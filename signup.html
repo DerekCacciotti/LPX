@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LPX- Sign up</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+</head>
+<body>
+
+  <nav class=" navbar navbar-inverse">
+    <div class="container-fluid">
+      <!-- logo -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collaspe" data-target="#mainnavbar">
+          <!-- make the three line icon found on chrome in the menu bar for settings-->
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">LPX</a>
+      </div>
+
+      <!-- MENU ITEMS-->
+      <div class="collaspe navbar-collaspe" id="mainnavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+
+<!-- right align menu item for login and sign uo buttons-->
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="#">Login</a></li>
+    <li class="active"><a href="#">Sign Up</a></li>
+</ul>
+
+      </div>
+    </div>
+
+  </nav>
+
+
+
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-6 col-md-4 col-md-offset-4">
+
+              <div class="account-wall">
+                    <h1 class="text-center login-title">Create a account with LPX.</h1>
+                  <form class="form-signin">
+                  <input type="text" class="form-control" placeholder="Name" id="name" required autofocus>
+                  <input type="text" class="form-control" placeholder="Business Name" id="bizname" required>
+                  <input type="text" class="form-control" placeholder="Email" id="email" required autofocus>
+                  <input type="text" class="form-control" placeholder="Business Address" id="address" required autofocus>
+                  <input type="text" class="form-control" placeholder="Business Phone" id="phone" required autofocus>
+                  <input type="text" class="form-control" placeholder="City" id="city" required autofocus>
+                  <input type="text" class="form-control" placeholder="State" id="state" required autofocus>
+                  <input type="text" class="form-control" placeholder="Zip" id="zip" required autofocus>
+
+                  <br />
+
+                  <input type="text" class="form-control" placeholder="username" id="username" required autofocus>
+                  <input type="password" class="form-control" placeholder="password" id="password" required autofocus>
+
+                  <input type="button" class="btn btn-lg btn-success btn-block"  name="loginbutton" value="Create" onclick="CreateUser()">
+                  <label class="checkbox pull-left">
+                      <input type="checkbox" value="remember-me">
+                      Remember me
+                  </label>
+                  <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                  </form>
+              </div>
+              <a href="#" class="text-center new-account">Log in</a>
+          </div>
+      </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+
+    Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
+      Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+      function CreateUser()
+      {
+        var name = document.getElementById("name").value
+        var businessname = document.getElementById("bizname").value
+        var email = document.getElementById("email").value
+        var busaddress = document.getElementById("address").value
+        var phone = document.getElementById("phone").value
+        var city = document.getElementById("city").value
+        var state = document.getElementById("state").value
+        var zip = document.getElementById("zip").value
+
+        var username = document.getElementById("username").value
+        var password = document.getElementById("password").value
+
+        // create parse user
+        var newuser = new Parse.User()
+        newuser.set("username", username)
+        newuser.set("password", password)
+        newuser.set("email", email)
+        newuser.set("name", name)
+        newuser.set("businessname", businessname)
+        newuser.set("phone",phone)
+        newuser.set("address", busaddress)
+        newuser.set("city", city)
+        newuser.set("state",state)
+        newuser.set("zip", zip)
+        newuser.signUp(null, {
+        success: function(newuser) {
+         // Hooray! Let them use the app now.
+         alert("success")
+        },
+        error: function(user, error) {
+         // Show the error message somewhere and let the user try again.
+         alert("Error: " + error.code + " " + error.message);
+        }
+        })
+
+
+
+      }
+
+
+
+    </script>
+
+</body>
+</html>

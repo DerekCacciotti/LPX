@@ -84,6 +84,7 @@
         Parse.User.logIn(username, password, {
       success: function(user) {
       alert("user logged in ")
+      window.location.href = "dashboard/dashboard.html";
       },
       error: function(user, error) {
         // The login failed. Check error to see why.

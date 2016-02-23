@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 <body>
 
@@ -61,15 +62,34 @@
   		<h2>Search for items</h2>
              <div id="custom-search-input">
                               <div class="input-group col-md-12">
-                                  <input type="text" class="  search-query form-control" placeholder="Search" />
+                                  <input type="text" class="  search-query form-control" placeholder="Search" id="searchbox" />
                                   <span class="input-group-btn">
-                                      <input type="button" class="btn btn-success" value="Search"  name="searchbutton"   onclick="">
+                                      <input type="button" class="btn btn-success" value="Search"  name="searchbutton"   onclick="findFood()">
+                                        <input type="button" class="btn btn-success" value="Clear"  name="clearbutton"   onclick="cleartable()">
                                       </button>
                                   </span>
                               </div>
                           </div>
+
   	</div>
   </div>
+
+<div id="selected">
+  <p></p>
+</div>
+
+<div id="table">
+  <table id="results-table" class="table">
+<tr>
+  <th>ID</th>
+  <th>Item</th>
+  <th>Brand</th>
+
+</tr>
+</table>
+</div>
+
+
 <div class="navbar navbar-default navbar-fixed-bottom">
   <div class="container">
     <p class="navbar-text pull-left">&copy; 2016 LPX</p>
@@ -77,7 +97,46 @@
   </div>
 </div>
 
+<script type="text/javascript">
 
+
+    Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
+      Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+function findFood()
+{
+  var searchtextupper = document.getElementById("searchbox").value
+var searchtext = searchtextupper.toUpperCase()
+  var GameScore = Parse.Object.extend("FoodSource");
+var query = new Parse.Query(GameScore);
+query.equalTo("Item", searchtext );
+query.find({
+    success: function(results) {
+      console.log(results.length)
+       for (var i = 0; i < results.length; i++) {
+           var object = results[i];
+               (function($) {
+                   $('#results-table').append('<tr><td>' +  object.id + '</td><td>' + object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+               })(jQuery);
+       }
+    },
+    error: function(error) {
+        alert("Error: " + error.code + " " + error.message);
+    }
+});
+}
+// unused
+function cleartable()
+{
+  var table = document.getElementById("results-table");
+  while (table.rows.length > 0) {
+    table.deleteRow(1);
+
+  }
+}
+
+
+</script>
 
 </body>
 </html>

@@ -64,7 +64,7 @@
                               <div class="input-group col-md-12">
                                   <input type="text" class="  search-query form-control" placeholder="Search" id="searchbox" />
                                   <span class="input-group-btn">
-                                      <input type="button" class="btn btn-success" value="Search"  name="searchbutton"   onclick="findFood()">
+                                    <input type="button" class="btn btn-success" value="Search"  name="searchbutton"   onclick="findFood()">
                                         <input type="button" class="btn btn-success" value="Clear"  name="clearbutton"   onclick="cleartable()">
                                       </button>
                                   </span>
@@ -80,12 +80,21 @@
 
 <div id="table">
   <table id="results-table" class="table">
+
+    <td>
+
+    </td>
 <tr>
   <th>ID</th>
   <th>Item</th>
   <th>Brand</th>
 
+
+
 </tr>
+
+
+
 </table>
 </div>
 
@@ -103,8 +112,35 @@
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
+      window.onload = getalldata()
+
+      // this function gets all data is called on load
+      function getalldata()
+      {
+        var GameScore = Parse.Object.extend("FoodSource");
+      var query = new Parse.Query(GameScore);
+      query.find({
+          success: function(results) {
+            console.log(results.length)
+             for (var i = 0; i < results.length; i++) {
+               var button = document.createElement("input")
+               button.type = "button"
+               button.value = ""
+                 var object = results[i];
+                     (function($) {
+                         $('#results-table').append('<tr><td>' +  object.id + '</td><td>' + object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+                     })(jQuery);
+             }
+          },
+          error: function(error) {
+              alert("Error: " + error.code + " " + error.message);
+          }
+      });
+      }
+
 function findFood()
 {
+  cleartable();
   var searchtextupper = document.getElementById("searchbox").value
 var searchtext = searchtextupper.toUpperCase()
   var GameScore = Parse.Object.extend("FoodSource");
@@ -130,9 +166,13 @@ function cleartable()
 {
   var table = document.getElementById("results-table");
   while (table.rows.length > 0) {
-    table.deleteRow(1);
+    table.deleteRow(0);
+    getalldata();
+
 
   }
+
+  table.innerHTML = "<tr>" + "  <th>ID</th>" + "<th>Item</th>" + "<th>Brand</th>" + "</tr>"
 }
 
 

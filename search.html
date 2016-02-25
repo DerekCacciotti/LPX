@@ -66,6 +66,7 @@
                                   <span class="input-group-btn">
                                     <input type="button" class="btn btn-success" value="Search"  name="searchbutton"   onclick="findFood()">
                                         <input type="button" class="btn btn-success" value="Clear"  name="clearbutton"   onclick="cleartable()">
+                              
                                       </button>
                                   </span>
                               </div>
@@ -81,13 +82,13 @@
 <div id="table">
   <table id="results-table" class="table">
 
-    <td>
-
-    </td>
 <tr>
   <th>ID</th>
   <th>Item</th>
   <th>Brand</th>
+
+
+
 
 
 
@@ -123,12 +124,9 @@
           success: function(results) {
             console.log(results.length)
              for (var i = 0; i < results.length; i++) {
-               var button = document.createElement("input")
-               button.type = "button"
-               button.value = ""
                  var object = results[i];
                      (function($) {
-                         $('#results-table').append('<tr><td>' +  object.id + '</td><td>' + object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+                         $('#results-table').append('<tr><td>' +  object.id + '</td><td>' +   '<span><input type="checkbox" id=checkbox /></span>' + " "  +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
                      })(jQuery);
              }
           },
@@ -152,7 +150,9 @@ query.find({
        for (var i = 0; i < results.length; i++) {
            var object = results[i];
                (function($) {
-                   $('#results-table').append('<tr><td>' +  object.id + '</td><td>' + object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+
+                   $('#results-table').append('<tr>' + object.id + '</td><td>' + object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+
                })(jQuery);
        }
     },
@@ -161,7 +161,9 @@ query.find({
     }
 });
 }
-// unused
+
+
+
 function cleartable()
 {
   var table = document.getElementById("results-table");
@@ -173,6 +175,11 @@ function cleartable()
   }
 
   table.innerHTML = "<tr>" + "  <th>ID</th>" + "<th>Item</th>" + "<th>Brand</th>" + "</tr>"
+
+
+
+
+
 }
 
 

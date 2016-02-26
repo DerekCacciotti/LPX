@@ -87,7 +87,16 @@
 
 #addbutton
 {
-  float: left;
-  clear: both;
+position: absolute;
 
+left: 140px;
+down:55px;
+z-index: -1
+
+
+
+}
+.selected {
+    background-color: brown;
+    color: #FFF;
 }

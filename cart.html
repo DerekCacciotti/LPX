@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script src="bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+  <nav class=" navbar navbar-inverse">
+    <div class="container-fluid">
+      <!-- logo -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collaspe" data-target="#mainnavbar">
+          <!-- make the three line icon found on chrome in the menu bar for settings-->
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">LPX</a>
+      </div>
+
+      <!-- MENU ITEMS-->
+      <div class="collaspe navbar-collaspe" id="mainnavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile <span class="caret"></span></a>
+                   <ul class="dropdown-menu">
+                       <li><a href="#">Dashboard</a></li>
+                       <li><a href="#">Database</a></li>
+                       <li><a href="#">Log Out</a></li>
+                   </ul>
+               </li>
+           </ul>
+
+            </ul>
+      </div>
+    </div>
+
+  </nav>
+
+  <div class="container">
+	<table id="cart" class="table table-hover table-condensed">
+    				<thead>
+						<tr>
+							<th style="width:50%">Product</th>
+							<th style="width:30%">Quantity</th>
+							<th style="width:80%"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td data-th="Product">
+								<div class="row">
+									<div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+									<div class="col-sm-10">
+										<h4 class="nomargin">Product </h4>
+										<p>Item description.</p>
+									</div>
+								</div>
+							</td>
+							<td data-th="Quantity">
+								<input type="number" class="form-control text-center" value="1">
+							</td>
+
+							<td class="actions" data-th="">
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr class="visible-xs">
+						</tr>
+						<tr>
+							<td><a href="index.html" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+							<td colspan="2" class="hidden-xs"></td>
+							<td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+						</tr>
+					</tfoot>
+				</table>
+</div>

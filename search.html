@@ -105,9 +105,10 @@
 
 <div class="navbar navbar-default navbar-fixed-bottom">
   <div class="container">
-    <p class="navbar-text pull-left">&copy; 2016 LPX</p>
+    <p class="navbar-text pull-left" id="copytext">&copy; 2016 LPX</p>
     <a href="#" class="navbar-btn btn btn-info pull-right" >Support</a>
-    <input type="button" class="btn btn btn-danger" value="Add"  name="addbutton" id="addbutton"    onclick="addOrder()">
+
+    <input type="button" class="navbar-btn btn btn-danger pull-right" value="Add to order"  name="addbutton" id="addbutton"    onclick="LoadCart()">
 
   </div>
 </div>
@@ -193,6 +194,7 @@ query.find({
          }).get();
 
          alert($.trim(dataarray[0]));
+         console.log(itemsarray)
        })
     },
     error: function(error) {
@@ -223,7 +225,10 @@ function cleartable()
 
 function LoadCart()
 {
+  // saving current array
+  window.localStorage.setItem("order", JSON.stringify(itemsarray));
 
+  window.location.href = "cart.html"
 }
 
 

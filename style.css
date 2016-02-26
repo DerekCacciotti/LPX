@@ -100,3 +100,8 @@ z-index: -1
     background-color: brown;
     color: #FFF;
 }
+
+#copytext
+{
+  padding-left: 30px;
+}

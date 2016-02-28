@@ -86,7 +86,6 @@
   <table id="results-table" class="table">
 
 <tr>
-  <th>ID</th>
   <th>Item</th>
   <th>Brand</th>
 
@@ -136,13 +135,13 @@ var itemsarray =[];
                  var object = results[i];
                      (function($) {
 
-                         $('#results-table').append('<tr><td>' +  object.id + '</td><td>' +    object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
 
                      })(jQuery);
 
 
              }
-
+             // click event
              $("tr").click(function(){
                alert("click")
                var index = $(this).index();
@@ -154,6 +153,7 @@ var itemsarray =[];
                alert($.trim(dataarray[0]));
                itemsarray.push($.trim(dataarray[0]));
                console.log(itemsarray);
+               LoadProduct();
              })
           },
           error: function(error) {
@@ -178,7 +178,7 @@ query.find({
                (function($) {
 
 
-                   $('#results-table').append('<tr><td>' +  object.id + '</td><td>' +    object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+                   $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
 
                })(jQuery);
 
@@ -215,7 +215,7 @@ function cleartable()
 
   }
 
-  table.innerHTML = "<tr>" + "  <th>ID</th>" + "<th>Item</th>" + "<th>Brand</th>" + "</tr>"
+  table.innerHTML = "<tr>" + " th>Item</th>" + "<th>Brand</th>" + "</tr>"
 
 
 
@@ -223,12 +223,12 @@ function cleartable()
 
 }
 
-function LoadCart()
+function LoadProduct()
 {
   // saving current array
-  window.localStorage.setItem("order", JSON.stringify(itemsarray));
+  window.localStorage.setItem("item", JSON.stringify(itemsarray));
 
-  window.location.href = "cart.html"
+  window.location.href = "productpage.html"
 }
 
 

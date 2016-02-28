@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Item</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+<body>
+
+  <!-- Navigation -->
+   <nav class=" navbar navbar-inverse">
+     <div class="container-fluid">
+       <!-- logo -->
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collaspe" data-target="#mainnavbar">
+           <!-- make the three line icon found on chrome in the menu bar for settings-->
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a href="#" class="navbar-brand">LPX</a>
+       </div>
+
+       <!-- MENU ITEMS-->
+       <div class="collaspe navbar-collaspe" id="mainnavbar">
+         <ul class="nav navbar-nav">
+           <li class="active"><a href="#">Home</a></li>
+           <li><a href="#">About</a></li>
+             <li><a href="#">Contact</a></li>
+         </ul>
+
+
+         <ul class="nav navbar-nav navbar-right">
+           <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Database</a></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+             </ul>
+       </div>
+     </div>
+
+   </nav>
+
+
+   <div class="container-fluid">
+    <div class="content-wrapper">
+		<div class="item-container">
+			<div class="container">
+				<div class="col-md-12">
+					<div class="product col-md-3 service-image-left">
+
+						<center>
+							<img id="item-display" src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
+						</center>
+					</div>
+
+					<div class="container service1-items col-sm-2 col-md-2 pull-left">
+						<center>
+							<a id="item-1" class="service1-item">
+								<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
+							</a>
+							<a id="item-2" class="service1-item">
+								<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
+							</a>
+							<a id="item-3" class="service1-item">
+								<img src="http://www.corsair.com/Media/catalog/product/g/s/gs600_psu_sideview_blue_2.png" alt=""></img>
+							</a>
+						</center>
+					</div>
+				</div>
+
+				<div class="col-md-7">
+					<div class="product-title" id="itemname">title</div>
+					<div class="product-desc" id="brandlabel">desciption</div>
+          <br />
+          <div class="btn-group back">
+						<input type="button" class="btn btn-warning" value="Back to Search"  name="backtosearch" id="backtosearch"  onclick="BacktoSearch()">
+					</div>
+					<div class="btn-group cart">
+						<input type="button" class="btn btn-success" value="Add to cart"  name="addtocart"   onclick="addtoCart()">
+					</div>
+					<div class="btn-group wishlist">
+						<button type="button" class="btn btn-danger">
+							Add to wishlist
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="col-md-12 product-info">
+					<ul id="myTab" class="nav nav-tabs nav_tabs">
+
+
+						<li><a href="#service-one" data-toggle="tab">PRODUCT INFO</a></li>
+						<li><a href="#service-two" data-toggle="tab">PRICES</a></li>
+
+					</ul>
+				<div id="myTabContent" class="tab-content">
+						<div class="tab-pane fade in active" id="service-one">
+
+							<section class="container product-info">
+								more info
+							</section>
+
+						</div>
+					<div class="tab-pane fade" id="service-two">
+
+						<section class="container">
+
+						</section>
+
+					</div>
+					<div class="tab-pane fade" id="service-three">
+            <section class="container product-info">
+              PRICING WILL GO HERE
+            </section>
+
+
+					</div>
+				</div>
+				<hr>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container">
+    <p class="navbar-text pull-left" id="copytext">&copy; 2016 LPX</p>
+    <a href="#" class="navbar-btn btn btn-info pull-right" >Support</a>
+
+
+  </div>
+</div>
+
+<script type="text/javascript">
+
+
+Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
+  Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+  var finalorder = [];
+
+  var orderarray = JSON.parse(window.localStorage.getItem("item"))
+  console.log(orderarray)
+  for (var i = 0; i < orderarray.length; i++)
+  {
+    var item = orderarray[i];
+    console.log(item)
+    var itemname = document.getElementById("itemname").innerHTML = item
+    var database = Parse.Object.extend("FoodSource")
+    var query = new Parse.Query(database)
+    query.equalTo("Item", item)
+    query.find({
+      success: function(results){
+        console.log("found");
+        for(var i = 0; i < results.length; i++)
+        {
+          console.log(results.length);
+          var object = results[i]
+          var brand = object.get("Brand")
+          console.log(brand)
+          var brandlabel = document.getElementById("brandlabel").innerHTML = brand
+        } // END OF LOOP FPOR BRAND
+      }, // end of success function
+    })
+  } // enf of outter loop
+
+  getcurrentcart()
+
+
+  function addtoCart()
+  {
+      var currentitem = document.getElementById("itemname").innerHTML
+      alert(currentitem);
+      var database = Parse.Object.extend("FoodSource")
+      var query = new Parse.Query(database)
+      query.equalTo("Item", currentitem )
+      query.find({
+        success: function(results){
+          console.log("found");
+          for(var i = 0; i < results.length; i++)
+          {
+            var object = results[i]
+            var objectid = object.id
+            finalorder.push(objectid)
+            console.log(finalorder);
+          }
+
+
+  }
+});
+}
+
+function BacktoSearch()
+{
+  localStorage.setItem("currentcart", JSON.stringify(finalorder))
+  window.location.href = "search.html"
+}
+
+
+function getcurrentcart()
+{
+  // check to see if localstorage has a value stored in it
+
+}
+
+</script>
+
+</body>
+</html>

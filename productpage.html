@@ -173,10 +173,10 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
           var brand = object.get("Brand")
           console.log(brand)
           var brandlabel = document.getElementById("brandlabel").innerHTML = brand
-        } // END OF LOOP FPOR BRAND
+        } // END OF LOOP FOR BRAND
       }, // end of success function
     })
-  } // enf of outter loop
+  } // end of outter loop
 
   getcurrentcart()
 
@@ -196,8 +196,11 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
             var object = results[i]
             var objectid = object.id
             finalorder.push(objectid)
-            console.log(finalorder);
+            //console.log(finalorder);
           }
+
+
+            console.log(finalorder);
 
 
   }
@@ -214,7 +217,24 @@ function BacktoSearch()
 function getcurrentcart()
 {
   // check to see if localstorage has a value stored in it
+if (localStorage.getItem("currentcart") == null)
+{
+  console.log("no value")
+}
+else {
+var currentitems = []
+  currentitems = JSON.parse(window.localStorage.getItem("currentcart"))
+  console.log(currentitems)
 
+  // set items back in other array
+  for(var i = 0; i < currentitems.length; i++)
+  {
+    finalorder.push(currentitems[i])
+    console.log("the current final order is " + finalorder)
+  }
+  window.localStorage.clear();
+  //finalorder.filter(function(val) { return val !== null; }).join(", ")
+}
 }
 
 </script>

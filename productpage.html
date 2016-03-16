@@ -184,10 +184,12 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   function addtoCart()
   {
       var currentitem = document.getElementById("itemname").innerHTML
+      var currentbrand = document.getElementById("brandlabel").innerHTML
       alert(currentitem);
       var database = Parse.Object.extend("FoodSource")
       var query = new Parse.Query(database)
       query.equalTo("Item", currentitem )
+      query.equalTo("Brand", currentbrand)
       query.find({
         success: function(results){
           console.log("found");
@@ -196,11 +198,18 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
             var object = results[i]
             var objectid = object.id
             finalorder.push(objectid)
-            //console.log(finalorder);
+            console.log(finalorder);
+
+            // send the order to the cart page
+            localStorage.setItem("currentcart", JSON.stringify(finalorder))
+              window.location.href = "cart.html"
+
+
+
           }
 
 
-            console.log(finalorder);
+            //console.log(finalorder);
 
 
   }
@@ -232,6 +241,7 @@ var currentitems = []
     finalorder.push(currentitems[i])
     console.log("the current final order is " + finalorder)
   }
+  console.log("clear")
   window.localStorage.clear();
   //finalorder.filter(function(val) { return val !== null; }).join(", ")
 }

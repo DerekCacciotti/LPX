@@ -75,7 +75,8 @@
   </div>
 
     <input type="button" class="btn btn-success pull-right" value="Send Order"  name="sendorder"   onclick="">
-    <input type="button" class="btn btn-warning " value="Back to Search"  name="sendorder"   onclick="">
+    <input type="button" class="btn btn-warning " value="Back to Search"  name="backtosearch"   onclick="BacktoSearch()">
+      <input type="button" class="btn btn-danger " value="Cancel Order"  name="cancelorder"   onclick="CancelOrder()">
 
 
 
@@ -94,7 +95,7 @@
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
-  var orderarray = JSON.parse(window.localStorage.getItem("item"))
+  var orderarray = JSON.parse(window.localStorage.getItem("currentcart"))
   console.log(orderarray)
 
   for(var i = 0; i < orderarray.length; i++)
@@ -107,9 +108,34 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
       success: function(object)
       {
         console.log(object.get('Item'));
-         $('#order-table').append('<tr><td>' +     object.get('Item')  + '</td><td>' + 	'<input type="number" class="form-control text-center" value="1">' + '</td></tr>');
+         $('#order-table').append('<tr><td>' +     object.get('Item')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value="1">' + '</td></tr>');
       }
     })
+  }
+
+  function BacktoSearch()
+  {
+    window.location.href = "search.html"
+  }
+
+  function CancelOrder()
+  {
+    orderarray.length = 0;
+    var table = document.getElementById("order-table")
+    while (table.rows.length > 0)
+    {
+      table.deleteRow(0)
+
+
+    }
+      table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Amount</th>" + "</tr>"
+
+      function CreateOrder()
+      {
+        
+      }
+
+
   }
 
 </script>

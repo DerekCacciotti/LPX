@@ -95,6 +95,11 @@
 							Add to wishlist
 						</button>
 					</div>
+          <br />
+          <br />
+          <div>
+             <input type="number" name="quantity" id=quanityinput value="1" />
+          </div>
 				</div>
 			</div>
 		</div>
@@ -197,7 +202,11 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
           {
             var object = results[i]
             var objectid = object.id
-            finalorder.push(objectid)
+            finalorder.push({
+    itemid:   objectid,
+    amount: document.getElementById("quanityinput").value
+});
+            //finalorder.push(objectid)
             console.log(finalorder);
 
             // send the order to the cart page

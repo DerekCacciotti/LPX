@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
@@ -67,19 +68,49 @@
 
 
 
+
   </tr>
+
+
 
 
 
   </table>
   </div>
 
-    <input type="button" class="btn btn-success pull-right" value="Send Order"  name="sendorder"   onclick="">
+
+
+    <input type="button" class="btn btn-success pull-right" onclick="CreateOrder()" value="Prepare Order">
     <input type="button" class="btn btn-warning " value="Back to Search"  name="backtosearch"   onclick="BacktoSearch()">
       <input type="button" class="btn btn-danger " value="Cancel Order"  name="cancelorder"   onclick="CancelOrder()">
 
 
 
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="modalheader"></h4>
+      </div>
+      <div class="modal-body">
+        <p><input type="number" id="quanity" class="form-control text-center" value="1"></p>
+        <input type="button" class="btn btn-success btn-sm pull-right" value="Next"  name="nextbutton" id="nextbutton"   >
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <div class="navbar navbar-default navbar-fixed-bottom">
@@ -95,20 +126,27 @@
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
+
   var orderarray = JSON.parse(window.localStorage.getItem("currentcart"))
   console.log(orderarray)
+
+  var itemname;
 
   for(var i = 0; i < orderarray.length; i++)
   {
     console.log(orderarray[i])
 
     var database = Parse.Object.extend("FoodSource")
+    var amount = orderarray[i].amount
     var query = new Parse.Query(database)
-    query.get(orderarray[i], {
+    console.log(amount);
+    query.get(orderarray[i].itemid,  {
       success: function(object)
       {
         console.log(object.get('Item'));
-         $('#order-table').append('<tr><td>' +     object.get('Item')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value="1">' + '</td></tr>');
+
+
+         $('#order-table').append('<tr><td>' +     object.get('Item')  + '</td><td>' + 	amount + '</td></tr>');
       }
     })
   }
@@ -123,20 +161,89 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
     orderarray.length = 0;
     var table = document.getElementById("order-table")
     while (table.rows.length > 0)
+
     {
       table.deleteRow(0)
 
 
     }
       table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Amount</th>" + "</tr>"
+}
 
-      function CreateOrder()
-      {
-        
-      }
+function CreateOrder()
+{
+  // open the modal
+  $("#myModal").modal()
+  var itemsarray = []
+  var index = 0
+  var table = document.getElementById("order-table");
+  var header = document.getElementById("modalheader")
+
+  for (var i = 1, row; row = table.rows[i]; i++) {
+     //iterate through rows
+     //rows would be accessed using the "row" variable assigned in the for loop
+     //console.log(row.innerHTML)
+     for (var j = 0, col; col = row.cells[j]; j++) {
+       //iterate through columns
+       //columns would be accessed using the "col" variable assigned in the for loop
+
+       //onsole.log(col.innerHTML)
+
+
+      itemsarray.push(col.innerHTML)
+
+     }
 
 
   }
+
+   console.log(itemsarray);
+   header.innerHTML = itemsarray[0]
+
+
+   // the next line, of course, assumes you have an element with id="next"
+    $('#nextbutton').click(function () {
+
+
+      NextElement(itemsarray);
+
+      });
+
+
+}
+
+function NextElement(array)
+{
+  var header = document.getElementById("modalheader")
+  var maxlength = array.length;
+
+
+
+  console.log(index)
+    header.innerHTML = array[index++]
+    console.log(array[index++])
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 

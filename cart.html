@@ -28,9 +28,9 @@
       <!-- MENU ITEMS-->
       <div class="collaspe navbar-collaspe" id="mainnavbar">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+          <li class="active"><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
 
 
@@ -114,7 +114,9 @@ var itemidsarray = [];
 var amountarray = [];
 var finalorder = [];
 
+  var currentuser = Parse.User.current();
 console.log(orderarray);
+console.log(currentuser)
 
 for(var i = 0; i < orderarray.length; i++)
 {
@@ -183,43 +185,58 @@ function BacktoSearch()
 
     console.log(finalorder)
 
+
+
     for(var d = 0; d < finalorder.length; d++)
     {
       console.log(finalorder[d])
 
-      var order = Parse.Object.extend("Order");
-      var orderobj = new order();
+
 
       //console.log(ordernum)
 
 
-      // create parse object here.
 
 
 
 
-
-
-
-    /*var table = document.getElementById("order-table");
-for (var i = 0, row; row = table.rows[i]; i++) {
-   //iterate through rows
-   //rows would be accessed using the "row" variable assigned in the for loop
-   for (var j = 0, col; col = row.cells[j]; j++) {
-     //iterate through columns
-     //columns would be accessed using the "col" variable assigned in the for loop
-     console.log(col.innerHTML)
-     finalorder.push(col.innerHTML)
-
-     var inputtag = document.getElementById("quanity")
-    finalamounts = inputtag.value
-    console.log(finalamounts)
-   }
-
-*/
 }
 
-//console.log(finalorder)
+console.log(finalorder)
+
+  // create parse object here.
+
+  var order = Parse.Object.extend("Order");
+  var orderobj = new order();
+  console.log(currentuser);
+
+
+  orderobj.set("order", finalorder)
+  orderobj.set("submiitedby", currentuser)
+  // add sellers
+  orderobj.save(null, {
+  success: function(submiitedorder) {
+    // Execute any logic that should take place after the object is saved.
+    alert('New object created with objectId: ' + submiitedorder.id);
+  },
+  error: function(submiitedorder, error) {
+    // Execute any logic that should take place if the save fails.
+    // error is a Parse.Error with an error code and message.
+    alert('Failed to create new object, with error code: ' + error.message);
+  }
+});
+
+
+
+
+}
+
+
+
+
+
+
+
 
 
 

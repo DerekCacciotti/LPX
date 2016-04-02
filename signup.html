@@ -69,15 +69,19 @@
                   <input type="text" class="form-control" placeholder="username" id="username" required autofocus>
                   <input type="password" class="form-control" placeholder="password" id="password" required autofocus>
 
+                  <textarea rows="3" cols="20" class="form-control"required autofocus id="sellerinfo" placeholder="Enter your sales reps emails here"></textarea>  </textarea>
+
+                  <br />
                   <input type="button" class="btn btn-lg btn-success btn-block"  name="loginbutton" value="Create" onclick="CreateUser()">
                   <label class="checkbox pull-left">
                       <input type="checkbox" value="remember-me">
                       Remember me
                   </label>
                   <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                  <a href="#" class="text-center new-account">Log in</a>
                   </form>
               </div>
-              <a href="#" class="text-center new-account">Log in</a>
+
           </div>
       </div>
   </div>
@@ -91,6 +95,14 @@
 
       function CreateUser()
       {
+        var salesreps = [];
+
+        var lines = $('#sellerinfo').val().split('\n');
+for(var i = 0;i < lines.length;i++){
+    salesreps.push(lines[i])
+}
+
+
         var name = document.getElementById("name").value
         var businessname = document.getElementById("bizname").value
         var email = document.getElementById("email").value
@@ -115,6 +127,7 @@
         newuser.set("city", city)
         newuser.set("state",state)
         newuser.set("zip", zip)
+        newuser.set("salesreps", salesreps)
         newuser.signUp(null, {
         success: function(newuser) {
          // Hooray! Let them use the app now.

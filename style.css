@@ -268,12 +268,37 @@ footer
     display: table;
     margin: 0 auto;
 }
-
-select option { padding: 6px;}
-
-#sellerinfo
+#formarea
 {
-  width: 300px;
-  height: 125px;
+  display: table;
+  margin: 0 auto;
+}
 
+#formarea input
+{
+  width: 500px;
+  height: 50px;
+}
+
+#select
+{
+  display: table;
+  margin: 0 auto;
+  width: 200px;
+  height: 100px;
+}
+
+span #close
+{
+  width: 5em;
+  position: relative;
+  margin-top: -25px;
+
+}
+
+span #submitbutton
+{
+  width: 10em;
+  position: relative;
+  margin-top: -70px;
 }

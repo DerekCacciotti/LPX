@@ -80,9 +80,44 @@
 
 
 
-    <input type="button" class="btn btn-success pull-right" onclick="CreateOrder()" value="Prepare Order">
+
+
+    <input type="button" class="btn btn-primary pull-right" onclick="ShowSalesRepInfo()" value="Prepare Order">
     <input type="button" class="btn btn-warning " value="Back to Search"  name="backtosearch"   onclick="BacktoSearch()">
       <input type="button" class="btn btn-danger " value="Cancel Order"  name="cancelorder"   onclick="CancelOrder()">
+
+
+
+</div>
+<br />
+
+<div id="formarea">
+  <form>
+    <fieldset>
+      <legend>Sales rep info<span><input type="button" class="btn btn-danger  btn-sm pull-right" value="Close"  name="submitorder" id="close"   onclick="ShowSalesRepInfo()"></span></legend>
+      <input type="text" class="form-control" placeholder="Please enter the email address of the seller you would like to send the order to" />
+      <br />
+      <h4 class="center">OR select one from the list below</h4>
+
+
+
+      <br />
+
+
+    <select multiple class="form-control" id="select">
+
+</select>
+
+<br />
+
+<input type="button" class="btn btn-success  btn-sm " value="Submit Order"  name="submitorder" id="submitbutton"   onclick="CreateOrder()">
+
+
+
+
+    </fieldset>
+  </form>
+
 
 
 
@@ -97,38 +132,10 @@
   </div>
 </div>
 
-<!-- this modal is for the order submission only, its called by javascript-->
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enter or select sales reps</h4>
-      </div>
-      <div class="modal-body">
-      <input type="text" id="selleremail" class="form-control" placeholder="Enter sales your sales reps email.">
-      <br />
-<h4 id="OR header" class="center">OR</h4>
-<br />
-      <div id="selectarea" class="center">
-        <select multiple class="form-control">
-  
-  </select>
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Submit Order</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <script type="text/javascript">
-
+$("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
@@ -189,6 +196,11 @@ function BacktoSearch()
     window.location.href = "search.html"
   }
 
+  function ShowSalesRepInfo()
+  {
+    $("#formarea").toggle();
+  }
+
   function CreateOrder()
   {
 
@@ -234,7 +246,7 @@ function BacktoSearch()
 
 console.log(finalorder)
 
-$("#myModal").modal()
+
 
   // create parse object here.
 // GET THE VALUES FROM THE MODAL BEFORE CREATING THE ORDER

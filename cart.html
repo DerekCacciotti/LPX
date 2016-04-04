@@ -94,7 +94,7 @@
 <div id="formarea">
   <form>
     <fieldset>
-      <legend>Sales rep info<span><input type="button" class="btn btn-danger  btn-sm pull-right" value="Close"  name="submitorder" id="close"   onclick="ShowSalesRepInfo()"></span></legend>
+      <legend>Sales rep info<span><input type="button" class="btn btn-danger  btn-sm pull-right" value="Close"  name="submitorder" id="close"   onclick="CloseSellerPane()"></span></legend>
       <input type="text" class="form-control" placeholder="Please enter the email address of the seller you would like to send the order to" />
       <br />
       <h4 class="center">OR select one from the list below</h4>
@@ -199,6 +199,44 @@ function BacktoSearch()
   function ShowSalesRepInfo()
   {
     $("#formarea").toggle();
+
+    //console.log(currentuser.id)
+    // get sellers
+    var index = 0
+    var users = Parse.Object.extend("_User")
+    var query = new Parse.Query(users);
+query.get(currentuser.id, {
+  success: function(results) {
+    console.log(results)
+
+    var sellers = results.get("salesreps")
+    console.log(sellers)
+    var selecttag = document.getElementById("select")
+
+     for(seller in sellers)
+     {
+       var option = document.createElement("option")
+       option.value = index
+       option.innerHTML = sellers[seller]
+
+      selecttag.appendChild(option)
+      index++;
+
+
+     }
+  },
+  error: function(object, error) {
+    // The object was not retrieved successfully.
+    // error is a Parse.Error with an error code and message.
+  }
+});
+
+
+  }
+
+  function CloseSellerPane()
+  {
+    $("#formarea").toggle();
   }
 
   function CreateOrder()
@@ -248,25 +286,25 @@ console.log(finalorder)
 
 
 
-  // create parse object here.
-// GET THE VALUES FROM THE MODAL BEFORE CREATING THE ORDER
 
 
 
 
-
-/*  var order = Parse.Object.extend("Order");
+  var order = Parse.Object.extend("Order");
   var orderobj = new order();
   console.log(currentuser);
+  var select = document.getElementById("select")
+var selecteditem = select.options[select.selectedIndex].innerHTML
+console.log(selecteditem)
 
 
  orderobj.set("order", finalorder)
   orderobj.set("submiitedby", currentuser)
-  // add sellers
+  orderobj.set("sellers", selecteditem)
   orderobj.save(null, {
   success: function(submiitedorder) {
     // Execute any logic that should take place after the object is saved.
-    alert('New object created with objectId: ' + submiitedorder.id);
+    alert('Your order has been submitted' + submiitedorder.id);
   },
   error: function(submiitedorder, error) {
     // Execute any logic that should take place if the save fails.
@@ -275,7 +313,7 @@ console.log(finalorder)
   }
 });
 
-*/
+
 
 
 

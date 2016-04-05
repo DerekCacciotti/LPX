@@ -104,7 +104,7 @@
       <br />
 
 
-    <select multiple class="form-control" id="select">
+    <select multiple="multiple" class="form-control" id="select">
 
 </select>
 
@@ -202,7 +202,8 @@ function BacktoSearch()
 
     //console.log(currentuser.id)
     // get sellers
-    var index = 0
+
+    var index = 0;
     var users = Parse.Object.extend("_User")
     var query = new Parse.Query(users);
 query.get(currentuser.id, {
@@ -211,6 +212,8 @@ query.get(currentuser.id, {
 
     var sellers = results.get("salesreps")
     console.log(sellers)
+
+
     var selecttag = document.getElementById("select")
 
      for(seller in sellers)
@@ -219,11 +222,18 @@ query.get(currentuser.id, {
        option.value = index
        option.innerHTML = sellers[seller]
 
+
       selecttag.appendChild(option)
-      index++;
+      index++
+
+
 
 
      }
+
+
+
+
   },
   error: function(object, error) {
     // The object was not retrieved successfully.
@@ -232,7 +242,9 @@ query.get(currentuser.id, {
 });
 
 
+
   }
+
 
   function CloseSellerPane()
   {
@@ -241,7 +253,7 @@ query.get(currentuser.id, {
 
   function CreateOrder()
   {
-
+    var sellersarray = []
     var table = $('#order-table')
 
     table.find('tr').each(function (i) {
@@ -295,12 +307,15 @@ console.log(finalorder)
   console.log(currentuser);
   var select = document.getElementById("select")
 var selecteditem = select.options[select.selectedIndex].innerHTML
-console.log(selecteditem)
+//console.log(selecteditem)
+var selected = $("#select option:selected ").text();
+sellersarray.push(" " + selected)
+
 
 
  orderobj.set("order", finalorder)
   orderobj.set("submiitedby", currentuser)
-  orderobj.set("sellers", selecteditem)
+  orderobj.set("selectedsellers", sellersarray)
   orderobj.save(null, {
   success: function(submiitedorder) {
     // Execute any logic that should take place after the object is saved.
@@ -312,6 +327,7 @@ console.log(selecteditem)
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+
 
 
 

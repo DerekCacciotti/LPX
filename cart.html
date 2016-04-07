@@ -125,7 +125,7 @@
 
 
 
-<div class="navbar navbar-default navbar-fixed-bottom">
+<div class="navbar-fixed-bottom">
   <div class="container">
     <p class="navbar-text pull-left">&copy; 2016 LPX</p>
     <a href="#" class="navbar-btn btn btn-info pull-right" >Support</a>
@@ -306,11 +306,12 @@ console.log(finalorder)
   var orderobj = new order();
   console.log(currentuser);
   var select = document.getElementById("select")
-var selecteditem = select.options[select.selectedIndex].innerHTML
-//console.log(selecteditem)
-var selected = $("#select option:selected ").text();
-sellersarray.push(" " + selected)
-
+    for (var i = 0; i < select.options.length; i++) {
+       if(select.options[i].selected ==true){
+            console.log(select.options[i].innerHTML);
+            sellersarray.push(select.options[i].innerHTML)
+        }
+    }
 
 
  orderobj.set("order", finalorder)
@@ -327,6 +328,7 @@ sellersarray.push(" " + selected)
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+
 
 
 

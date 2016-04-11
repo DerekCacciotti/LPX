@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script type="text/javascript" src="mandrill.js"></script>
+  <script src="node_modules/node-uuid/uuid.js"></script>
 </head>
 <body>
 
@@ -319,8 +321,13 @@ console.log(finalorder)
   orderobj.set("selectedsellers", sellersarray)
   orderobj.save(null, {
   success: function(submiitedorder) {
-    // Execute any logic that should take place after the object is saved.
-    alert('Your order has been submitted' + submiitedorder.id);
+    // create unique link
+
+  SendEmail(sellersarray, submiitedorder.id);
+    alert('Your order has been submitted ' + submiitedorder.id);
+
+
+
   },
   error: function(submiitedorder, error) {
     // Execute any logic that should take place if the save fails.
@@ -336,6 +343,31 @@ console.log(finalorder)
 
 
 
+
+
+}
+
+
+function SendEmail(array, pobject)
+{
+  console.log("the sellers are " + array)
+
+  // loop through sellers arrays
+  for (object in array)
+  {
+    var email = new mandrill.Mandrill('TMc9w9HepAG7nUI1amdO3g'); // This will be public
+
+    email.messages.send({
+            "message": {
+                "from_email": "derekc247@me.com",
+                "from_name": "LPX",
+                "to":[{"email": array[object], "name": "Confidental"}], // Array of recipients
+                "subject": "LPX order " + pobject.id,
+                "text": "You have a new LPX order " + pobject.id
+            }
+        });
+      console.log("worked")
+  }
 
 
 }

@@ -302,3 +302,21 @@ span #submitbutton
   position: relative;
   margin-top: -70px;
 }
+
+#ordersection
+{
+  margin-top: 20px;
+  display: table;
+  margin: 0 auto;
+
+}
+#ordersection input
+{
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+#pricebox
+{
+  width: 300px;
+}

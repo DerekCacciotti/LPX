@@ -66,6 +66,16 @@
       </div>
   </div>
 
+  <div class="container" id="ordersection">
+
+<label id="orderlabel"></label>
+
+
+
+  </div>
+
+
+
 
 
   <script type="text/javascript">
@@ -83,7 +93,56 @@ query.get(ordernumber, {
   success: function(order) {
     console.log(order)
 
-    // create table here so user can the seller can enter values 
+    // create table here so user can the seller can enter values
+
+    var retrievedorder = order.get("order")
+
+
+    console.log(retrievedorder)
+
+
+
+
+    $("#lookupbox").toggle();
+
+    for(var i = 0;  i < retrievedorder.length; i++)
+    {
+      var label = document.getElementById("orderlabel")
+      label.innerHTML = retrievedorder[i];
+      /*var input = document.createElement("input")
+      input.type = "text"
+      input.id = "pricebox"
+
+  var div = document.getElementById('ordersection').appendChild(input)
+*/
+
+
+
+
+    }
+
+    var input = document.createElement("input")
+    input.type = "text"
+    input.id = "pricebox"
+    input.className = "form-control input-sm"
+
+    var div = document.getElementById('ordersection').appendChild(input)
+
+var button = document.createElement("input")
+button.className = "btn btn-success"
+button.value = "Send pricing"
+var div = document.getElementById('ordersection').appendChild(button)
+
+
+
+
+
+
+
+
+
+
+
   },
   error: function(object, error) {
     // The object was not retrieved successfully.
@@ -91,6 +150,7 @@ query.get(ordernumber, {
   }
 });
 }
+
 
 
 

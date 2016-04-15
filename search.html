@@ -126,6 +126,9 @@ var itemsarray =[];
       // this function gets all data is called on load
       function getalldata()
       {
+
+
+
         var GameScore = Parse.Object.extend("FoodSource");
       var query = new Parse.Query(GameScore);
       query.find({
@@ -161,6 +164,15 @@ var itemsarray =[];
           }
       });
       }
+
+      function checkCookie() {
+     var user = getCookie("userid");
+     if (user != "") {
+         //stay on page
+     } else {
+        alert("cookie was not created")
+     }
+ }
 
 function findFood()
 {

@@ -68,7 +68,26 @@
 
   <div class="container" id="ordersection">
 
-<label id="orderlabel"></label>
+    <table id="order-table" class="table">
+
+  <tr>
+    <th>Item</th>
+
+
+
+
+
+
+
+
+
+  </tr>
+
+
+
+
+
+  </table>
 
 
 
@@ -82,6 +101,7 @@
 
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
 
 function Lookup()
 {
@@ -100,38 +120,19 @@ query.get(ordernumber, {
 
     console.log(retrievedorder)
 
+    for(items in retrievedorder)
+    {
+      $('#order-table').append('<tr><td id="item">' + retrievedorder[items] + '</td><td>' + 	'<input type="text" id="pricebox" class="form-control text-center"> ' + '</td></tr>')
+    }
+
+
+
 
 
 
     $("#lookupbox").toggle();
 
-    for(var i = 0;  i < retrievedorder.length; i++)
-    {
-      var label = document.getElementById("orderlabel")
-      label.innerHTML = retrievedorder[i];
-      /*var input = document.createElement("input")
-      input.type = "text"
-      input.id = "pricebox"
 
-  var div = document.getElementById('ordersection').appendChild(input)
-*/
-
-
-
-
-    }
-
-    var input = document.createElement("input")
-    input.type = "text"
-    input.id = "pricebox"
-    input.className = "form-control input-sm"
-
-    var div = document.getElementById('ordersection').appendChild(input)
-
-var button = document.createElement("input")
-button.className = "btn btn-success"
-button.value = "Send pricing"
-var div = document.getElementById('ordersection').appendChild(button)
 
 
 

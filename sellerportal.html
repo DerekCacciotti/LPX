@@ -71,7 +71,10 @@
     <table id="order-table" class="table">
 
   <tr>
-    <th>Item</th>
+    <th>Item and Amount</th>
+    <th>Please enter your prices in this collum</th>
+
+
 
 
 
@@ -89,6 +92,9 @@
 
   </table>
 
+  <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer()"/>
+  <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
+
 
 
   </div>
@@ -102,11 +108,24 @@
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
+      document.onload = onpage();
+
+      function onpage()
+      {
+        $("#order-table").toggle();
+        $("#submittocustomer").toggle();
+        $("#lookupbutton").toggle();
+
+      }
+
+      var globordernum;
+
 
 function Lookup()
 {
   var ordernumber = document.getElementById("ordernumber").value
   console.log(ordernumber)
+  globordernum = ordernumber;
   var orders = Parse.Object.extend("Order");
 var query = new Parse.Query(orders);
 query.get(ordernumber, {
@@ -116,7 +135,14 @@ query.get(ordernumber, {
     // create table here so user can the seller can enter values
 
     var retrievedorder = order.get("order")
+    var search_term = 'undefined';
 
+    for (var i=retrievedorder.length-1; i>=0; i--) {
+        if (retrievedorder[i] === search_term) {
+            retrievedorder.splice(i, 1);
+             break;
+        }
+    }
 
     console.log(retrievedorder)
 
@@ -129,8 +155,16 @@ query.get(ordernumber, {
 
 
 
-
+    // hidden
     $("#lookupbox").toggle();
+
+    // show
+    $("#order-table").toggle();
+    $("#submittocustomer").toggle();
+    $("#lookupbutton").toggle();
+
+
+
 
 
 
@@ -150,6 +184,25 @@ query.get(ordernumber, {
     // error is a Parse.Error with an error code and message.
   }
 });
+}
+
+function returntoLookup()
+{
+  // hidden
+  $("#order-table").toggle();
+  $("#submittocustomer").toggle();
+
+  // showen
+  $("#lookupbox").toggle();
+
+}
+
+
+function Submitbacktocustomer()
+{
+  console.log(globordernum)
+
+  // add parse code here..... 
 }
 
 

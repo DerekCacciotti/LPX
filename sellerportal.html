@@ -92,12 +92,19 @@
 
   </table>
 
+
+  <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your seller email here">
+
   <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer()"/>
   <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
 
 
 
-  </div>
+
+
+  <div>
+
+
 
 
 
@@ -115,10 +122,16 @@
         $("#order-table").toggle();
         $("#submittocustomer").toggle();
         $("#lookupbutton").toggle();
+        $("#emailbox").toggle();
 
       }
 
       var globordernum;
+
+      var counter = 0
+
+      var submittedpricesarray = []
+      var retrievedorder;
 
 
 function Lookup()
@@ -134,7 +147,7 @@ query.get(ordernumber, {
 
     // create table here so user can the seller can enter values
 
-    var retrievedorder = order.get("order")
+    retrievedorder = order.get("order")
     var search_term = 'undefined';
 
     for (var i=retrievedorder.length-1; i>=0; i--) {
@@ -162,6 +175,7 @@ query.get(ordernumber, {
     $("#order-table").toggle();
     $("#submittocustomer").toggle();
     $("#lookupbutton").toggle();
+    $("#emailbox").toggle();
 
 
 
@@ -202,7 +216,59 @@ function Submitbacktocustomer()
 {
   console.log(globordernum)
 
-  // add parse code here..... 
+$("#pricebox").each(function() {
+    submittedpricesarray.push($(this).val())
+});
+
+var comepletedorder = []
+
+for (orders in retrievedorder)
+{
+  var orderdeailts = retrievedorder[orders]
+
+  for (prices in submittedpricesarray)
+{
+  comepletedorder.push({
+    details:   orderdeailts,
+    prices: submittedpricesarray[prices]
+});
+}
+
+}
+
+console.log(comepletedorder)
+
+
+// create new entry for furfilled orders
+
+var furfilledorders = Parse.Object.extend("furfilledorders");
+var furfilledordersobj = new furfilledorders();
+var emailbox = document.getElementById("emailbox").value
+
+furfilledordersobj.set("furfilledorder", comepletedorder);
+furfilledordersobj.set("ordernumber", globordernum);
+furfilledordersobj.set("seller", emailbox);
+furfilledordersobj.save(null, {
+  success: function(furfilledorder) {
+    // Execute any logic that should take place after the object is saved.
+    alert("Your order has been furfilled")
+
+  },
+  error: function(order, error) {
+    // Execute any logic that should take place if the save fails.
+    // error is a Parse.Error with an error code and message.
+    alert('Failed to create new object, with error code: ' + error.message);
+  }
+});
+
+
+
+
+
+
+
+
+
 }
 
 

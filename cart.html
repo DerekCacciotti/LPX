@@ -54,6 +54,14 @@
 
   </nav>
 
+  <div class="dropdown" id="dropdownbutton">
+  <button class="btn btn-link dropdown-toggle pull-right" type="button" data-toggle="dropdown">Recent Orders
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu pull-right" id="dropdownmenu">
+
+  </ul>
+</div>
+
 <div class="container">
   <h4>Current order</h4>
   <div id="table">
@@ -131,10 +139,12 @@
 
 
 <script type="text/javascript">
+
 $("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+  document.onload = poplatedropdown();
 
 
 var orderarray = JSON.parse(window.localStorage.getItem("currentcart"))
@@ -366,6 +376,39 @@ function SendEmail(array, pobject)
 
 }
 
+// poplates drop down
+function poplatedropdown()
+{
+
+  var loggedinuser = Parse.User.current();
+    console.log(loggedinuser)
+  var order = Parse.Object.extend("Order");
+var query = new Parse.Query(order);
+query.equalTo("submiitedby", loggedinuser);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for(var i = 0; i < results.length; i++ )
+    {
+      var dropdownmenu = document.getElementById("dropdownmenu")
+    var li =  document.createElement("li")
+    //li.innerHTML = results[i].id
+    var atag = document.createElement("a")
+    //dropdownmenu.appendChild(li)
+    atag.href = "#"
+    atag.innerHTML = results[i].id
+    li.appendChild(atag)
+    dropdownmenu.appendChild(li)
+    }
+
+
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+}
 
 
 

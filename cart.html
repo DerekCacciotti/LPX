@@ -195,6 +195,23 @@ for (var j = 0; j <= itemidsarray.length; ++j)
       }
     })
 }
+function cleartable()
+{
+  var table = document.getElementById("order-table");
+  while (table.rows.length > 0) {
+    table.deleteRow(0);
+
+
+
+  }
+
+
+
+
+
+
+
+}
 
 
 function BacktoSearch()
@@ -400,7 +417,48 @@ query.find({
     atag.innerHTML = results[i].id
     li.appendChild(atag)
     dropdownmenu.appendChild(li)
+
+
     }
+
+    $("#dropdownmenu a").click(function() {
+      var ordernumber = this.innerHTML;
+    //lert(this.innerHTML)
+    cleartable();
+
+    var Order = Parse.Object.extend("Order");
+var query = new Parse.Query(Order);
+query.get(ordernumber, {
+  success: function(savedorder) {
+    var order = savedorder.get("order");
+
+    var search_term = 'undefined';
+
+    for (var i=order.length-1; i>=0; i--) {
+        if (order[i] === search_term) {
+            order.splice(i, 1);
+             break;
+        }
+    }
+
+    for (items in order)
+    {
+      $('#order-table').append('<tr><td id="item">' +     order[items]  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + '</td></tr>');
+
+    }
+
+  },
+  error: function(object, error) {
+    // The object was not retrieved successfully.
+    // error is a Parse.Error with an error code and message.
+  }
+});
+
+
+
+
+
+});
 
 
   },

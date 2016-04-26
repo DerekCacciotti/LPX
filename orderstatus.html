@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LPX- Order Status</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+</head>
+<body>
+
+
+  <nav class=" navbar navbar-inverse">
+    <div class="container-fluid">
+      <!-- logo -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collaspe" data-target="#mainnavbar">
+          <!-- make the three line icon found on chrome in the menu bar for settings-->
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">LPX</a>
+      </div>
+
+      <!-- MENU ITEMS-->
+      <div class="collaspe navbar-collaspe" id="mainnavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+
+<!-- right align menu item for login and sign uo buttons-->
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="login.html">Login</a></li>
+    <li><a href="signup.html">Sign Up</a></li>
+</ul>
+
+      </div>
+    </div>
+
+  </nav>
+
+
+  <div class="container" id="lookupbox">
+      <div class="row">
+          <div class="col-sm-6 col-md-4 col-md-offset-4">
+
+              <div class="account-wall">
+                    <h1 class="text-center login-title">Please enter your Order Number.</h1>
+                  <form class="form-signin">
+                  <input type="text" class="form-control" placeholder="Order Number" id="ordernumber" required autofocus>
+                  <input type="text" class="form-control" placeholder="Seller Name" id="sellername" required autofocus>
+                  <br />
+                  <input type="button" class="btn btn-lg btn-primary btn-block"  name="loopup" value="Look Up" onclick="Lookup()">
+
+                  </form>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
+  <div class="container" id="ordersection">
+
+    <table id="order-table" class="table">
+
+  <tr>
+    <th>Item and Amount</th>
+    <th>Returned Pricing</th>
+
+
+
+
+
+
+
+
+
+
+
+  </tr>
+
+
+
+
+
+  </table>
+
+  <p id="submittedbylabel"></p>
+  <p id="totallabel" class="pull-right"></p>
+
+
+
+
+
+
+
+
+
+  <div>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+
+    Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
+      Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+      document.onload = hideTable();
+
+      var globordernum;
+
+      var pricearray = [];
+
+
+
+// function to hide the div with the table
+function hideTable()
+{
+  $("#ordersection").toggle();
+}
+
+
+function Lookup()
+{
+  var ordernumber = document.getElementById("ordernumber").value
+  console.log(ordernumber)
+  var seller = document.getElementById("sellername").value
+
+  var furfilledorders = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorders);
+query.equalTo("ordernumber", ordernumber);
+query.equalTo("seller", seller);
+query.find({
+  success: function(results) {
+    console.log(results)
+    HideLookupBox();
+
+    for(var i = 0; i < results.length; i++)
+    {
+      var orderdeailts = results[i];
+      var savedorder = orderdeailts.get("furfilledorder")
+      for (details in savedorder)
+      {
+          console.log(savedorder[details].prices)
+
+          pricearray.push(savedorder[details].prices)
+
+          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].prices + '</td></tr>')
+          var sellertag = document.getElementById('submittedbylabel');
+          sellertag.innerHTML = "Submitted by " + seller
+      }
+
+      console.log(pricearray)
+
+      for(price in pricearray)
+      {
+        var convertedprice = parseInt(pricearray[price])
+        var totallabel = document.getElementById("totallabel")
+        totallabel.innerHTML = convertedprice
+
+      }
+
+
+    }
+
+  },
+  error: function(error) {
+    alert("Error finding your order");
+  }
+});
+}
+
+function HideLookupBox()
+{
+  $("#lookupbox").toggle();
+  $("#ordersection").toggle();
+
+}
+
+
+
+
+
+    </script>
+
+</body>
+</html>

@@ -136,6 +136,9 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
   var finalorder = [];
+  var currentuser = Parse.User.current();
+
+window.onload = checkCookie();
 
   var orderarray = JSON.parse(window.localStorage.getItem("item"))
   console.log(orderarray)
@@ -202,6 +205,21 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
   }
 });
+}
+
+
+function checkCookie() {
+console.log("the current cookie is " + document.cookie)
+
+if (currentuser == null)
+{
+currentuser = document.cookie
+}
+else
+{
+console.log("user passed")
+}
+
 }
 
 function BacktoSearch()

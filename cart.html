@@ -393,10 +393,26 @@ function SendEmail(array, pobject)
 
 }
 
+function checkCookie() {
+console.log("the current cookie is " + document.cookie)
+
+if (currentuser == null)
+{
+currentuser = document.cookie
+}
+else
+{
+console.log("user passed")
+}
+
+}
+
+
 // poplates drop down
 function poplatedropdown()
 {
 
+checkCookie();
   var loggedinuser = Parse.User.current();
     console.log(loggedinuser)
   var order = Parse.Object.extend("Order");

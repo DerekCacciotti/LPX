@@ -121,6 +121,8 @@
 // this array will hold the id og the items ordered
 var itemsarray =[];
 
+var currentuser = Parse.User.current();
+
       window.onload = getalldata()
 
       // this function gets all data is called on load
@@ -128,7 +130,7 @@ var itemsarray =[];
       {
 
 
-
+        checkCookie()
         var GameScore = Parse.Object.extend("FoodSource");
       var query = new Parse.Query(GameScore);
       query.find({
@@ -166,12 +168,17 @@ var itemsarray =[];
       }
 
       function checkCookie() {
-     var user = getCookie("userid");
-     if (user != "") {
-         //stay on page
-     } else {
-        alert("cookie was not created")
-     }
+    console.log("the current cookie is " + document.cookie)
+
+    if (currentuser == null)
+    {
+      currentuser = document.cookie
+    }
+    else {
+      console.log("user passed")
+    }
+
+
  }
 
 function findFood()

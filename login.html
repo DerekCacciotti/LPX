@@ -83,9 +83,12 @@
         var password = document.getElementById('password').value
         Parse.User.logIn(username, password, {
       success: function(user) {
+        document.cookie = user
+        console.log(document.cookie)
+
       alert("user logged in ")
 
-      setCookie("user", user.id, 1)
+    
 
       window.location.href = "search.html" // change this to dashboard
       },
@@ -96,13 +99,9 @@
 
       }
 
-      function setCookie(cname, cvalue, exdays) {
-     var d = new Date();
-     d.setTime(d.getTime() + (exdays*24*60*60*1000));
-     var expires = "expires="+d.toUTCString();
-     document.cookie = cname + "=" + cvalue + "; " + expires;
-     console.log("cookie created")
- }
+
+
+
 
 
     </script>

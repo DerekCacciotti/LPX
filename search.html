@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="bower_components/toastr/toastr.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
     <script src="bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="bower_components/toastr/toastr.js"></script>
+
 
 </head>
 <body>
@@ -40,7 +43,7 @@
           <li class="dropdown">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile <span class="caret"></span></a>
                    <ul class="dropdown-menu">
-                       <li><a href="dashboard/dashboard.html">Dashboard</a></li>
+                       <li><a href="dashboard.html">Dashboard</a></li>
                        <li class="active"><a href="search.html">Database</a></li>
                        <li><a href="#">Log Out</a></li>
                    </ul>
@@ -128,8 +131,7 @@ var currentuser = Parse.User.current();
       // this function gets all data is called on load
       function getalldata()
       {
-
-
+        CheckforFurfilledOrders();
         checkCookie()
         var GameScore = Parse.Object.extend("FoodSource");
       var query = new Parse.Query(GameScore);
@@ -179,6 +181,26 @@ var currentuser = Parse.User.current();
       console.log("user passed")
       console.log(currentuser)
     }
+
+
+ }
+
+
+ function CheckforFurfilledOrders()
+ {
+   var order = Parse.Object.extend("furfilledorders")
+   var query = new Parse.Query(order)
+   query.equalTo("orderfor", currentuser.get("username"))
+   query.find({
+  success: function(results) {
+  toastr.success("Some sellers got back to you", results.length + " new orders ")
+
+
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
 
 
  }

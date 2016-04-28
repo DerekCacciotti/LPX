@@ -160,6 +160,8 @@ var itemidsarray = [];
 var amountarray = [];
 var finalorder = [];
 
+
+
   var currentuser = Parse.User.current();
 console.log(orderarray);
 console.log(currentuser)
@@ -346,7 +348,8 @@ console.log(finalorder)
 
 
  orderobj.set("order", finalorder)
-  orderobj.set("submiitedby", currentuser)
+
+  orderobj.set("submitedbyusername", currentuser.get("username"))
   orderobj.set("selectedsellers", sellersarray)
   orderobj.save(null, {
   success: function(submiitedorder) {
@@ -354,6 +357,7 @@ console.log(finalorder)
 
   SendEmail(sellersarray, submiitedorder.id);
     alert('Your order has been submitted ' + submiitedorder.id);
+    localStorage.removeItem("currentcart")
 
 
 

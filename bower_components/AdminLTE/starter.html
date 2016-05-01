@@ -180,7 +180,7 @@ desired effect
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li class="header">HEADER</li>
+        <li class="header">User Tools</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="/Users/derekcacciotti/Documents/LPX/index.html"><i class="fa fa-link"></i> <span>Home Page</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Sales</span></a></li>
@@ -210,6 +210,45 @@ desired effect
     <section class="content">
 
       <!-- Your Page Content Here -->
+
+      <div id="nonfurfilledorderarea">
+        <h2>Submitted orders</h2>
+
+      <div class="account-wall" id="orderslistdiv">
+
+    <ul id="orderslist">
+
+
+    </ul>
+        </div>
+    </div>
+    <br />
+
+    <div id="furfilledorders">
+      <h2>Furfilled Orders</h2>
+      <div>
+        <ul id="forderslist">
+
+        </ul>
+      </div>
+
+      <div id="chart1">
+        <h1>CHART HERE</h1>
+      </div>
+
+      <br />
+
+      <div id="chart2">
+        <h1>CHART2 HERE</h1>
+      </div>
+
+
+
+
+    </div>
+
+
+      </div>
 
     </section>
     <!-- /.content -->
@@ -272,6 +311,8 @@ console.log(currentuser.get("username"))
 var usernamecorner = document.getElementById("usernamecorner")
 usernamecorner.innerHTML = currentuser.get("username")
 
+document.onload = populateorderslist()
+
 $("#logoutbutton").click(function(){
   Logout()
 })
@@ -280,7 +321,73 @@ $("#logoutbutton").click(function(){
 // log out function
 function Logout()
 {
+
   console.log("logged out")
+}
+
+function populateorderslist()
+{
+  var orders = Parse.Object.extend("Order");
+var query = new Parse.Query(orders);
+query.equalTo("submitedbyusername", currentuser.get("username"));
+query.equalTo("isfurfilled", false)
+query.find({
+success: function(results) {
+  console.log("Successfully retrieved " + results.length);
+  // Do something with the returned Parse.Object values
+for(var i = 0; i < results.length; i++)
+{
+  var orderslist = document.getElementById('forderslist')
+  var li =  document.createElement("li")
+    //li.innerHTML = results[i].id
+    var atag = document.createElement("a")
+    //dropdownmenu.appendChild(li)
+    atag.href = "#"
+    atag.innerHTML = results[i].id
+    li.appendChild(atag)
+    orderslist.appendChild(li)
+}
+
+
+
+},
+error: function(error) {
+  alert("Error: " + error.code + " " + error.message);
+}
+});
+populatefurfilledorderslist()
+}
+
+function populatefurfilledorderslist()
+{
+  var orders = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(orders);
+query.equalTo("orderfor", currentuser.get("username"));
+query.find({
+success: function(results) {
+  console.log("Successfully retrieved " + results.length);
+  // Do something with the returned Parse.Object values
+for(var i = 0; i < results.length; i++)
+{
+  var orderslist = document.getElementById('orderslist')
+  var li =  document.createElement("li")
+    //li.innerHTML = results[i].id
+    var atag = document.createElement("a")
+    //dropdownmenu.appendChild(li)
+    atag.href = "#"
+    atag.innerHTML = results[i].id
+    li.appendChild(atag)
+    orderslist.appendChild(li)
+}
+
+
+
+},
+error: function(error) {
+  alert("Error: " + error.code + " " + error.message);
+}
+});
+
 }
 
 

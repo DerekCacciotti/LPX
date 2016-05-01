@@ -159,6 +159,7 @@ var finalamounts;
 var itemidsarray = [];
 var amountarray = [];
 var finalorder = [];
+var isfurfilled = false;
 
 
 
@@ -351,6 +352,7 @@ console.log(finalorder)
 
   orderobj.set("submitedbyusername", currentuser.get("username"))
   orderobj.set("selectedsellers", sellersarray)
+  orderobj.set("isfurfilled", isfurfilled)
   orderobj.save(null, {
   success: function(submiitedorder) {
     // create unique link

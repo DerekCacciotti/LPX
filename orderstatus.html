@@ -36,11 +36,18 @@
         </ul>
 
 
-<!-- right align menu item for login and sign uo buttons-->
-<ul class="nav navbar-nav navbar-right">
-  <li><a href="login.html">Login</a></li>
-    <li><a href="signup.html">Sign Up</a></li>
-</ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile <span class="caret"></span></a>
+                   <ul class="dropdown-menu">
+                       <li><a href="dashboard.html">Dashboard</a></li>
+                       <li class="active"><a href="search.html">Database</a></li>
+                       <li><a href="#">Log Out</a></li>
+                   </ul>
+               </li>
+           </ul>
+
+            </ul>
 
       </div>
     </div>
@@ -56,7 +63,6 @@
                     <h1 class="text-center login-title">Please enter your Order Number.</h1>
                   <form class="form-signin">
                   <input type="text" class="form-control" placeholder="Order Number" id="ordernumber" required autofocus>
-                  <input type="text" class="form-control" placeholder="Seller Name" id="sellername" required autofocus>
                   <br />
                   <input type="button" class="btn btn-lg btn-primary btn-block"  name="loopup" value="Look Up" onclick="Lookup()">
 
@@ -74,6 +80,8 @@
   <tr>
     <th>Item and Amount</th>
     <th>Returned Pricing</th>
+    <th>Seller</th>
+
 
 
 
@@ -124,12 +132,16 @@
 
       var pricearray = [];
 
+    var currentUser = Parse.User.current();
+    var total = 0
+
 
 
 // function to hide the div with the table
 function hideTable()
 {
   $("#ordersection").toggle();
+
 }
 
 
@@ -137,39 +149,41 @@ function Lookup()
 {
   var ordernumber = document.getElementById("ordernumber").value
   console.log(ordernumber)
-  var seller = document.getElementById("sellername").value
 
   var furfilledorders = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorders);
 query.equalTo("ordernumber", ordernumber);
-query.equalTo("seller", seller);
+query.equalTo("orderfor", currentUser.get("username"))
 query.find({
   success: function(results) {
-    console.log(results)
+    console.log(results.length)
     HideLookupBox();
 
     for(var i = 0; i < results.length; i++)
     {
       var orderdeailts = results[i];
       var savedorder = orderdeailts.get("furfilledorder")
+      console.log(savedorder)
       for (details in savedorder)
       {
           console.log(savedorder[details].prices)
 
           pricearray.push(savedorder[details].prices)
 
-          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].prices + '</td></tr>')
-          var sellertag = document.getElementById('submittedbylabel');
-          sellertag.innerHTML = "Submitted by " + seller
+          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].prices +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
+
       }
 
       console.log(pricearray)
 
       for(price in pricearray)
       {
-        var convertedprice = parseInt(pricearray[price])
+        console.log(pricearray[price])
+        var convertedprice = parseFloat(pricearray[price])
+        total += convertedprice
+        console.log(total)
         var totallabel = document.getElementById("totallabel")
-        totallabel.innerHTML = " the total is" + convertedprice
+        totallabel.innerHTML = " the total is " + total
 
       }
 

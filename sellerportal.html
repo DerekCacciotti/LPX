@@ -102,7 +102,7 @@
 
   <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your seller email here">
 
-  <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer()"/>
+  <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer(retrievedorder[items])"/>
   <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
 
 
@@ -142,8 +142,9 @@
       var retrievedorder;
       var orderforid;
       var orderfor;
-      var orderdeailts;
+
       var finalprices;
+      var comepletedorder = []
 
 
 function Lookup()
@@ -173,7 +174,7 @@ query.get(ordernumber, {
         }
     }
 
-    console.log(retrievedorder)
+    //console.log(retrievedorder)
 
     for(items in retrievedorder)
     {
@@ -230,39 +231,21 @@ function returntoLookup()
 
 function Submitbacktocustomer()
 {
+  var comepletedorder = []
   console.log(globordernum)
-
-  $("input[name='pricebox']" ).each(function(){
-        alert($(this).val())
-        submittedpricesarray.push($(this).val())
-    });
-
-    console.log(submittedpricesarray)
-
-
-    var comepletedorder = []
-for (orders in retrievedorder)
-{
- orderdeailts = retrievedorder[orders]
- comepletedorder.push({
-    details:   orderdeailts
- });
-
-
-}
-
-for (prices in submittedpricesarray)
-{
-
-finalprices = parseFloat(submittedpricesarray[prices])
-
-comepletedorder.push({
-   price: finalprices
+$("input[name='pricebox']").each(function() {
+    comepletedorder.push($(this).val())
 });
 
 
+for (orders in retrievedorder)
+{
+  comepletedorder.unshift(retrievedorder[orders])
 
 }
+
+
+console.log(comepletedorder)
 
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
@@ -284,26 +267,46 @@ furfilledordersobj.save(null, {
 });
 
 
-
-
-
-
-
-
-
-console.log(comepletedorder)
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

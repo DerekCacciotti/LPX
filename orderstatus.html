@@ -159,20 +159,25 @@ query.find({
     console.log(results.length)
     HideLookupBox();
 
+
+
     for(var i = 0; i < results.length; i++)
     {
       var orderdeailts = results[i];
+
       var savedorder = orderdeailts.get("furfilledorder")
       console.log(savedorder)
       for (details in savedorder)
       {
-          console.log(savedorder[details].prices)
+          console.log(savedorder[details].price)
 
-          pricearray.push(savedorder[details].prices)
+          pricearray.push(savedorder[details].price)
 
-          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].prices +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
+          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].price +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
 
       }
+
+    
 
       console.log(pricearray)
 

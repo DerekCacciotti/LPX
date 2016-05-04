@@ -136,11 +136,14 @@
       var globordernum;
 
       var counter = 0
+      var pricecounter = 0;
 
       var submittedpricesarray = []
       var retrievedorder;
       var orderforid;
       var orderfor;
+      var orderdeailts;
+      var finalprices;
 
 
 function Lookup()
@@ -174,7 +177,7 @@ query.get(ordernumber, {
 
     for(items in retrievedorder)
     {
-      $('#order-table').append('<tr><td id="item">' + retrievedorder[items] + '</td><td>' + 	'<input type="text" id="pricebox" class="form-control text-center"> ' + '</td></tr>')
+      $('#order-table').append('<tr><td id="item">' + retrievedorder[items] + '</td><td>' + 	'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
     }
 
 
@@ -229,35 +232,41 @@ function Submitbacktocustomer()
 {
   console.log(globordernum)
 
-$("#pricebox").each(function() {
-    submittedpricesarray.push($(this).val())
-});
+  $("input[name='pricebox']" ).each(function(){
+        alert($(this).val())
+        submittedpricesarray.push($(this).val())
+    });
 
-var comepletedorder = []
+    console.log(submittedpricesarray)
 
+
+    var comepletedorder = []
 for (orders in retrievedorder)
 {
-  var orderdeailts = retrievedorder[orders]
+ orderdeailts = retrievedorder[orders]
+ comepletedorder.push({
+    details:   orderdeailts
+ });
 
-  for (prices in submittedpricesarray)
+
+}
+
+for (prices in submittedpricesarray)
 {
-  comepletedorder.push({
-    details:   orderdeailts,
-    prices: submittedpricesarray[prices]
+
+finalprices = parseFloat(submittedpricesarray[prices])
+
+comepletedorder.push({
+   price: finalprices
 });
-}
+
+
 
 }
-
-console.log(comepletedorder)
-
-
-// create new entry for furfilled orders
 
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
 var emailbox = document.getElementById("emailbox").value
-
 furfilledordersobj.set("furfilledorder", comepletedorder);
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", emailbox);
@@ -266,7 +275,6 @@ furfilledordersobj.save(null, {
   success: function(furfilledorder) {
     // Execute any logic that should take place after the object is saved.
     alert("Your order has been furfilled")
-
   },
   error: function(order, error) {
     // Execute any logic that should take place if the save fails.
@@ -274,6 +282,18 @@ furfilledordersobj.save(null, {
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+
+
+
+
+
+
+
+
+
+console.log(comepletedorder)
+
+
 
 
 

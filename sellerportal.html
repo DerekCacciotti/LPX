@@ -231,26 +231,42 @@ function returntoLookup()
 
 function Submitbacktocustomer()
 {
-  var comepletedorder = []
-  console.log(globordernum)
-$("input[name='pricebox']").each(function() {
-    comepletedorder.push($(this).val())
-});
+  var foundorders = []
 
 
-for (orders in retrievedorder)
+var LPXOrder = {};
+
+// get prices first
+
+var prices = $('input[name="pricebox"]').map(function() {
+    return parseFloat(this.value)
+}).get()
+console.log(prices)
+
+
+
+LPXOrder.prices = prices
+
+
+// get order deatils
+
+for(orders in retrievedorder)
 {
-  comepletedorder.unshift(retrievedorder[orders])
-
+  foundorders.push(retrievedorder[orders])
 }
+console.log(foundorders)
 
 
-console.log(comepletedorder)
+LPXOrder.orderdetails = foundorders
+
+console.log(LPXOrder)
+
+
 
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
 var emailbox = document.getElementById("emailbox").value
-furfilledordersobj.set("furfilledorder", comepletedorder);
+furfilledordersobj.set("furfilledorder", LPXOrder);
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", emailbox);
 furfilledordersobj.set("orderfor", orderfor);
@@ -265,7 +281,6 @@ furfilledordersobj.save(null, {
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
-
 
 }
 

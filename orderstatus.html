@@ -131,6 +131,7 @@
       var globordernum;
 
       var pricearray = [];
+      var itemsarray = [];
 
     var currentUser = Parse.User.current();
     var total = 0
@@ -153,7 +154,7 @@ function Lookup()
   var furfilledorders = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorders);
 query.equalTo("ordernumber", ordernumber);
-query.equalTo("orderfor", currentUser.get("username"))
+//query.equalTo("orderfor", currentUser.get("username"))
 query.find({
   success: function(results) {
     console.log(results.length)
@@ -166,31 +167,20 @@ query.find({
       var orderdeailts = results[i];
 
       var savedorder = orderdeailts.get("furfilledorder")
-      console.log(savedorder)
-      for (details in savedorder)
+      console.log(savedorder.orderdetails)
+      for (details in savedorder.orderdetails)
       {
-          console.log(savedorder[details].price)
+          console.log(savedorder.orderdetails[details])
 
-          pricearray.push(savedorder[details].price)
+          pricearray.push(savedorder.prices)
 
-          $('#order-table').append('<tr><td id="item">' + savedorder[details].details + '</td><td>' + 	savedorder[details].price +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
+          $('#order-table').append('<tr><td id="item">' + savedorder.orderdetails[details] + '</td><td>' + 	savedorder.prices[details] +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
 
       }
 
-    
 
-      console.log(pricearray)
 
-      for(price in pricearray)
-      {
-        console.log(pricearray[price])
-        var convertedprice = parseFloat(pricearray[price])
-        total += convertedprice
-        console.log(total)
-        var totallabel = document.getElementById("totallabel")
-        totallabel.innerHTML = " the total is " + total
 
-      }
 
 
     }

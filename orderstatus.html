@@ -75,34 +75,14 @@
 
   <div class="container" id="ordersection">
 
-    <table id="order-table" class="table">
-
-  <tr>
-    <th>Item and Amount</th>
-    <th>Returned Pricing</th>
-    <th>Seller</th>
 
 
+        <table id="order-table" class="table">
 
-
-
-
-
-
-
-
-
-
-  </tr>
-
-
-
-
-
-  </table>
-
-  <p id="submittedbylabel"></p>
-  <p id="totallabel" class="pull-right"></p>
+      <tr>
+        <th>Item and Amount</th>
+        <th>Returned Pricing</th>
+        <th>Seller</th>
 
 
 
@@ -113,10 +93,63 @@
 
 
 
-  <div>
+
+
+      </tr>
 
 
 
+
+
+      </table>
+
+      <p id="submittedbylabel"></p>
+      <p id="totallabel" class="pull-right"></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<div id="pricecomparsion" class="center">
+<h1 id="compdir"></h1>
+
+
+
+
+
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="modalheader"></h4>
+      </div>
+      <div class="modal-body" id="modalbody">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -131,7 +164,7 @@
       var globordernum;
 
       var pricearray = [];
-      var itemsarray = [];
+      var sellersarray = [];
 
     var currentUser = Parse.User.current();
     var total = 0
@@ -142,6 +175,7 @@
 function hideTable()
 {
   $("#ordersection").toggle();
+    $("pricecomparsion").toggle();
 
 }
 
@@ -150,11 +184,12 @@ function Lookup()
 {
   var ordernumber = document.getElementById("ordernumber").value
   console.log(ordernumber)
+  globordernum = ordernumber
 
   var furfilledorders = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorders);
 query.equalTo("ordernumber", ordernumber);
-//query.equalTo("orderfor", currentUser.get("username"))
+query.equalTo("orderfor", currentUser.get("username"))
 query.find({
   success: function(results) {
     console.log(results.length)
@@ -174,6 +209,8 @@ query.find({
 
           pricearray.push(savedorder.prices)
 
+
+
           $('#order-table').append('<tr><td id="item">' + savedorder.orderdetails[details] + '</td><td>' + 	savedorder.prices[details] +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
 
       }
@@ -183,7 +220,12 @@ query.find({
 
 
 
+
+
+
     }
+
+    CreateButtons(globordernum)
 
   },
   error: function(error) {
@@ -197,7 +239,85 @@ function HideLookupBox()
   $("#lookupbox").toggle();
   $("#ordersection").toggle();
 
+
 }
+
+function CreateButtons(ordernumber)
+{
+  $("pricecomparsion").toggle();
+  var total;
+
+  var furfilledorder = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorder);
+query.equalTo("ordernumber", ordernumber);
+query.find({
+success: function(results) {
+  // Do something with the returned Parse.Object values
+  for (var i = 0; i < results.length; i++) {
+    var object = results[i];
+    sellersarray.push(object.get("seller"))
+
+  }
+console.log(sellersarray)
+
+var directions = document.getElementById("compdir")
+directions.innerHTML = "Please click the name of the seller to determine if they are a good fit for your business"
+
+var buttondiv = document.getElementById("pricecomparsion")
+
+for(var i = 0; i < sellersarray.length; i++)
+{
+  var buttonelement = document.createElement("input")
+  buttonelement.type = "button"
+  buttonelement.className = "btn btn-default"
+  buttonelement.value = sellersarray[i]
+  buttonelement.name = "sellerbutton"
+  buttondiv.appendChild(buttonelement)
+}
+
+$("input[name=sellerbutton]").click(function() {
+console.log($(this).val())
+var selectedseller = $(this).val()
+$("#myModal").modal()
+
+var furfilledorder = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorder);
+query.equalTo("seller", selectedseller);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " scores.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      console.log(object.get("furfilledorder").prices)
+      var selectedprices = []
+      selectedprices.push(object.get("furfilledorder").prices)
+      // header
+      var modalheader = document.getElementById("modalheader")
+      modalheader.innerHTML = "Order for " + selectedseller
+
+      var modalbody = document.getElementById("modalbody")
+      var p = document.createElement("p")
+
+
+    
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+});
+
+},
+error: function(error) {
+  alert("Error: " + error.code + " " + error.message);
+}
+});
+
+
+}
+
+
 
 
 

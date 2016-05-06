@@ -340,3 +340,8 @@ span #submitbutton
 {
   list-style: none;
 }
+
+#compdir
+{
+  font-size: 18px;
+}

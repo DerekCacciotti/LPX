@@ -121,7 +121,7 @@
 
 </div>
 
-<div id="pricecomparsion" class="center">
+<div class="center" id="comp">
 <h1 id="compdir"></h1>
 
 
@@ -144,7 +144,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
     </div>
 
@@ -175,7 +175,8 @@
 function hideTable()
 {
   $("#ordersection").toggle();
-    $("pricecomparsion").toggle();
+
+
 
 }
 
@@ -240,32 +241,32 @@ function HideLookupBox()
   $("#ordersection").toggle();
 
 
+
 }
+
 
 function CreateButtons(ordernumber)
 {
-  $("pricecomparsion").toggle();
-  var total;
-
+$("comp").toggle();
   var furfilledorder = Parse.Object.extend("furfilledorders");
-var query = new Parse.Query(furfilledorder);
-query.equalTo("ordernumber", ordernumber);
-query.find({
-success: function(results) {
-  // Do something with the returned Parse.Object values
-  for (var i = 0; i < results.length; i++) {
-    var object = results[i];
-    sellersarray.push(object.get("seller"))
+  var query = new Parse.Query(furfilledorder);
+  query.equalTo("ordernumber", ordernumber);
+  query.find({
+    success: function(results) {
+      console.log("Successfully retrieved " + results.length);
+      // Do something with the returned Parse.Object values
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i];
+      sellersarray.push(object.get("seller"))
+      }
+      console.log(sellersarray)
 
-  }
-console.log(sellersarray)
+      var directions = document.getElementById("compdir")
+      directions.innerHTML = "Please click the name of the seller to determine if they are a good fit for your business"
 
-var directions = document.getElementById("compdir")
-directions.innerHTML = "Please click the name of the seller to determine if they are a good fit for your business"
+      var buttondiv = document.getElementById("comp")
 
-var buttondiv = document.getElementById("pricecomparsion")
-
-for(var i = 0; i < sellersarray.length; i++)
+  for(var i = 0; i < sellersarray.length; i++)
 {
   var buttonelement = document.createElement("input")
   buttonelement.type = "button"
@@ -279,43 +280,70 @@ $("input[name=sellerbutton]").click(function() {
 console.log($(this).val())
 var selectedseller = $(this).val()
 $("#myModal").modal()
+PopulateModal(selectedseller)
+});
 
-var furfilledorder = Parse.Object.extend("furfilledorders");
+
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+}
+
+
+function PopulateModal(selectedseller)
+{
+  var furfilledorder = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorder);
 query.equalTo("seller", selectedseller);
 query.find({
   success: function(results) {
-    console.log("Successfully retrieved " + results.length + " scores.");
+    console.log("Successfully retrieved " + results.length);
     // Do something with the returned Parse.Object values
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
       console.log(object.get("furfilledorder").prices)
-      var selectedprices = []
-      selectedprices.push(object.get("furfilledorder").prices)
-      // header
-      var modalheader = document.getElementById("modalheader")
-      modalheader.innerHTML = "Order for " + selectedseller
+      var selectedprices = object.get("furfilledorder").prices
 
-      var modalbody = document.getElementById("modalbody")
-      var p = document.createElement("p")
+    }
+    console.log(selectedprices)
+
+    // modal header
+    var modalheader = document.getElementById("modalheader")
+    modalheader.innerHTML = "Order by " + selectedseller
 
 
-    
+    // body of the modal
+    var modalbody = document.getElementById("modalbody")
+    var p = document.createElement("p")
+    p.id = "total"
+
+    for(var i = 0; i < selectedprices.length; i++)
+    {
+      total += selectedprices[i]
+    }
+    console.log(total)
+
+    p.innerHTML = "the total for this order is " + total
+    modalbody.appendChild(p)
+
+    $("#modalclose").click(function() {
+      console.log("click")
+      selectedprices = []
+      total = 0;
+      $("#total").remove();
+    });
+
+
+
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
   }
 });
-});
-
-},
-error: function(error) {
-  alert("Error: " + error.code + " " + error.message);
 }
-});
 
-
-}
 
 
 

@@ -91,7 +91,7 @@
 <tr>
   <th>Item</th>
   <th>Brand</th>
-
+  <th>Packsize</th>
 
 
 
@@ -142,7 +142,7 @@ var currentuser = Parse.User.current();
                  var object = results[i];
                      (function($) {
 
-                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td><td>' + object.get("Packsize") + '</td></tr>');
 
                      })(jQuery);
 

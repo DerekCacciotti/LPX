@@ -80,7 +80,9 @@
         <table id="order-table" class="table">
 
       <tr>
-        <th>Item and Amount</th>
+        <th>Item</th>
+        <th>Amount</th>
+        <th>Packsize</th>
         <th>Returned Pricing</th>
         <th>Seller</th>
 
@@ -212,7 +214,7 @@ query.find({
 
 
 
-          $('#order-table').append('<tr><td id="item">' + savedorder.orderdetails[details] + '</td><td>' + 	savedorder.prices[details] +'</td><td>' + orderdeailts.get("seller") + '</td></tr>')
+          $('#order-table').append('<tr><td id="item">' + savedorder.orderdetails[details].item + '</td><td>' + 	savedorder.orderdetails[details].amount + '</td><td>' + 	savedorder.orderdetails[details].Packsize  + "</td><td>" + savedorder.prices[details] + '</td><td>' + orderdeailts.get("seller") + '</td></tr>')
 
       }
 

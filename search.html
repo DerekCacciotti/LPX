@@ -221,7 +221,7 @@ query.find({
                (function($) {
 
 
-           $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td></tr>');
+           $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td><td>' + object.get("Packsize") + '</td></tr>');
 
                })(jQuery);
 
@@ -258,7 +258,7 @@ function cleartable()
 
   }
 
-  table.innerHTML = "<tr>" + " th>Item</th>" + "<th>Brand</th>" + "</tr>"
+  table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Brand</th>" + "<th>Packsize</th>" + "</tr>"
 
 
 

@@ -80,11 +80,13 @@
         <table id="order-table" class="table">
 
       <tr>
+        <th>Seller</th>
         <th>Item</th>
         <th>Amount</th>
-        <th>Packsize</th>
+        <th>Size</th>
+        <th>Pack</th>
         <th>Returned Pricing</th>
-        <th>Seller</th>
+
 
 
 
@@ -146,12 +148,36 @@
 
       </div>
       <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="pricebreakdown">Price Breakdown</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
     </div>
 
   </div>
 </div>
+
+
+<div id="PBModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="modalheader"></h4>
+      </div>
+      <div class="modal-body" id="modalbody">
+
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="pricebreakdown">Price Breakdown</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 
 
@@ -214,7 +240,7 @@ query.find({
 
 
 
-          $('#order-table').append('<tr><td id="item">' + savedorder.orderdetails[details].item + '</td><td>' + 	savedorder.orderdetails[details].amount + '</td><td>' + 	savedorder.orderdetails[details].Packsize  + "</td><td>" + savedorder.prices[details] + '</td><td>' + orderdeailts.get("seller") + '</td></tr>')
+          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[details].item + '</td><td>' + savedorder.orderdetails[details].amount + '</td><td>' + savedorder.orderdetails[details].sizeamount  + "</td><td>" +  savedorder.orderdetails[details].pack + '</td><td>' + savedorder.prices[details])
 
       }
 
@@ -307,6 +333,7 @@ query.find({
       var object = results[i];
       console.log(object.get("furfilledorder").prices)
       var selectedprices = object.get("furfilledorder").prices
+      console.log(object.id)
 
     }
     console.log(selectedprices)
@@ -336,6 +363,11 @@ query.find({
       total = 0;
       $("#total").remove();
     });
+
+    $("#pricebreakdown").click(function() {
+      console.log("price breakdown was clicked")
+
+    })
 
 
 

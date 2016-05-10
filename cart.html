@@ -71,7 +71,9 @@
   <tr>
     <th>Item</th>
     <th>Amount</th>
-    <th>PackSize</th>
+    <th>Size</th>
+    <th>Pack</th>
+
 
 
 
@@ -190,8 +192,11 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
       {
         console.log(object.get('Item'));
+        console.log(object.get("Size"));
 
-         $('#order-table').append('<tr><td id="item">' +     object.get('Item')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("Packsize") + '</td></tr>');
+
+
+         $('#order-table').append('<tr><td id="item">' +   object.get('Item')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("Size") + "</td><td>" + object.get("Pack") +  '</td></tr>');
 
 
 
@@ -295,7 +300,8 @@ query.get(currentuser.id, {
         var $tds = $(this).find('td'),
             product = $tds.eq(0).text(),
             Quantity = $tds.eq(1).text(),
-            Packsize = $tds.eq(2).text();
+            size = $tds.eq(2).text(),
+            pack = $tds.eq(3).text();
             var $input = $(this).find("#quanity"),
             amount2 = $input.eq(0).val()
 
@@ -304,12 +310,13 @@ query.get(currentuser.id, {
             //console.log(product)
           //  console.log(Quantity)
             console.log(amount2)
-            console.log(Packsize)
+            console.log(pack)
 
             var Order = {};
             Order.item = product
             Order.amount = amount2
-            Order.Packsize = Packsize
+            Order.sizeamount = size
+            Order.pack = pack
 
           finalorder.push(Order)
           //finalorder.push(Quantity)

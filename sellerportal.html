@@ -80,7 +80,8 @@
   <tr>
     <th>Item</th>
     <th>Amount</th>
-    <th>Packsize</th>
+    <th>Size</th>
+    <th>Pack</th>
     <th>Please enter your prices in this collum</th>
 
 
@@ -182,7 +183,7 @@ query.get(ordernumber, {
 
     for(items in retrievedorder)
     {
-      $('#order-table').append('<tr><td id="item">' + retrievedorder[items].item + '</td><td>'  +   retrievedorder[items].amount + "</td><td>" + retrievedorder[items].Packsize + "</td><td>" +  	'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
+      $('#order-table').append('<tr><td id="item">' + retrievedorder[items].item + '</td><td>'  +   retrievedorder[items].amount + "</td><td>" + retrievedorder[items].sizeamount + "</td><td>" + retrievedorder[items].pack  + "</td><td>" +	'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
     }
 
 

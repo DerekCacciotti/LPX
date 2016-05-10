@@ -91,8 +91,8 @@
 <tr>
   <th>Item</th>
   <th>Brand</th>
-  <th>Packsize</th>
-
+  <th>Pack</th>
+  <th>Size</th>
 
 
 
@@ -107,9 +107,7 @@
 
 <div class="navbar-fixed-bottom">
   <div class="container">
-    <p class="navbar-text pull-left" id="copytext">&copy; 2016 LPX</p>
-    <a href="#" class="navbar-btn btn btn-info pull-right" >Support</a>
-
+  
 
 
   </div>
@@ -142,7 +140,7 @@ var currentuser = Parse.User.current();
                  var object = results[i];
                      (function($) {
 
-                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td><td>' + object.get("Packsize") + '</td></tr>');
+                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td><td>' + object.get("Pack") + '</td><td>'  + object.get("Size") + '</td><td>');
 
                      })(jQuery);
 

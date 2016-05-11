@@ -196,6 +196,7 @@
 
     var currentUser = Parse.User.current();
     var total = 0
+    var breakdowntotal = 0;
 
 
 
@@ -318,8 +319,7 @@ PopulateModal(selectedseller)
     }
   });
 }
-
-
+// MAKE EVERYTHING INSIDE THE MODAL A BUTTON SO THE USER CAN CLICK ON THE ITEM AND GET PRICE BASED AMOUNT AND CONVERSIONS INFORMATION
 function PopulateModal(selectedseller)
 {
   var furfilledorder = Parse.Object.extend("furfilledorders");
@@ -334,9 +334,42 @@ query.find({
       console.log(object.get("furfilledorder").prices)
       var selectedprices = object.get("furfilledorder").prices
       console.log(object.id)
+      var recivedObject = object.get("furfilledorder").orderdetails
+      console.log("amount is " + recivedObject)
+      var price = object.get("furfilledorder").prices
 
     }
     console.log(selectedprices)
+    var amount;
+    var foundprice;
+
+    for(var j = 0; j < recivedObject.length; j++)
+    {
+      //console.log(recivedObject[j].amount)
+      amount = recivedObject[j].amount
+
+
+    }
+    console.log(amount)
+
+    for (prices in price)
+    {
+      console.log(price[prices])
+      foundprice = price[prices]
+    }
+
+    // total for items in order
+console.log(additemsinorder(amount,foundprice))
+
+var label = document.createElement("label")
+label.id = "based on ammount"
+
+label.innerHTML = "The price you will pay to this seller based on the amount is " + additemsinorder(amount,foundprice)
+
+
+
+
+
 
     // modal header
     var modalheader = document.getElementById("modalheader")
@@ -354,8 +387,18 @@ query.find({
     }
     console.log(total)
 
+
+
+
+
+
+
     p.innerHTML = "the total for this order is " + total
     modalbody.appendChild(p)
+
+    // add the label to
+    modalbody.appendChild(label)
+
 
     $("#modalclose").click(function() {
       console.log("click")
@@ -377,6 +420,14 @@ query.find({
   }
 });
 }
+
+
+function additemsinorder(amount, price)
+{
+  return amount * price
+}
+
+
 
 
 

@@ -148,7 +148,7 @@
 
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="pricebreakdown">Price Breakdown</button>
+          <button type="button" class="btn btn-primary" id="pricebreakdown">Get Unit Conversions </button>
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
     </div>
@@ -170,7 +170,7 @@
 
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="pricebreakdown">Price Breakdown</button>
+          <button type="button" class="btn btn-primary" id="pricebreakdown">Submit Subtotal</button>
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
     </div>
@@ -322,7 +322,7 @@ PopulateModal(selectedseller)
     }
   });
 }
-// MAKE EVERYTHING INSIDE THE MODAL A BUTTON SO THE USER CAN CLICK ON THE ITEM AND GET PRICE BASED AMOUNT AND CONVERSIONS INFORMATION
+
 function PopulateModal(selectedseller)
 {
   var furfilledorder = Parse.Object.extend("furfilledorders");
@@ -349,41 +349,20 @@ query.find({
       orderid = object.id
 
 
+      var subtotal = object.get("subtotal")
+
+      var modalbody = document.getElementById("modalbody")
+      var p = document.createElement("p")
+      p.id = "subtotal"
+      p.innerHTML = "the submiited subtotal is " + subtotal
+      modalbody.appendChild(p)
+
+
+
+
 
 
     }
-
-    //
-
-    //console.log(selectedprices)
-
-
-    /*for(var j = 0; j < recivedObject.length; j++)
-    {
-      //console.log(recivedObject[j].amount)
-      amount = recivedObject[j].amount
-
-
-    }
-    console.log(amount)
-
-    for (prices in price)
-    {
-      console.log(price[prices])
-      foundprice = price[prices]
-    }
-
-    // total for items in order
-console.log(additemsinorder(amount,foundprice))
-
-var label = document.createElement("label")
-label.id = "based on ammount"
-
-label.innerHTML = "The price you will pay to this seller based on the amount is " + additemsinorder(amount,foundprice)
-
-
-
-*/
 
 
     // modal header
@@ -417,6 +396,8 @@ label.innerHTML = "The price you will pay to this seller based on the amount is 
       selectedprices = []
       total = 0;
       $("#total").remove();
+      subtotal = ""
+      $("#subtotal").remove()
 
 
     });
@@ -424,55 +405,63 @@ label.innerHTML = "The price you will pay to this seller based on the amount is 
 
 
     $("#pricebreakdown").click(function() {
-      console.log("price breakdown was clicked")
-      var subtotal = 0;
-      var storedprices = []
-      var amountarray = []
+      console.log("price breakdown was clicked");
+      console.log(orderid)
+      var total = 0
 
       var furfilledorder = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorder);
 query.get(orderid, {
-  success: function(order) {
+  success: function(orderdata) {
     // The object was retrieved successfully.
+    var details = orderdata.get("furfilledorder").orderdetails
 
-
-var orderprices = object.get("furfilledorder").prices
-for(p = 0; p < orderprices.length; p++)
-{
-  storedprices.push(orderprices[p])
-}
-console.log(storedprices)
-
-
-    var orderdetails = object.get("furfilledorder").orderdetails
-    for(var i = 0; i < orderdetails.length; i++)
+    for(var i = 0; i < details.length; i++)
     {
-      var amount = orderdetails[i].amount
-      convertedamount = parseFloat(amount)
-      amountarray.push(convertedamount)
-
-    }
-    console.log(amountarray)
-
-    for(var a = 0; a < amountarray.length; a++)
-    {
-      for(var p = 0; p < storedprices.length; p++)
+      var units = details[i].sizeamount
+      console.log(units.slice(-2))
+      var unitmeasure = units.slice(-2)
+      if(unitmeasure == "CT")
       {
-        subtotal = additemsinorder(amountarray[a], storedprices[p])
-      alert("subtotal is " + subtotal)
-        console.log(subtotal)
+        console.log(parseFloat(details[i].sizeamount))
+        var carrets = parseFloat(details[i].sizeamount)
+        Carretstopounds(details[i].item, carrets)
+      }
+      else if(unitmeasure == "OZ") {
+        console.log("OUNCES")
+        var oz = parseFloat(details[i].sizeamount)
+        OZtoCups(details[i].item, oz)
+
+
       }
 
     }
-    var subtotal = 0;
   },
   error: function(object, error) {
     // The object was not retrieved successfully.
     // error is a Parse.Error with an error code and message.
   }
 });
+
+
+
+
     })
 
+
+    function Carretstopounds(parseObject, amount)
+    {
+      var pounds = amount * 0.00044092449520759
+
+      alert(parseObject + " in pounds " + pounds)
+    }
+
+    function OZtoCups(parseObject, amount)
+    {
+      var cups = amount / 8
+
+      alert(parseObject + " in cups " + cups)
+    }
 
 
 

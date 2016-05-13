@@ -104,6 +104,7 @@
 
 
   <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your seller email here">
+  <input type="text" id="subtotal" class="form-control text-center" placeholder="Enter the subtotal for the order">
 
   <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer(retrievedorder[items])"/>
   <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
@@ -130,6 +131,7 @@
       function onpage()
       {
         $("#order-table").toggle();
+        $("#subtotal").toggle();
         $("#submittocustomer").toggle();
         $("#lookupbutton").toggle();
         $("#emailbox").toggle();
@@ -198,6 +200,7 @@ query.get(ordernumber, {
     $("#submittocustomer").toggle();
     $("#lookupbutton").toggle();
     $("#emailbox").toggle();
+    $("#subtotal").toggle();
 
 
 
@@ -238,7 +241,7 @@ function Submitbacktocustomer()
 {
   var foundorders = []
 
-  
+
 
 
 var LPXOrder = {};
@@ -274,9 +277,11 @@ console.log(LPXOrder)
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
 var emailbox = document.getElementById("emailbox").value
+var subtotal = document.getElementById("subtotal").value
 furfilledordersobj.set("furfilledorder", LPXOrder);
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", emailbox);
+furfilledordersobj.set("subtotal", subtotal)
 furfilledordersobj.set("orderfor", orderfor);
 furfilledordersobj.save(null, {
   success: function(furfilledorder) {

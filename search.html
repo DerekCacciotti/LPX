@@ -102,12 +102,18 @@
 
 
 </table>
+
+<div id="bottomarea">
+
+  <input type="button" class="btn btn-link" value="Next"  id="nextresult"   onclick="NextPage()">
+
 </div>
+
 
 
 <div class="navbar-fixed-bottom">
   <div class="container">
-  
+
 
 
   </div>
@@ -118,6 +124,11 @@
 
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+      // Paginatation
+      var page = 0
+
+      var resultlimit = 50
 
 // this array will hold the id og the items ordered
 var itemsarray =[];
@@ -133,6 +144,8 @@ var currentuser = Parse.User.current();
         checkCookie()
         var GameScore = Parse.Object.extend("FoodSource");
       var query = new Parse.Query(GameScore);
+      query.limit(resultlimit)
+      query.skip(page * resultlimit)
       query.find({
           success: function(results) {
             console.log(results.length)
@@ -140,7 +153,7 @@ var currentuser = Parse.User.current();
                  var object = results[i];
                      (function($) {
 
-                         $('#results-table').append('<tr><td>' +  object.get('Item')  + '</td><td>' + object.get('Brand') + '</td><td>' + object.get("Pack") + '</td><td>'  + object.get("Size") + '</td><td>');
+                         $('#results-table').append('<tr><td>' +  object.get('ITEM')  + '</td><td>' + object.get('BRAND') + '</td><td>' + object.get("PACK") + '</td><td>'  + object.get("SIZE") + '</td><td>');
 
                      })(jQuery);
 
@@ -166,6 +179,38 @@ var currentuser = Parse.User.current();
           }
       });
       }
+
+      function NextPage()
+      {
+        page++
+        getalldata()
+        //cleartable();
+        // make if the user is a page larger than 1
+        if(page != 1)
+        {
+          var buttondiv = document.getElementById("bottomarea")
+          var lastpageButton = document.createElement("input")
+          lastpageButton.className = "btn btn-link"
+          lastpageButton.type = "button"
+          lastpageButton.id = "lastpage"
+          lastpageButton.value = "Previous"
+          buttondiv.appendChild(lastpageButton)
+        }
+       if(page == 1)
+        {
+            $("#lastapage").remove();
+        }
+        $("#lastpage").click(function() {
+          console.log("previous was tapped" + page)
+          page--
+          getalldata();
+        })
+
+
+        console.log("you are now viewing page " + page)
+      }
+
+
 
       function checkCookie() {
     console.log("the current cookie is " + document.cookie)
@@ -256,7 +301,7 @@ function cleartable()
 
   }
 
-  table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Brand</th>" + "<th>Packsize</th>" + "</tr>"
+  table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Brand</th>" + "<th>Pack</th>" + "<th>Size</th>" + "</tr>"
 
 
 

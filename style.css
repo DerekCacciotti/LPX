@@ -349,3 +349,21 @@ span #submitbutton
 {
   font-size: 18px;
 }
+label
+{
+  display: inline-block;
+  margin-right: 10px;
+}
+#servicechargeamount
+{
+  width: 300px;
+}
+
+#othercharge
+{
+  width: 350px;
+}
+#supplertag
+{
+  font-size: 5px;
+}

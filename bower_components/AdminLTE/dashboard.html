@@ -414,11 +414,19 @@ function poplulateSupplierProfile()
         var supplierlist = document.getElementById("supplierlist")
         var li = document.createElement("li")
         var atag = document.createElement("a")
-        atag.href = "/Users/derekcacciotti/Documents/LPX/supplierprofile.html"
+      //  atag.href = "/Users/derekcacciotti/Documents/LPX/supplierprofile.html"
         atag.innerHTML = object.get("name")
         li.appendChild(atag)
         supplierlist.appendChild(li)
       }
+      $("#supplierlist a").click(function(){
+        console.log($(this).html())
+        var selectedsupplier = $(this).html()
+
+        // set item in local stroage
+        window.localStorage.setItem("selectedsupplier", selectedsupplier);
+
+      });
     },
     error: function(error) {
       alert("Error: " + error.code + " " + error.message);

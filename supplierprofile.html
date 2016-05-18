@@ -79,7 +79,7 @@
 
                   <textarea rows="3" cols="20" class="form-control"required autofocus id="salesreps" placeholder="Enter your sales reps emails here"></textarea>
                   <br />
-                  <input type="button" class="btn btn-success pull-right" value="Add Supplier" id="addsupplierbutton" onclick="commitSupplier()" />
+                  <input type="button" class="btn btn-success pull-right" value="Add Supplier" id="addsupplierbutton"/>
                   </label>
 
 
@@ -98,6 +98,45 @@
 
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
+      var objectID;
+      if(localStorage.getItem("selectedsupplier")== null)
+      {
+        console.log("No editing")
+
+      }
+      else
+      {
+        var greenbutton = document.getElementById("addsupplierbutton");
+        greenbutton.id = "finished"
+        greenbutton.value = "Finshed Editing"
+        var selectedsupplier = localStorage.getItem("selectedsupplier")
+        var supplierprofile = Parse.Object.extend("SupplierProfile");
+var query = new Parse.Query(supplierprofile);
+query.equalTo("name", selectedsupplier);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      objectID = object.id
+      console.log(object.get('name'));
+      var sname = document.getElementById("sname").value = object.get("name")
+      var saddress = document.getElementById("saddress").value = object.get("address")
+      var scity = document.getElementById("scity").value = object.get("city")
+      var sstate = document.getElementById("sstate").value = object.get("State")
+      var szip = document.getElementById("szip").value = object.get("zip")
+      var sphone = document.getElementById("sphone").value = object.get("phone")
+      var salesreps = document.getElementById("salesreps").value = object.get("salesreps")
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+      }
+
       $("#servicechargeamount").toggle();
       $("#othercharge").toggle();
 
@@ -133,6 +172,17 @@
 
 
       });
+
+      $("#addsupplierbutton").click(function(){
+        commitSupplier();
+      })
+
+      $("#finished").click(function(){
+        SendEdits(objectID);
+      })
+
+
+
 
 
 
@@ -200,6 +250,51 @@
     }
   })
 
+      }
+
+
+      function SendEdits(objectid)
+      {
+        var salesrepsarry = [];
+
+
+        var sname = document.getElementById("sname").value
+        var saddress = document.getElementById("saddress").value
+        var scity = document.getElementById("scity").value
+        var sstate = document.getElementById("sstate").value
+        var szip = document.getElementById("szip").value
+        var sphone = document.getElementById("sphone").value
+        var salesreps = document.getElementById("salesreps").value
+
+        var reps = $("#salesreps").val().split('\n')
+        for(var i = 0; i < reps.length; i ++)
+        {
+          salesrepsarry.push(reps[i])
+        }
+        console.log(salesrepsarry)
+
+
+        var SupplierProfile = Parse.Object.extend("SupplierProfile");
+var query = new Parse.Query(SupplierProfile);
+query.get(objectid, {
+  success: function(supplierprofile) {
+    alert("you have successfully edited the suppiler profile")
+    supplierprofile.set("name", sname);
+    supplierprofile.set("address", saddress);
+    supplierprofile.set("city", scity);
+    supplierprofile.set("State", sstate);
+    supplierprofile.set("zip", szip);
+    supplierprofile.set("phone", sphone);
+    supplierprofile.set("salesreps", salesrepsarry);
+    //alert("you have successfully edited the suppiler profile")
+    supplierprofile.save();
+
+  },
+  error: function(object, error) {
+    // The object was not retrieved successfully.
+    // error is a Parse.Error with an error code and message.
+  }
+});
       }
 
 

@@ -147,7 +147,7 @@ $("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
-  document.onload = poplatedropdown();
+  //document.onload = poplatedropdown();
 
   var sessiontoken = Parse.Session.sessionToken;
   console.log(sessiontoken)
@@ -185,18 +185,18 @@ console.log(amountarray)
 for (var j = 0; j <= itemidsarray.length; ++j)
 {
 
-    var database = Parse.Object.extend("FoodSource")
+    var database = Parse.Object.extend("FoodSourceParse")
      var query = new Parse.Query(database)
      query.get(itemidsarray[j],  {
       success: function(object)
 
       {
-        console.log(object.get('Item'));
-        console.log(object.get("Size"));
+        console.log(object.get('ITEM'));
+        console.log(object.get("SIZE"));
 
 
 
-         $('#order-table').append('<tr><td id="item">' +   object.get('Item')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("Size") + "</td><td>" + object.get("Pack") +  '</td></tr>');
+         $('#order-table').append('<tr><td id="item">' +   object.get('ITEM')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("SIZE") + "</td><td>" + object.get("PACK") +  '</td></tr>');
 
 
 
@@ -372,8 +372,9 @@ console.log(finalorder)
   success: function(submiitedorder) {
     // create unique link
 
-  SendEmail(sellersarray, submiitedorder.id);
+
     alert('Your order has been submitted ' + submiitedorder.id);
+    SendEmail(sellersarray, submiitedorder);
     localStorage.removeItem("currentcart")
 
 
@@ -409,7 +410,7 @@ function SendEmail(array, pobject)
 
     email.messages.send({
             "message": {
-                "from_email": "derekc247@me.com",
+                "from_email": "orders@lpxco.com",
                 "from_name": "LPX",
                 "to":[{"email": array[object], "name": "Confidental"}], // Array of recipients
                 "subject": "LPX order " + pobject.id,

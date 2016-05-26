@@ -142,7 +142,7 @@ var currentuser = Parse.User.current();
       {
         CheckforFurfilledOrders();
         checkCookie()
-        var GameScore = Parse.Object.extend("FoodSource");
+        var GameScore = Parse.Object.extend("FoodSourceParse");
       var query = new Parse.Query(GameScore);
       query.limit(resultlimit)
       query.skip(page * resultlimit)

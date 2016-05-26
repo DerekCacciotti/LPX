@@ -152,7 +152,7 @@ window.onload = checkCookie();
     var itemname = document.getElementById("itemname").innerHTML = item
     var database = Parse.Object.extend("FoodSource")
     var query = new Parse.Query(database)
-    query.equalTo("Item", item)
+    query.equalTo("ITEM", item)
     query.find({
       success: function(results){
         console.log("found");
@@ -160,7 +160,7 @@ window.onload = checkCookie();
         {
           console.log(results.length);
           var object = results[i]
-          var brand = object.get("Brand")
+          var brand = object.get("BRAND")
           console.log(brand)
           var brandlabel = document.getElementById("brandlabel").innerHTML = brand
         } // END OF LOOP FOR BRAND
@@ -176,10 +176,10 @@ window.onload = checkCookie();
       var currentitem = document.getElementById("itemname").innerHTML
       var currentbrand = document.getElementById("brandlabel").innerHTML
       alert(currentitem);
-      var database = Parse.Object.extend("FoodSource")
+      var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
-      query.equalTo("Item", currentitem )
-      query.equalTo("Brand", currentbrand)
+      query.equalTo("ITEM", currentitem )
+      query.equalTo("BRAND", currentbrand)
       query.find({
         success: function(results){
           console.log("found");
@@ -189,7 +189,7 @@ window.onload = checkCookie();
             var objectid = object.id
             finalorder.push({
     itemid:   objectid,
-    
+
 });
             //finalorder.push(objectid)
             console.log(finalorder);

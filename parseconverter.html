@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
+</head>
   <body>
     <script type="text/javascript">
 
@@ -8,8 +12,45 @@
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
       // load the entire food source
+var database = Parse.Object.extend("FoodSource")
+var query = new Parse.Query(database)
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      //alert(object.id + ' - ' + object.get('playerName'));
 
-      
+      // construct new database
+      var FoodSourceParse = Parse.Object.extend("FoodSourceParse")
+      var foodsourceparse = new FoodSourceParse();
+      foodsourceparse.set("BRAND", object.get("BRAND"))
+      foodsourceparse.set("ITEM", object.get("ITEM"))
+    foodsourceparse.set("PACK", object.get("PACK"))
+    foodsourceparse.set("SIZE", object.get("SIZE"))
+
+    foodsourceparse.save(null, {
+  success: function(database) {
+    // Execute any logic that should take place after the object is saved.
+    alert('database restored');
+  },
+  error: function(database, error) {
+    // Execute any logic that should take place if the save fails.
+    // error is a Parse.Error with an error code and message.
+    alert('Failed to create new object, with error code: ' + error.message);
+  }
+});
+
+
+
+
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
 
     </script>
   </body>

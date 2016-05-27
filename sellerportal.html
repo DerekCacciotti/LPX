@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
+      <script type="text/javascript" src="mandrill.js"></script>
 
 </head>
 <body>
@@ -103,7 +104,7 @@
   </table>
 
 
-  <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your seller email here">
+  <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your distribution company">
   <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer(retrievedorder[items])"/>
   <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
 
@@ -148,6 +149,7 @@
 
       var finalprices;
       var comepletedorder = []
+      var returnemail;
 
 
 function Lookup()
@@ -162,7 +164,9 @@ query.get(ordernumber, {
     console.log(order)
 
     orderfor = order.get("submitedbyusername")
-    console.log(orderforid)
+    returnemail = order.get("returnemail")
+    //console.log(orderforid)
+    console.log(returnemail)
 
 
     // create table here so user can the seller can enter values
@@ -283,6 +287,9 @@ furfilledordersobj.save(null, {
   success: function(furfilledorder) {
     // Execute any logic that should take place after the object is saved.
     alert("Your order has been furfilled")
+    SendEmail()
+    window.href = "search.html"
+
   },
   error: function(order, error) {
     // Execute any logic that should take place if the save fails.
@@ -293,6 +300,20 @@ furfilledordersobj.save(null, {
 
 }
 
+function SendEmail()
+{
+  var email = new mandrill.Mandrill('TMc9w9HepAG7nUI1amdO3g'); // This will be public
+
+  email.messages.send({
+          "message": {
+              "from_email": "orders@lpxco.com",
+              "from_name": "LPX",
+              "to":[{"email": returnemail, "name": "Confidental"}], // Array of recipients
+              "subject": "LPX order " + globordernum,
+              "text": "Hello, your LPX order number " + globordernum +  " has been furfilled " + " please check out the dashboard to see pricing "
+          }
+      });
+}
 
 
 

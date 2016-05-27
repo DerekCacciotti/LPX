@@ -196,7 +196,7 @@
 
     var currentUser = Parse.User.current();
     var total = 0
-    var breakdowntotal = 0;
+    var priceperpound = 0
     var orderid;
     var itemamount
 
@@ -409,7 +409,7 @@ query.find({
       console.log(orderid)
       var total = 0
 
-      var furfilledorder = Parse.Object.extend("furfilledorders");
+     var furfilledorder = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorder);
 query.get(orderid, {
   success: function(orderdata) {
@@ -419,20 +419,29 @@ query.get(orderid, {
     for(var i = 0; i < details.length; i++)
     {
       var units = details[i].sizeamount
-      console.log(units.slice(-2))
+      console.log(units)
+      //console.log(units.slice(-2))
       var unitmeasure = units.slice(-2)
-      if(unitmeasure == "CT")
+      console.log(unitmeasure)
+
+      if (unitmeasure == "LB" || unitmeasure == "LBS")
       {
-        console.log(parseFloat(details[i].sizeamount))
-        var carrets = parseFloat(details[i].sizeamount)
-        Carretstopounds(details[i].item, carrets)
-      }
-      else if(unitmeasure == "OZ") {
-        console.log("OUNCES")
-        var oz = parseFloat(details[i].sizeamount)
-        OZtoCups(details[i].item, oz)
+        console.log("this order contains pounds")
+        var pounds = parseFloat(units)
+        console.log(pounds)
 
+        var pricevalues = orderdata.get("furfilledorder").prices
+        console.log(pricevalues)
 
+        for(var i = 0; i < pricevalues.length; i++)
+        {
+        var price = pricevalues[i]
+        priceperpound = getpriceperpound(price, pounds)
+      //console.log(priceperpound)
+
+        }
+          console.log(priceperpound)
+          alert("the price per pound is " + priceperpound)
       }
 
     }
@@ -446,10 +455,16 @@ query.get(orderid, {
 
 
 
+
     })
 
+    function getpriceperpound(price, pounds)
+    {
+      return price / pounds
+    }
 
-    function Carretstopounds(parseObject, amount)
+
+    /*function Carretstopounds(parseObject, amount)
     {
       var pounds = amount * 0.00044092449520759
 
@@ -462,6 +477,7 @@ query.get(orderid, {
 
       alert(parseObject + " in cups " + cups)
     }
+    */
 
 
 

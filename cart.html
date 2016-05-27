@@ -368,6 +368,7 @@ console.log(finalorder)
   orderobj.set("submitedbyusername", currentuser.get("username"))
   orderobj.set("selectedsellers", sellersarray)
   orderobj.set("isfurfilled", isfurfilled)
+  orderobj.set("returnemail", currentuser.get("email"))
   orderobj.save(null, {
   success: function(submiitedorder) {
     // create unique link

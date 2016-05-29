@@ -85,7 +85,8 @@
         <th>Amount</th>
         <th>Size</th>
         <th>Pack</th>
-        <th>Returned Pricing</th>
+        <th>Returned Case Pricing</th>
+        <th>Cost per Unit</th>
 
 
 
@@ -239,12 +240,49 @@ query.find({
       for (details in savedorder.orderdetails)
       {
           console.log(savedorder.orderdetails[details])
+          var units = savedorder.orderdetails[details].sizeamount
+          console.log(units)
+          var unitsmeasure = units.slice(-2)
+          console.log(unitsmeasure)
+
+          if(unitsmeasure == "LB" || unitsmeasure == "LBS")
+          {
+            console.log("This order contains pounds")
+            var pounds = parseFloat(units)
+            console.log(pounds)
+            var pricevalues = savedorder.prices
+            console.log(pricevalues)
+
+            for(var i = 0; i < pricevalues.length; i++)
+            {
+              var price = pricevalues[i]
+              priceperpound = getpriceperpound(price, pounds)
+            }
+
+          }
+          else
+          {
+            var units = savedorder.orderdetails[details].sizeamount
+            var unitvalue = parseFloat(units)
+            var pricevalues = savedorder.prices
+            console.log(pricevalues)
+            console.log(unitvalue)
+
+            for(var i = 0; i < pricevalues.length; i++)
+            {
+              var prices = pricevalues[i]
+              priceperpound = getpriceperpound(prices, unitvalue)
+
+            }
+
+
+          }
 
           pricearray.push(savedorder.prices)
 
 
 
-          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[details].item + '</td><td>' + savedorder.orderdetails[details].amount + '</td><td>' + savedorder.orderdetails[details].sizeamount  + "</td><td>" +  savedorder.orderdetails[details].pack + '</td><td>' + savedorder.prices[details])
+          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[details].item + '</td><td>' + savedorder.orderdetails[details].amount + '</td><td>' + savedorder.orderdetails[details].sizeamount  + "</td><td>" +  savedorder.orderdetails[details].pack + '</td><td>' +  savedorder.prices[details] + "</td><td>"  + priceperpound)
 
       }
 
@@ -265,6 +303,11 @@ query.find({
     alert("Error finding your order");
   }
 });
+}
+
+function getpriceperpound(price, pounds)
+{
+  return price / pounds
 }
 
 function HideLookupBox()
@@ -458,10 +501,7 @@ query.get(orderid, {
 
     })
 
-    function getpriceperpound(price, pounds)
-    {
-      return price / pounds
-    }
+
 
 
     /*function Carretstopounds(parseObject, amount)

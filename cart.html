@@ -108,7 +108,7 @@
   <form>
     <fieldset>
       <legend>Sales rep info<span><input type="button" class="btn btn-danger  btn-sm pull-right" value="Close"  name="submitorder" id="close"   onclick="CloseSellerPane()"></span></legend>
-      <input type="text" class="form-control" placeholder="Please enter the email address of the seller you would like to send the order to" />
+      <input type="text" class="form-control" placeholder="Please enter the email address of the seller you would like to send the order to"  id="addemail"/>
       <br />
       <h4 class="center">Please select and confrim suppliers</h4>
 
@@ -362,9 +362,21 @@ console.log(finalorder)
         }
     }
 
+    var addemailvalue = document.getElementById("addemail").value
+
+    if (addemailvalue.length != 0)
+    {
+      console.log("text has changed")
+      console.log(addemailvalue)
+      sellersarray.push(addemailvalue)
+      console.log(sellersarray)
+    }
+
+
+
+
 
  orderobj.set("order", finalorder)
-
   orderobj.set("submitedbyusername", currentuser.get("username"))
   orderobj.set("selectedsellers", sellersarray)
   orderobj.set("isfurfilled", isfurfilled)
@@ -441,10 +453,7 @@ console.log(currentuser)
 }
 
 
-function SetUser()
-{
 
-}
 
 
 // poplates drop down

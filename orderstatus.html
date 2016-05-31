@@ -200,6 +200,8 @@
     var priceperpound = 0
     var orderid;
     var itemamount
+    var highestprice = 0
+    var lowestprice = 0
 
 
 
@@ -262,7 +264,7 @@ query.find({
           }
           else
           {
-            var units = savedorder.orderdetails[details].sizeamount
+            /*var units = savedorder.orderdetails[details].sizeamount
             var unitvalue = parseFloat(units)
             var pricevalues = savedorder.prices
             console.log(pricevalues)
@@ -274,9 +276,10 @@ query.find({
               priceperpound = getpriceperpound(prices, unitvalue)
 
             }
-
+            */
 
           }
+
 
           pricearray.push(savedorder.prices)
 
@@ -297,6 +300,11 @@ query.find({
     }
 
     CreateButtons(globordernum)
+    highestprice = gethighestprice(pricearray)
+
+
+
+
 
   },
   error: function(error) {
@@ -318,6 +326,7 @@ function HideLookupBox()
 
 
 }
+
 
 
 function CreateButtons(ordernumber)

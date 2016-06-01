@@ -367,3 +367,12 @@ label
 {
   font-size: 5px;
 }
+#highestlabel
+{
+  color: #00ff00;
+}
+
+#lowestlabel
+{
+  color: #e50b2c;
+}

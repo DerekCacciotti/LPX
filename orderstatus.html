@@ -128,6 +128,8 @@
 
 <div class="center" id="comp">
 <h1 id="compdir"></h1>
+<label id="highestlabel"class="pull-right"></label>
+<label id="lowestlabel" class="pull-right"></label>
 
 
 
@@ -300,7 +302,15 @@ query.find({
     }
 
     CreateButtons(globordernum)
-    highestprice = gethighestprice(pricearray)
+    highestprice = getMaxOfArray(pricearray)
+    console.log(highestprice)
+    var highlabel =  document.getElementById('highestlabel').innerHTML = "the highest price in this order is " + highestprice
+
+
+    lowestprice = getMinOfArray(pricearray)
+    console.log(lowestprice)
+
+    var lowlabel = document.getElementById('lowestlabel').innerHTML = "the lowest price in this order is " + lowestprice
 
 
 
@@ -312,6 +322,15 @@ query.find({
   }
 });
 }
+
+function getMaxOfArray(numArray) {
+  return Math.max.apply(null, numArray);
+}
+
+function getMinOfArray(numArray) {
+  return Math.min.apply(null, numArray);
+}
+
 
 function getpriceperpound(price, pounds)
 {

@@ -237,53 +237,46 @@ query.find({
 
     for(var i = 0; i < results.length; i++)
     {
-      var orderdeailts = results[i];
+     var orderdeailts = results[i];
 
       var savedorder = orderdeailts.get("furfilledorder")
       console.log(savedorder.orderdetails)
       for (details in savedorder.orderdetails)
       {
-          console.log(savedorder.orderdetails[details])
+
+
+          //console.log(pricearray)
+
+
+
+
+
+          pricearray.push(savedorder.prices[details])
+          console.log(pricearray)
+
+            // cost per unit
+
+
+            console.log(savedorder.orderdetails[details])
           var units = savedorder.orderdetails[details].sizeamount
           console.log(units)
           var unitsmeasure = units.slice(-2)
           console.log(unitsmeasure)
-
-          if(unitsmeasure == "LB" || unitsmeasure == "LBS")
+          if(unitsmeasure == "LB" || unitsmeasure == "BS")
           {
             console.log("This order contains pounds")
             var pounds = parseFloat(units)
             console.log(pounds)
-            var pricevalues = savedorder.prices
-            console.log(pricevalues)
 
-            for(var i = 0; i < pricevalues.length; i++)
+            for(var i = 0; i < pricearray.length; i++)
             {
-              var price = pricevalues[i]
+              var price = pricearray[i]
               priceperpound = getpriceperpound(price, pounds)
             }
 
           }
-          else
-          {
-            /*var units = savedorder.orderdetails[details].sizeamount
-            var unitvalue = parseFloat(units)
-            var pricevalues = savedorder.prices
-            console.log(pricevalues)
-            console.log(unitvalue)
+        
 
-            for(var i = 0; i < pricevalues.length; i++)
-            {
-              var prices = pricevalues[i]
-              priceperpound = getpriceperpound(prices, unitvalue)
-
-            }
-            */
-
-          }
-
-
-          pricearray.push(savedorder.prices)
 
 
 
@@ -299,11 +292,21 @@ query.find({
 
 
 
+
+
+
+
+
+
+
     }
 
+
+
     CreateButtons(globordernum)
-    highestprice = getMaxOfArray(pricearray)
-    console.log(highestprice)
+     highestprice = getMaxOfArray(pricearray)
+  //  console.log(pricearray)
+  console.log(highestprice)
     var highlabel =  document.getElementById('highestlabel').innerHTML = "the highest price in this order is " + highestprice
 
 
@@ -311,7 +314,6 @@ query.find({
     console.log(lowestprice)
 
     var lowlabel = document.getElementById('lowestlabel').innerHTML = "the lowest price in this order is " + lowestprice
-
 
 
 
@@ -330,6 +332,8 @@ function getMaxOfArray(numArray) {
 function getMinOfArray(numArray) {
   return Math.min.apply(null, numArray);
 }
+
+
 
 
 function getpriceperpound(price, pounds)
@@ -382,8 +386,8 @@ $("comp").toggle();
 $("input[name=sellerbutton]").click(function() {
 console.log($(this).val())
 var selectedseller = $(this).val()
-$("#myModal").modal()
-PopulateModal(selectedseller)
+//$("#myModal").modal()
+//PopulateModal(selectedseller)
 });
 
 
@@ -394,173 +398,6 @@ PopulateModal(selectedseller)
   });
 }
 
-function PopulateModal(selectedseller)
-{
-  var furfilledorder = Parse.Object.extend("furfilledorders");
-var query = new Parse.Query(furfilledorder);
-query.equalTo("seller", selectedseller);
-query.find({
-  success: function(results) {
-    console.log("Successfully retrieved " + results.length);
-    // Do something with the returned Parse.Object values
-    for (var i = 0; i < results.length; i++) {
-
-      var object = results[i];
-
-      var orderdetails = object.get("furfilledorder").orderdetails
-      var selectedprices = object.get("furfilledorder").prices
-      for(deatils in orderdetails)
-      {
-        var item = orderdetails[deatils].item
-        console.log(item)
-
-        //createItemButtons(item)
-
-      }
-      orderid = object.id
-
-
-      var subtotal = object.get("subtotal")
-
-      var modalbody = document.getElementById("modalbody")
-      var p = document.createElement("p")
-      p.id = "subtotal"
-      p.innerHTML = "the submiited subtotal is " + subtotal
-      modalbody.appendChild(p)
-
-
-
-
-
-
-    }
-
-
-    // modal header
-    var modalheader = document.getElementById("modalheader")
-    modalheader.innerHTML = "Order by " + selectedseller
-
-
-    // body of the modal
-    var modalbody = document.getElementById("modalbody")
-    var p = document.createElement("p")
-    p.id = "total"
-
-
-    for(var i = 0; i < selectedprices.length; i++)
-    {
-      total += selectedprices[i]
-    }
-    console.log(total)
-
-
-
-    p.innerHTML = "the total for this order is " + total
-    modalbody.appendChild(p)
-
-    // add the label to
-    //modalbody.appendChild(label)
-
-
-    $("#modalclose").click(function() {
-      console.log("click")
-      selectedprices = []
-      total = 0;
-      $("#total").remove();
-      subtotal = ""
-      $("#subtotal").remove()
-
-
-    });
-
-
-
-    $("#pricebreakdown").click(function() {
-      console.log("price breakdown was clicked");
-      console.log(orderid)
-      var total = 0
-
-     var furfilledorder = Parse.Object.extend("furfilledorders");
-var query = new Parse.Query(furfilledorder);
-query.get(orderid, {
-  success: function(orderdata) {
-    // The object was retrieved successfully.
-    var details = orderdata.get("furfilledorder").orderdetails
-
-    for(var i = 0; i < details.length; i++)
-    {
-      var units = details[i].sizeamount
-      console.log(units)
-      //console.log(units.slice(-2))
-      var unitmeasure = units.slice(-2)
-      console.log(unitmeasure)
-
-      if (unitmeasure == "LB" || unitmeasure == "LBS")
-      {
-        console.log("this order contains pounds")
-        var pounds = parseFloat(units)
-        console.log(pounds)
-
-        var pricevalues = orderdata.get("furfilledorder").prices
-        console.log(pricevalues)
-
-        for(var i = 0; i < pricevalues.length; i++)
-        {
-        var price = pricevalues[i]
-        priceperpound = getpriceperpound(price, pounds)
-      //console.log(priceperpound)
-
-        }
-          console.log(priceperpound)
-          alert("the price per pound is " + priceperpound)
-      }
-
-    }
-  },
-  error: function(object, error) {
-    // The object was not retrieved successfully.
-    // error is a Parse.Error with an error code and message.
-  }
-});
-
-
-
-
-
-    })
-
-
-
-
-    /*function Carretstopounds(parseObject, amount)
-    {
-      var pounds = amount * 0.00044092449520759
-
-      alert(parseObject + " in pounds " + pounds)
-    }
-
-    function OZtoCups(parseObject, amount)
-    {
-      var cups = amount / 8
-
-      alert(parseObject + " in cups " + cups)
-    }
-    */
-
-
-
-
-
-
-
-
-
-  },
-  error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
-  }
-});
-}
 
 
 function additemsinorder(amount, price)

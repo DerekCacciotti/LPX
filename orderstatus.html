@@ -138,26 +138,6 @@
 </div>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" id="modalheader"></h4>
-      </div>
-      <div class="modal-body" id="modalbody">
-
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="pricebreakdown">Get Unit Conversions </button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 
 <div id="PBModal" class="modal fade" role="dialog">
@@ -241,7 +221,7 @@ query.find({
 
       var savedorder = orderdeailts.get("furfilledorder")
       console.log(savedorder.orderdetails)
-      for (details in savedorder.orderdetails)
+      for (var j = 0; j < savedorder.orderdetails.length; j++)
       {
 
 
@@ -251,18 +231,32 @@ query.find({
 
 
 
-          pricearray.push(savedorder.prices[details])
+          pricearray.push(savedorder.prices[j])
           console.log(pricearray)
 
             // cost per unit
 
 
-            console.log(savedorder.orderdetails[details])
-          var units = savedorder.orderdetails[details].sizeamount
+            console.log(savedorder.orderdetails[j])
+          var units = savedorder.orderdetails[j].sizeamount
           console.log(units)
           var unitsmeasure = units.slice(-2)
           console.log(unitsmeasure)
-          if(unitsmeasure == "LB" || unitsmeasure == "BS")
+
+
+          for(p = 0; p < pricearray.length; p++)
+          {
+            var price = pricearray[i]
+            console.log(units)
+            var units = savedorder.orderdetails[j].sizeamount
+            var convertedunits = parseFloat(units)
+            console.log(convertedunits)
+            var costperunitnotrounded = getpriceperpound(price, convertedunits)
+            priceperpound = "$ " +  costperunitnotrounded.toFixed(2)
+
+          }
+
+          /*if(unitsmeasure == "LB" || unitsmeasure == "BS")
           {
             console.log("This order contains pounds")
             var pounds = parseFloat(units)
@@ -275,14 +269,31 @@ query.find({
             }
 
           }
-        
+
+          if (unitsmeasure != "LB" || unitsmeasure != "BS")
+          {
+            console.log("This order does contain pounds")
+            var unit = parseFloat(units)
+            console.log(unit)
+
+            for(var i = 0; i < pricearray.length; i++)
+            {
+              var price = pricearray[i]
+              priceperpound = getpriceperpound(price, unit)
+            }
+          }
+          */
 
 
 
 
-          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[details].item + '</td><td>' + savedorder.orderdetails[details].amount + '</td><td>' + savedorder.orderdetails[details].sizeamount  + "</td><td>" +  savedorder.orderdetails[details].pack + '</td><td>' +  savedorder.prices[details] + "</td><td>"  + priceperpound)
+
+
+          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
 
       }
+
+
 
 
 
@@ -307,13 +318,6 @@ query.find({
      highestprice = getMaxOfArray(pricearray)
   //  console.log(pricearray)
   console.log(highestprice)
-    var highlabel =  document.getElementById('highestlabel').innerHTML = "the highest price in this order is " + highestprice
-
-
-    lowestprice = getMinOfArray(pricearray)
-    console.log(lowestprice)
-
-    var lowlabel = document.getElementById('lowestlabel').innerHTML = "the lowest price in this order is " + lowestprice
 
 
 
@@ -386,8 +390,8 @@ $("comp").toggle();
 $("input[name=sellerbutton]").click(function() {
 console.log($(this).val())
 var selectedseller = $(this).val()
-//$("#myModal").modal()
-//PopulateModal(selectedseller)
+$("#PBModal").modal()
+PopulateModal(selectedseller)
 });
 
 
@@ -396,6 +400,17 @@ var selectedseller = $(this).val()
       alert("Error: " + error.code + " " + error.message);
     }
   });
+}
+
+function PopulateModal(selectedseller)
+{
+  var header = document.getElementById("modalheader")
+  header.innerHTML = selectedseller
+
+  var body = document.getElementById("modalbody")
+  body.innerHTML = "total break down will go here"
+
+  
 }
 
 

@@ -103,10 +103,17 @@
 
   </table>
 
+<input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
 
-  <input type="text" id="emailbox" class="form-control text-center" placeholder="Enter your distribution company">
+  <div class="dropdown" id="dropdownmenuconatiner">
+    <button class="btn btn-warning dropdown-toggle " id="dropdownbutton" type="button" data-toggle="dropdown">Select Your dristurbution Company
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" id= "suppliersmenu">
+
+    </ul>
+  </div>
   <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer(retrievedorder[items])"/>
-  <input type="button" class="btn btn-md btn-primary pull-left" name="lookupbutton" value="Return to lookup" id="lookupbutton" onclick="returntoLookup()" />
+
 
 
 
@@ -133,7 +140,7 @@
 
         $("#submittocustomer").toggle();
         $("#lookupbutton").toggle();
-        $("#emailbox").toggle();
+        $("#dropdownbutton").toggle();
 
       }
 
@@ -146,6 +153,7 @@
       var retrievedorder;
       var orderforid;
       var orderfor;
+      var selectedsupplier;
 
       var finalprices;
       var comepletedorder = []
@@ -190,6 +198,8 @@ query.get(ordernumber, {
       $('#order-table').append('<tr><td id="item">' + retrievedorder[items].item + '</td><td>'  +   retrievedorder[items].amount + "</td><td>" + retrievedorder[items].sizeamount + "</td><td>" + retrievedorder[items].pack  + "</td><td>" +	'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
     }
 
+    populatesuppilerslist();
+
 
 
 
@@ -201,7 +211,7 @@ query.get(ordernumber, {
     $("#order-table").toggle();
     $("#submittocustomer").toggle();
     $("#lookupbutton").toggle();
-    $("#emailbox").toggle();
+    $("#dropdownbutton").toggle();
 
 
 
@@ -225,6 +235,43 @@ query.get(ordernumber, {
   }
 });
 }
+
+// populate seller select drop down
+
+function populatesuppilerslist()
+{
+  var supplierprofiles = Parse.Object.extend("SupplierProfile")
+  var query = new Parse.Query(supplierprofiles);
+  query.find({
+    success: function(results) {
+      console.log("Successfully retrieved " + results.length + " profiles.");
+      // Do something with the returned Parse.Object values
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i];
+        console.log(object.id + ' - ' + object.get('name'));
+        var supplierlist = document.getElementById("suppliersmenu")
+        var li = document.createElement("li")
+        var atag = document.createElement("a")
+        atag.innerHTML = object.get("name")
+        li.appendChild(atag)
+        supplierlist.appendChild(li)
+      }
+      $("#suppliersmenu a").click(function(){
+        console.log($(this).html())
+         selectedsupplier = $(this).html()
+
+
+        // set item in local stroage
+        window.localStorage.setItem("selectedsupplier", selectedsupplier);
+
+      });
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+}
+
 
 function returntoLookup()
 {
@@ -277,11 +324,10 @@ console.log(LPXOrder)
 
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
-var emailbox = document.getElementById("emailbox").value
 
 furfilledordersobj.set("furfilledorder", LPXOrder);
 furfilledordersobj.set("ordernumber", globordernum);
-furfilledordersobj.set("seller", emailbox);
+furfilledordersobj.set("seller", selectedsupplier);
 furfilledordersobj.set("orderfor", orderfor);
 furfilledordersobj.save(null, {
   success: function(furfilledorder) {
@@ -314,6 +360,9 @@ function SendEmail()
           }
       });
 }
+
+
+
 
 
 

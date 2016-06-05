@@ -242,6 +242,7 @@ query.find({
       // Execute any logic that should take place after the object is saved.
       console.log('New object created with objectId: ' + profile.id);
       alert("you have successfully added a Supplier Profile ")
+      localStorage.removeItem("selectedsupplier");
     },
     error: function(profile, error) {
       // Execute any logic that should take place if the save fails.
@@ -288,6 +289,7 @@ query.get(objectid, {
     supplierprofile.set("salesreps", salesrepsarry);
     //alert("you have successfully edited the suppiler profile")
     supplierprofile.save();
+    localStorage.removeItem("selectedsupplier");
 
   },
   error: function(object, error) {

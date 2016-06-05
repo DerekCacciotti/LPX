@@ -186,7 +186,7 @@ desired effect
           <li><a href="/Users/derekcacciotti/Documents/LPX/search.html"><i class="fa fa-link"></i> <span>Create new order guide</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Sales</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Stats</span></a></li>
-        <li><a href="/Users/derekcacciotti/Documents/LPX/supplierprofile.html"><i class="fa fa-link"></i> <span>Suplier Profile</span></a></li>
+        <li><a href="/Users/derekcacciotti/Documents/LPX/supplierprofile.html"><i class="fa fa-link"></i> <span>Create new Suplier Profile</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Rebates</span></a></li>
         <li class="treeview">
         </li>
@@ -339,6 +339,9 @@ function Logout()
 
 function populateorderslist()
 {
+  if (localStorage.getItem("selectedsupplier") != null) {
+    localStorage.removeItem("selectedsupplier");
+}
 var orders = Parse.Object.extend("Order");
 var query = new Parse.Query(orders);
 query.equalTo("submitedbyusername", currentuser.get("username"));

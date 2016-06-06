@@ -256,33 +256,6 @@ query.find({
 
           }
 
-          /*if(unitsmeasure == "LB" || unitsmeasure == "BS")
-          {
-            console.log("This order contains pounds")
-            var pounds = parseFloat(units)
-            console.log(pounds)
-
-            for(var i = 0; i < pricearray.length; i++)
-            {
-              var price = pricearray[i]
-              priceperpound = getpriceperpound(price, pounds)
-            }
-
-          }
-
-          if (unitsmeasure != "LB" || unitsmeasure != "BS")
-          {
-            console.log("This order does contain pounds")
-            var unit = parseFloat(units)
-            console.log(unit)
-
-            for(var i = 0; i < pricearray.length; i++)
-            {
-              var price = pricearray[i]
-              priceperpound = getpriceperpound(price, unit)
-            }
-          }
-          */
 
 
 
@@ -391,7 +364,7 @@ $("input[name=sellerbutton]").click(function() {
 console.log($(this).val())
 var selectedseller = $(this).val()
 $("#PBModal").modal()
-PopulateModal(selectedseller)
+PopulateModal(selectedseller,globordernum)
 });
 
 
@@ -402,15 +375,74 @@ PopulateModal(selectedseller)
   });
 }
 
-function PopulateModal(selectedseller)
+function PopulateModal(selectedseller, ordernumber)
 {
   var header = document.getElementById("modalheader")
   header.innerHTML = selectedseller
 
-  var body = document.getElementById("modalbody")
-  body.innerHTML = "total break down will go here"
 
-  
+
+  var furfilledorders = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorders);
+var sum = 0
+query.equalTo("ordernumber", ordernumber);
+query.equalTo("seller", selectedseller)
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " scores.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      var returnedobject = object.get("furfilledorder")
+      console.log(returnedobject.prices)
+      for(var i = 0; i < returnedobject.prices.length; i++)
+      {
+        sum += returnedobject.prices[i]
+
+
+        var supplierprofile = Parse.Object.extend("SupplierProfile");
+var query = new Parse.Query(supplierprofile);
+query.equalTo("name", selectedseller);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + "profile");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+        var body = document.getElementById("modalbody")
+        body.innerHTML = "the total price for this order is " + sum
+
+
+      }
+
+      sum = 0
+
+
+
+
+
+
+
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
+
+
+
+
 }
 
 

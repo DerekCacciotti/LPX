@@ -244,9 +244,9 @@ query.find({
           console.log(unitsmeasure)
 
 
-          for(p = 0; p < pricearray.length; p++)
+          for(p = 0; p < pricearray.length; ++p)
           {
-            var price = pricearray[i]
+            var price = pricearray[p]
             console.log(units)
             var units = savedorder.orderdetails[j].sizeamount
             var convertedunits = parseFloat(units)

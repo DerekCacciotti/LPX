@@ -70,7 +70,7 @@
                       No <br />
 
 
-                        <input type="text" name="servicecharge" class= "form-control" id="servicechargeamount"  placeholder="Enter service charge price"/>
+                        <input type="text" name="servicecharge" class= "form-control" id="servicechargeamount"  placeholder="Enter Fuel ser charge amount"/>
                         <input type="text" name="servicecharge" class= "form-control" id="othercharge"  placeholder="Please enter the minimum dollar amount for a order">
 
 
@@ -129,6 +129,22 @@ query.find({
       var szip = document.getElementById("szip").value = object.get("zip")
       var sphone = document.getElementById("sphone").value = object.get("phone")
       var salesreps = document.getElementById("salesreps").value = object.get("salesreps")
+
+      if(object.get("DoesServicecharge") == true)
+      {
+        document.getElementById("radioyes").checked = true
+         $("#servicechargeamount").toggle();
+         var chargeamount = object.get("servicechargeprice")
+         document.getElementById("servicechargeamount").value = chargeamount
+
+      }
+      else
+      {
+        document.getElementById("radiono").checked = true
+        $("#othercharge").toggle();
+        var othercharge = object.get("minpricefororder")
+        document.getElementById("othercharge").value = othercharge
+      }
     }
   },
   error: function(error) {
@@ -148,6 +164,7 @@ query.find({
          {
            radiobuttonvalue = true
            $("#servicechargeamount").toggle();
+
 
 
 

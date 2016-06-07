@@ -289,8 +289,12 @@ query.find({
 
     CreateButtons(globordernum)
      highestprice = getMaxOfArray(pricearray)
-  //  console.log(pricearray)
+     lowestprice = getMinOfArray(pricearray)
+    console.log(pricearray)
   console.log(highestprice)
+
+  var highestpricelabel = document.getElementById("highestlabel").innerHTML = " the highest pricie is " + highestprice
+  var lowestpricelabel = document.getElementById("lowestlabel").innerHTML = " the lowest pricie is " + lowestprice
 
 
 
@@ -384,7 +388,6 @@ function PopulateModal(selectedseller, ordernumber)
 
   var furfilledorders = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorders);
-var sum = 0
 query.equalTo("ordernumber", ordernumber);
 query.equalTo("seller", selectedseller)
 query.find({
@@ -397,33 +400,57 @@ query.find({
       console.log(returnedobject.prices)
       for(var i = 0; i < returnedobject.prices.length; i++)
       {
-        sum += returnedobject.prices[i]
+        total += returnedobject.prices[i]
 
 
-        var supplierprofile = Parse.Object.extend("SupplierProfile");
-var query = new Parse.Query(supplierprofile);
-query.equalTo("name", selectedseller);
-query.find({
-  success: function(results) {
-    console.log("Successfully retrieved " + results.length + "profile");
-    // Do something with the returned Parse.Object values
-    for (var i = 0; i < results.length; i++) {
-      var object = results[i];
-
-    }
-  },
-  error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
-  }
-});
-
-        var body = document.getElementById("modalbody")
-        body.innerHTML = "the total price for this order is " + sum
 
 
       }
 
-      sum = 0
+      var supplierprofile = Parse.Object.extend("SupplierProfile");
+var query = new Parse.Query(supplierprofile);
+query.equalTo("name", selectedseller);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " profile");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+
+      if(object.get("DoesServicecharge") == true)
+      {
+        console.log("charge found")
+
+        var charge = object.get("servicechargeprice")
+        var grandtotal = total + charge
+
+        var body = document.getElementById("modalbody")
+        body.innerHTML = "the total price for this order is " + grandtotal
+
+
+
+      }
+
+      else
+      {
+        var body = document.getElementById("modalbody")
+        body.innerHTML = "the total price for this order is " + total
+
+      }
+
+
+
+    }
+    total = 0;
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
+
+
 
 
 
@@ -447,10 +474,6 @@ query.find({
 
 
 
-function additemsinorder(amount, price)
-{
-  return amount * price
-}
 
 
 

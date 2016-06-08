@@ -73,6 +73,14 @@
       </div>
   </div>
 
+  <div class="center" id="comp">
+  <h1 id="compdir"></h1>
+  <label id="highestlabel"class="pull-right"></label>
+  <label id="lowestlabel" class="pull-right"></label>
+  </div>
+
+  <br />
+
   <div class="container" id="ordersection">
 
 
@@ -125,21 +133,46 @@
 
 
 </div>
-
-<div class="center" id="comp">
-<h1 id="compdir"></h1>
-<label id="highestlabel"class="pull-right"></label>
-<label id="lowestlabel" class="pull-right"></label>
-
-
-
-
+<div id="comparsionbuttonandtable" class="center">
+  <input type="button" class="btn btn-warning pull-left" id="comparsionbutton" value="See total comparison" />
 
 </div>
 
+<div>
+  <br />
+  <table id="compare-table" class="table">
+
+<tr>
+  <th>Seller</th>
+  <th>Total</th>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tr>
+
+
+
+
+
+</table>
+</div>
+
+
+
+
+
 <!-- Modal -->
-
-
 <div id="PBModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -151,9 +184,10 @@
       </div>
       <div class="modal-body" id="modalbody">
 
+
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="pricebreakdown">Submit Subtotal</button>
+
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
     </div>
@@ -184,6 +218,7 @@
     var itemamount
     var highestprice = 0
     var lowestprice = 0
+    var comptotal = 0
 
 
 
@@ -192,6 +227,8 @@
 function hideTable()
 {
   $("#ordersection").toggle();
+  $("#comparsionbuttonandtable").toggle();
+  $("#compare-table").toggle()
 
 
 
@@ -293,8 +330,8 @@ query.find({
     console.log(pricearray)
   console.log(highestprice)
 
-  var highestpricelabel = document.getElementById("highestlabel").innerHTML = " the highest pricie is " + highestprice
-  var lowestpricelabel = document.getElementById("lowestlabel").innerHTML = " the lowest pricie is " + lowestprice
+  var highestpricelabel = document.getElementById("highestlabel").innerHTML = " the highest price is " + highestprice
+  var lowestpricelabel = document.getElementById("lowestlabel").innerHTML = " the lowest price is " + lowestprice
 
 
 
@@ -336,6 +373,8 @@ function HideLookupBox()
 function CreateButtons(ordernumber)
 {
 $("comp").toggle();
+$("#comparsionbuttonandtable").toggle();
+
   var furfilledorder = Parse.Object.extend("furfilledorders");
   var query = new Parse.Query(furfilledorder);
   query.equalTo("ordernumber", ordernumber);
@@ -423,9 +462,17 @@ query.find({
 
         var charge = object.get("servicechargeprice")
         var grandtotal = total + charge
+        var label = document.createElement("label")
+        label.id = "fuelcharge"
+        var newline = document.createElement("br")
+        label.innerHTML = selectedseller + " has a $ " + charge + " charge "
+
+
 
         var body = document.getElementById("modalbody")
         body.innerHTML = "the total price for this order is " + grandtotal
+        body.appendChild(newline)
+        body.appendChild(label)
 
 
 
@@ -471,6 +518,64 @@ query.find({
 
 
 }
+
+$("#comparsionbutton").click(function() {
+  console.log("click")
+    var body = document.getElementById("modalbody")
+    var newline = document.createElement("br")
+    body.appendChild(newline)
+$("#compare-table").toggle();
+console.log(compbuttoncounter)
+compbuttoncounter++
+
+
+// query for toatals for all sellers
+
+var furfilledorders = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorders);
+query.equalTo("ordernumber", globordernum);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " order.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      var details = object.get("furfilledorder")
+      console.log(details.prices)
+      for(var i = 0; i < details.prices.length; i++)
+      {
+        comptotal += details.prices[i]
+
+      }
+        $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + comptotal)
+
+
+
+
+
+
+
+
+
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
+/*if(compbuttoncounter == 1)
+{
+  $("#compare-table").toggle();
+}
+
+*/
+
+});
+compbuttoncounter = 0
+
+
 
 
 

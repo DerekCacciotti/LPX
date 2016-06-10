@@ -253,7 +253,7 @@ function findFood()
   cleartable();
   var searchtextupper = document.getElementById("searchbox").value
 var searchtext = searchtextupper.toUpperCase()
-  var GameScore = Parse.Object.extend("FoodSource");
+  var GameScore = Parse.Object.extend("FoodSourceParse");
 var query = new Parse.Query(GameScore);
 query.equalTo("Item", searchtext );
 query.find({

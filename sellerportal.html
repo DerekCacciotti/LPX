@@ -160,6 +160,7 @@
       var finalprices;
       var comepletedorder = []
       var returnemail;
+      var isfurfilled = false
 
 
 function Lookup()
@@ -255,13 +256,37 @@ function populatesuppilerslist()
         var li = document.createElement("li")
         var atag = document.createElement("a")
         atag.innerHTML = object.get("name")
+        var suppliername = object.get("name")
         li.appendChild(atag)
         supplierlist.appendChild(li)
       }
       $("#suppliersmenu a").click(function(){
         console.log($(this).html())
          selectedsupplier = $(this).html()
-         toastr.info("You have selected " + selectedsupplier)
+         var furfilledorders = Parse.Object.extend("furfilledorders");
+var query = new Parse.Query(furfilledorders);
+query.equalTo("ordernumber", globordernum);
+query.equalTo("seller", selectedsupplier)
+query.equalTo("isfurfilled", true)
+query.find({
+  success: function(results) {
+    if (results.length >= 1)
+    {
+      alert("Sorry this order has been furfilled by " + selectedsupplier)
+      selectedsupplier = ""
+    }
+    else
+    {
+      isfurfilled = true;
+      toastr.info("You have selected " + selectedsupplier)
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
 
 
         // set item in local stroage
@@ -332,6 +357,7 @@ furfilledordersobj.set("furfilledorder", LPXOrder);
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", selectedsupplier);
 furfilledordersobj.set("orderfor", orderfor);
+furfilledordersobj.set("isfurfilled", isfurfilled)
 furfilledordersobj.save(null, {
   success: function(furfilledorder) {
     // Execute any logic that should take place after the object is saved.

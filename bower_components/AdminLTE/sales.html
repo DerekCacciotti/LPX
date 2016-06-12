@@ -78,8 +78,9 @@
 <tr>
     <th>Item</th>
   <th>Price</th>
-  <th>Amount of cases purchased</th>
+  <th>Requested number of cases</th>
   <th>Seller</th>
+
 
 
 
@@ -90,6 +91,9 @@
 
 </table>
 
+<p class="text-center" id="totallabel"></p>
+
+
 </div>
 
 
@@ -99,6 +103,8 @@
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
       var currentuser = Parse.User.current();
       document.onload = getSalesData();
+
+      var total = 0;
 
 
 function getSalesData()
@@ -187,7 +193,13 @@ success: function(results) {
         for (var j = 0; j < order.orderdetails.length; j++)
         {
               $('#salesarea-table').append('<tr><td>' +  order.orderdetails[j].item  + '</td><td>' + order.prices[j] + '</td><td>' + order.orderdetails[j].amount +'</td><td>' + object.get("seller") );
+              total += order.prices[j]
+
+
+
         }
+
+        var totallabel = document.getElementById("totallabel").innerHTML = "the total price for this order is " + total
 
 
 

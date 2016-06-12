@@ -62,7 +62,7 @@
 
                     </div>
                     <br />
-                    <input type="button" class="btn btn-success pull-right" value="Add Deal" id="addsupplierbutton" onclick="AddDeal()"/>
+                    <input type="button" class="btn btn-success pull-right" value="Add Deal" id="adddealbutton" onclick=""/>
                     <br />
 
 
@@ -86,6 +86,52 @@
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
+      var objectID;
+
+      if(localStorage.getItem("clickeddeal")== null)
+      {
+        console.log("No editing")
+
+      }
+
+      else
+      {
+        var greenbutton = document.getElementById("adddealbutton");
+        greenbutton.id = "finished"
+        greenbutton.value = "Finshed Editing"
+
+        var clickeddeal = localStorage.getItem("clickeddeal")
+        var supplierprofile = Parse.Object.extend("Deals");
+var query = new Parse.Query(supplierprofile);
+query.equalTo("DealName", clickeddeal);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      objectID = object.id
+      console.log(object.get('name'));
+      var dealname = document.getElementById("dealname").value = object.get("DealName")
+      var dealitem = document.getElementById("dealitem").value = object.get("Item")
+      var startdatestr = document.getElementById("startdate").value = object.get("startdate")  // change to date object
+      var enddatestr = document.getElementById("enddate").value = object.get("enddate")  // change to date object
+      var percentoff = document.getElementById("percentoff").value = object.get("percentoff")
+
+      }
+    }
+  });
+}
+
+
+      $("#adddealbutton").click(function(){
+        commitSupplier();
+      })
+
+      $("#finished").click(function(){
+        SendEdits(objectID);
+      })
+
 
 
 
@@ -108,7 +154,7 @@ deals.set("DealName", dealname);
 deals.set("Item", dealitem);
 deals.set("startdate", startdatestr);
 deals.set("enddate", enddatestr)
-deals.set("percen off", percentoff)
+deals.set("percentoff", percentoff)
 
 deals.save(null, {
   success: function(saved) {
@@ -121,6 +167,36 @@ deals.save(null, {
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+      }
+
+      function SendEdits()
+      {
+        var dealname = document.getElementById("dealname").value
+        var dealitem = document.getElementById("dealitem").value
+        var startdatestr = document.getElementById("startdate").value // change to date object
+        var enddatestr = document.getElementById("enddate").value // change to date object
+        var percentoff = document.getElementById("percentoff").value
+
+      var Deals = Parse.Object.extend("Deals");
+    var deals = new Deals();
+
+    deals.set("DealName", dealname);
+    deals.set("Item", dealitem);
+    deals.set("startdate", startdatestr);
+    deals.set("enddate", enddatestr)
+    deals.set("percentoff", percentoff)
+
+    deals.save(null, {
+      success: function(saved) {
+        // Execute any logic that should take place after the object is saved.
+        alert("Deal Saved")
+      },
+      error: function(gameScore, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        alert('Failed to create new object, with error code: ' + error.message);
+      }
+    });
       }
 
 

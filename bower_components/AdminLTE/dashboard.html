@@ -253,6 +253,15 @@ desired effect
         </ul>
       </div>
 
+      <div id="deals">
+        <h1>Customer Deals</h1>
+        <small>Click on a deal to edit it</small>
+        <ul id="dealslist">
+
+        </ul>
+
+      </div>
+
 
 
 
@@ -340,8 +349,9 @@ function Logout()
 
 function populateorderslist()
 {
-  if (localStorage.getItem("selectedsupplier") != null) {
+  if (localStorage.getItem("selectedsupplier") != null ||  localStorage.getItem("clickeddeal")!= null) {
     localStorage.removeItem("selectedsupplier");
+    localStorage.removeItem("clickeddeal")
 }
 var orders = Parse.Object.extend("Order");
 var query = new Parse.Query(orders);
@@ -373,6 +383,7 @@ error: function(error) {
 });
 populatefurfilledorderslist()
 poplulateSupplierProfile();
+populateDealsList();
 }
 
 function populatefurfilledorderslist()
@@ -441,6 +452,42 @@ function poplulateSupplierProfile()
       alert("Error: " + error.code + " " + error.message);
     }
   });
+}
+
+function populateDealsList()
+{
+  var Deals = Parse.Object.extend("Deals");
+var query = new Parse.Query(Deals);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " scores.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      console.log( object.get('DealName'));
+      var dealslist = document.getElementById("dealslist")
+      var li = document.createElement("li")
+      var atag = document.createElement("a")
+      atag.href = "/Users/derekcacciotti/Documents/LPX/mydeals.html"
+      atag.innerHTML = object.get("DealName")
+      li.appendChild(atag)
+      dealslist.appendChild(li)
+
+    }
+
+    $("#dealslist a").click(function(){
+      console.log($(this).html())
+      var clickeddeal = $(this).html()
+
+      // set item in local stroage
+      window.localStorage.setItem("clickeddeal", clickeddeal);
+
+    });
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
 }
 
 

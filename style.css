@@ -345,6 +345,13 @@ span #submitbutton
   list-style: none;
 }
 
+#furfilledorders ul
+{
+  list-style: none;
+}
+
+
+
 #compdir
 {
   font-size: 18px;

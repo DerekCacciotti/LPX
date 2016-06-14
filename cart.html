@@ -421,16 +421,30 @@ function SendEmail(array, pobject)
   {
     var email = new mandrill.Mandrill('TMc9w9HepAG7nUI1amdO3g'); // This will be public
 
-    email.messages.send({
-            "message": {
-                "from_email": "orders@lpxco.com",
-                "from_name": "LPX",
-                "to":[{"email": array[object], "name": "Confidental"}], // Array of recipients
-                "subject": "LPX order " + pobject.id,
-                "text": "You have a new LPX order " + pobject.id
-            }
-        });
-      console.log("worked")
+
+
+    var params = {
+  "template_name": "LPXCart",
+  "template_content": [
+      {
+          "name": "test",
+          "content": "testing"
+      }
+  ],
+
+  "message": {
+      "from_email":"orders@lpxco.com",
+      "to":[{"email":array[object], "name": "Confidental"}],
+      "subject": "LPX order " + pobject.id + " needs to be furfilled " ,
+      "text": "Hello, your LPX order number " + pobject.id +  " has been furfilled " + " please check out the dashboard to see pricing"
+  }
+  };
+
+  email.messages.sendTemplate(params, function(res) {
+      log(res);
+  }, function(err) {
+      log(err);
+  });
   }
 
 

@@ -87,6 +87,7 @@
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
       var objectID;
+      var currentuser = Parse.User.current();
 
       if(localStorage.getItem("clickeddeal")== null)
       {
@@ -101,9 +102,10 @@
         greenbutton.value = "Finshed Editing"
 
         var clickeddeal = localStorage.getItem("clickeddeal")
-        var supplierprofile = Parse.Object.extend("Deals");
-var query = new Parse.Query(supplierprofile);
+        var deals = Parse.Object.extend("Deals");
+var query = new Parse.Query(Deals);
 query.equalTo("DealName", clickeddeal);
+query.equalTo("submiitedby", currentuser.get("username"))
 query.find({
   success: function(results) {
     console.log("Successfully retrieved " + results.length);
@@ -125,7 +127,7 @@ query.find({
 
 
       $("#adddealbutton").click(function(){
-        commitSupplier();
+        AddDeal()
       })
 
       $("#finished").click(function(){
@@ -155,6 +157,7 @@ deals.set("Item", dealitem);
 deals.set("startdate", startdatestr);
 deals.set("enddate", enddatestr)
 deals.set("percentoff", percentoff)
+deals.set("submiitedby", currentuser.get("username"))
 
 deals.save(null, {
   success: function(saved) {
@@ -185,6 +188,7 @@ deals.save(null, {
     deals.set("startdate", startdatestr);
     deals.set("enddate", enddatestr)
     deals.set("percentoff", percentoff)
+    deals.set("submiitedby", currentuser.get("username"))
 
     deals.save(null, {
       success: function(saved) {

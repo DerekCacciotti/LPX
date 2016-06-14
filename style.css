@@ -402,3 +402,16 @@ label
 {
   margin-top: -75px
 }
+
+#totallabel
+{
+  text-indent: 5px;
+  color: green;
+}
+#casetotal
+{
+  position: relative;
+  left: -50px;
+  text-indent: 5px;
+  color: blue;
+}

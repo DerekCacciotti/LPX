@@ -188,7 +188,7 @@ desired effect
         <li><a href="#"><i class="fa fa-link"></i> <span>Stats</span></a></li>
         <li><a href="/Users/derekcacciotti/Documents/LPX/supplierprofile.html"><i class="fa fa-link"></i> <span>Create new Suplier Profile</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Rebates</span></a></li>
-          <li><a href="#"><i class="fa fa-link"></i> <span>My Deals</span></a></li>
+          <li><a href="/Users/derekcacciotti/Documents/LPX/mydeals.html"><i class="fa fa-link"></i> <span>My Deals</span></a></li>
         <li class="treeview">
         </li>
       </ul>
@@ -261,6 +261,7 @@ desired effect
         </ul>
 
       </div>
+
 
 
 
@@ -458,6 +459,7 @@ function populateDealsList()
 {
   var Deals = Parse.Object.extend("Deals");
 var query = new Parse.Query(Deals);
+query.equalTo("submiitedby",currentuser.get("username"))
 query.find({
   success: function(results) {
     console.log("Successfully retrieved " + results.length + " scores.");

@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stlesheet" type="text/css" href="/Users/derekcacciotti/Documents/LPX/progressjs.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
+    <script src="/Users/derekcacciotti/Documents/LPX/progress.min.js"></script>
+
+
 
 </head>
 <body>
@@ -185,8 +189,20 @@
       <div class="modal-body" id="modalbody">
 
 
+
+
+
       </div>
       <div class="modal-footer">
+          <label class="center">Estimated furfillment rate based on this order</label>
+          <br />
+
+        <div id="myProgress">
+          <div id="myBar">
+            <div id="labelprogress">10%</div>
+          </div>
+        </div>
+        <br />
 
         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose">Close</button>
       </div>
@@ -210,6 +226,8 @@
 
       var pricearray = [];
       var sellersarray = [];
+        var zeroarray = [];
+        var itemarray = []
 
     var currentUser = Parse.User.current();
     var total = 0
@@ -300,6 +318,7 @@ query.find({
 
 
           $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
+          itemarray.push(savedorder.orderdetails[j].item)
 
       }
 
@@ -426,6 +445,7 @@ function PopulateModal(selectedseller, ordernumber)
 
 
   var furfilledorders = Parse.Object.extend("furfilledorders");
+
 var query = new Parse.Query(furfilledorders);
 query.equalTo("ordernumber", ordernumber);
 query.equalTo("seller", selectedseller)
@@ -439,6 +459,50 @@ query.find({
       console.log(returnedobject.prices)
       for(var i = 0; i < returnedobject.prices.length; i++)
       {
+
+
+        if (returnedobject.prices[i] == 0)
+        {
+          zeroarray.push(returnedobject.prices[i])
+        }
+
+      // move the progress bar
+      if(zeroarray.length == itemarray.length)
+      {
+        var barwidth = 0
+         var progressbar = document.getElementById("myBar");
+         progressbar.style.width = barwidth + "%"
+         progressbar.style.backgroundColor = "red"
+         document.getElementById("labelprogress").innerHTML = barwidth * 1 + '%';
+
+
+      }
+      else if(zeroarray.length == itemarray.length / 2)
+      {
+        var barwidth = 50
+        var progressbar = document.getElementById("myBar");
+        progressbar.style.width = barwidth + "%"
+        progressbar.style.backgroundColor = "green"
+        document.getElementById("labelprogress").innerHTML = barwidth * 1 + '%';
+      }
+      else if(zeroarray.length == 0)
+      {
+        var barwidth = 100
+        var progressbar = document.getElementById("myBar");
+        progressbar.style.width = barwidth + "%"
+        progressbar.style.backgroundColor = "blue"
+        document.getElementById("labelprogress").innerHTML = barwidth * 1 + '%';
+      }
+
+
+
+
+
+
+
+
+
+
         total += returnedobject.prices[i]
 
 
@@ -466,13 +530,26 @@ query.find({
         label.id = "fuelcharge"
         var newline = document.createElement("br")
         label.innerHTML = selectedseller + " has a $ " + charge + " charge "
+        var percentagelabel = document.createElement("label")
+        percentagelabel.id = "percentagelabel"
+
+
+
+
+
+
 
 
 
         var body = document.getElementById("modalbody")
+        getpercentage(zeroarray,pricearray,body,percentagelabel)
         body.innerHTML = "the total price for this order is " + grandtotal
         body.appendChild(newline)
         body.appendChild(label)
+
+
+
+
 
 
 
@@ -483,12 +560,14 @@ query.find({
         var body = document.getElementById("modalbody")
         body.innerHTML = "the total price for this order is " + total
 
+
       }
 
 
 
     }
     total = 0;
+
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
@@ -514,6 +593,29 @@ query.find({
 
 
 
+
+
+
+}
+
+function getpercentage(zeroarray, itemarray, body, percentagelabel)
+{
+  if(zeroarray.length == itemarray.length)
+  {
+    percentagelabel.innerHTML = "0% furillment"
+    body.appendChild(percentagelabel)
+
+  }
+  else if(zeroarray.length == itemarray.length / 2)
+  {
+    percentagelabel.innerHTML = "50% furillment"
+      body.appendChild(percentagelabel)
+  }
+  else if(zeroarray.length == 0)
+  {
+    percentagelabel.innerHTML = "100% furillment"
+      body.appendChild(percentagelabel)
+  }
 
 
 

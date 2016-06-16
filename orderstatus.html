@@ -318,7 +318,7 @@ query.find({
 
 
           $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
-          itemarray.push(savedorder.orderdetails[j].item)
+          //itemarray.push(savedorder.orderdetails[j].item)
 
       }
 
@@ -456,7 +456,16 @@ query.find({
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
       var returnedobject = object.get("furfilledorder")
+      console.log(returnedobject.orderdetails)
       console.log(returnedobject.prices)
+
+      for(var j = 0; j < returnedobject.orderdetails.length; j++)
+      {
+        itemarray.push(returnedobject.orderdetails[j].item)
+      }
+      console.log(itemarray)
+
+
       for(var i = 0; i < returnedobject.prices.length; i++)
       {
 
@@ -465,6 +474,8 @@ query.find({
         {
           zeroarray.push(returnedobject.prices[i])
         }
+
+        console.log(zeroarray.length)
 
       // move the progress bar
       if(zeroarray.length == itemarray.length)
@@ -493,6 +504,17 @@ query.find({
         progressbar.style.backgroundColor = "blue"
         document.getElementById("labelprogress").innerHTML = barwidth * 1 + '%';
       }
+      if(zeroarray.length == 1)
+      {
+        var barwidth = 90
+        var progressbar = document.getElementById("myBar");
+        progressbar.style.width = barwidth + "%"
+        progressbar.style.backgroundColor = "blue"
+        document.getElementById("labelprogress").innerHTML = barwidth * 1 + '%';
+      }
+
+
+
 
 
 
@@ -504,6 +526,7 @@ query.find({
 
 
         total += returnedobject.prices[i]
+
 
 
 
@@ -542,7 +565,7 @@ query.find({
 
 
         var body = document.getElementById("modalbody")
-        getpercentage(zeroarray,pricearray,body,percentagelabel)
+        //getpercentage(zeroarray,pricearray,body,percentagelabel)
         body.innerHTML = "the total price for this order is " + grandtotal
         body.appendChild(newline)
         body.appendChild(label)
@@ -567,6 +590,8 @@ query.find({
 
     }
     total = 0;
+    itemarray = []
+    zeroarray = []
 
   },
   error: function(error) {
@@ -598,28 +623,7 @@ query.find({
 
 }
 
-function getpercentage(zeroarray, itemarray, body, percentagelabel)
-{
-  if(zeroarray.length == itemarray.length)
-  {
-    percentagelabel.innerHTML = "0% furillment"
-    body.appendChild(percentagelabel)
 
-  }
-  else if(zeroarray.length == itemarray.length / 2)
-  {
-    percentagelabel.innerHTML = "50% furillment"
-      body.appendChild(percentagelabel)
-  }
-  else if(zeroarray.length == 0)
-  {
-    percentagelabel.innerHTML = "100% furillment"
-      body.appendChild(percentagelabel)
-  }
-
-
-
-}
 
 $("#comparsionbutton").click(function() {
   console.log("click")
@@ -643,13 +647,17 @@ query.find({
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
       var details = object.get("furfilledorder")
+      console.log(details)
       console.log(details.prices)
-      for(var i = 0; i < details.prices.length; i++)
+      for(var j = 0; j < details.prices.length; j++)
       {
-        comptotal += details.prices[i]
+        comptotal += details.prices[j]
+
 
       }
+      //comptotal = 0
         $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + comptotal)
+        comptotal = 0
 
 
 
@@ -660,6 +668,8 @@ query.find({
 
 
     }
+
+  //comptotal = 0
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);

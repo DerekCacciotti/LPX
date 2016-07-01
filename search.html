@@ -12,6 +12,7 @@
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
     <script src="bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="bower_components/toastr/toastr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/3.16.0/algoliasearch.min.js"></script>
 
 
 </head>
@@ -250,7 +251,61 @@ var currentuser = Parse.User.current();
 
 function findFood()
 {
-  cleartable();
+
+cleartable()
+  var client = algoliasearch("1ZC34ODN95", '5ff9467977022bc22144e1f98657ecf3');
+    var index = client.initIndex('Foodsource');
+
+    index.search(document.getElementById("searchbox").value, function searchDone(err, content) {
+      console.log(content.hits)
+      for(var i = 0; i < content.hits.length; i++)
+      {
+        console.log(content.hits[i].ITEM)
+
+        var database = Parse.Object.extend("FoodSourceParse");
+var query = new Parse.Query(database);
+query.equalTo("ITEM", content.hits[i].ITEM);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+
+         $('#results-table').append('<tr><td>' +  object.get('ITEM')  + '</td><td>' + object.get('BRAND') + '</td><td>' + object.get("PACK") + '</td><td>'  + object.get("SIZE"));
+
+    }
+
+    $("tr").click(function(){
+      //alert("click")
+      var index = $(this).index();
+      //alert(index)
+      var dataarray = $(this).children("td").map(function(){
+        return $(this).text();
+      }).get();
+
+      //alert($.trim(dataarray[0]));
+      itemsarray.push($.trim(dataarray[0]));
+      console.log(itemsarray);
+      LoadProduct();
+    });
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+      }
+    });
+
+
+
+
+
+
+
+
+/*  cleartable();
   var searchtextupper = document.getElementById("searchbox").value
   var GameScore = Parse.Object.extend("FoodSourceParse");
 var query = new Parse.Query(GameScore);
@@ -289,7 +344,9 @@ query.find({
         alert("Error: " + error.code + " " + error.message);
     }
 });
+*/
 }
+
 
 
 

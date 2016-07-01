@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>LPX- Login</title>
+    <title>LPX- Dashboard</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -108,7 +108,7 @@
                         <br />
 
                         <div id="furfilledorders">
-                          <h2>Furfilled Orders</h2>
+                          <h2>Fulfilled Orders</h2>
                           <div>
                             <ul id="forderslist">
 
@@ -160,20 +160,10 @@
 
       document.onload = populateorderslist()
 
-      $("#logoutbutton").click(function(){
-        Logout()
-      })
+
 
 
       // log out function
-      function Logout()
-      {
-        Parse.User.logOut().then(() => {
-  var currentUser = Parse.User.current();  // this will now be null
-});
-        alert("You have successfully logged out")
-          window.location.href = "index.html"
-      }
 
       function populateorderslist()
       {

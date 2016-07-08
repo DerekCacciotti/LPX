@@ -147,7 +147,7 @@ $("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
-  //document.onload = poplatedropdown();
+   poplatedropdown();
 
   var sessiontoken = Parse.Session.sessionToken;
   console.log(sessiontoken)
@@ -211,11 +211,13 @@ function cleartable()
 {
   var table = document.getElementById("order-table");
   while (table.rows.length > 0) {
-    table.deleteRow(0);
+    table.deleteRow(2);
 
 
 
   }
+
+
 
 
 
@@ -450,21 +452,6 @@ function SendEmail(array, pobject)
 
 }
 
-function checkCookie() {
-console.log("the current cookie is " + document.cookie)
-
-if (currentuser == null)
-{
-currentuser = document.cookie
-console.log(currentuser)
-}
-else
-{
-console.log("user passed")
-console.log(currentuser)
-}
-
-}
 
 
 
@@ -474,17 +461,11 @@ console.log(currentuser)
 function poplatedropdown()
 {
 
-checkCookie();
   var loggedinuser = Parse.User.current();
     console.log(loggedinuser)
-
-    if (loggedinuser == null)
-    {
-      loggedinuser = document.cookie
-    }
   var order = Parse.Object.extend("Order");
 var query = new Parse.Query(order);
-query.equalTo("submiitedby", loggedinuser);
+query.equalTo("submitedbyusername", loggedinuser.get("username"));
 query.find({
   success: function(results) {
     console.log("Successfully retrieved " + results.length);
@@ -507,7 +488,7 @@ query.find({
     $("#dropdownmenu a").click(function() {
       var ordernumber = this.innerHTML;
     //lert(this.innerHTML)
-    cleartable();
+    //cleartable();
 
     var Order = Parse.Object.extend("Order");
 var query = new Parse.Query(Order);
@@ -515,18 +496,20 @@ query.get(ordernumber, {
   success: function(savedorder) {
     var order = savedorder.get("order");
 
-    var search_term = 'undefined';
+    var search_term = '';
 
     for (var i=order.length-1; i>=0; i--) {
-        if (order[i] === search_term) {
+        if (order[i].item === search_term) {
             order.splice(i, 1);
              break;
         }
     }
 
-    for (items in order)
+    for (var i  = 0; i < order.length; i++)
     {
-      $('#order-table').append('<tr><td id="item">' +     order[items]  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + '</td></tr>');
+      console.log(order[i].sizeamount)
+      $('#order-table').append('<tr><td id="item">' +   order[i].item  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + order[i].sizeamount + "</td><td>" + order[i].pack +  '</td></tr>');
+
 
     }
 

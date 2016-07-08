@@ -56,6 +56,8 @@
                     <input type="text" class="form-control" id="startdate" placeholder="Start Date" />
                     <input type="text" class="form-control" id="enddate" placeholder="End Date" />
                   <input type="text" class="form-control" id="percentoff" placeholder="% Off" />
+                  <label id="uploadlabel">Upload your rebate form</label>
+                  <input type="file" id="uploadPDF">
                   <br />
                   <input type="button" class="btn btn-success pull-right" value="Add Rebate" id="addrebatebutton" onclick=""/>
                   <br />
@@ -86,6 +88,7 @@
 
       var objectID;
       var currentuser = Parse.User.current();
+      
 
 
 
@@ -128,6 +131,7 @@ rebate.save(null, {
   success: function(saved) {
     // Execute any logic that should take place after the object is saved.
     alert("Rebate Added")
+    UploadPDF(saved);
   },
   error: function(gameScore, error) {
     // Execute any logic that should take place if the save fails.
@@ -135,6 +139,34 @@ rebate.save(null, {
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+      }
+
+      function UploadPDF(parseObject)
+      {
+        if(document.getElementById("uploadPDF").value != "")
+        {
+          var fileUploadControl = $("#uploadPDF")[0];
+if (fileUploadControl.files.length > 0) {
+  var file = fileUploadControl.files[0];
+  var name = "rebate.pdf";
+
+  var parseFile = new Parse.File(name, file);
+parseObject.set("rebateform", file)
+parseObject.save();
+
+  parseFile.save().then(function() {
+
+
+  alert("Rebate document saved")
+}, function(error) {
+  // The file either could not be read, or could not be saved to Parse.
+});
+}
+        }
+        else
+        {
+            return;
+        }
       }
 
 

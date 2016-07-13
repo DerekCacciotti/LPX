@@ -151,8 +151,9 @@ if (fileUploadControl.files.length > 0) {
   var name = "rebate.pdf";
 
   var parseFile = new Parse.File(name, file);
-parseObject.set("rebateform", file)
+parseObject.set("rebateform", parseFile)
 parseObject.save();
+
 
   parseFile.save().then(function() {
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>LPX- Sales</title>
+    <title>LPX- Rebate Listings</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -53,7 +53,7 @@
     <table id="rebate-table" class="table">
 
   <tr>
-      <th>Item</th>
+      <th>Rebate Name</th>
     <th>Start Date</th>
   <th>End Date</th>
 
@@ -67,7 +67,7 @@
 
   </table>
 
-  <p id="yeartodatesales"></p>
+
 
 
 </div>
@@ -79,7 +79,78 @@
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
       var currentuser = Parse.User.current();
 
-      
+      var rebates = Parse.Object.extend("Rebate");
+var query = new Parse.Query(rebates);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " rebates.");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      $('#rebate-table').append('<tr><td>' + object.get("RebateName") + '</td><td>' + object.get('startdate') + '</td><td>' + object.get('enddate'))
+
+
+    }
+
+    $("tr").click(function(){
+      //alert("click")
+      var index = $(this).index();
+      //alert(index)
+      var dataarray = $(this).children("td").map(function(){
+        return $(this).text();
+      }).get();
+
+      console.log($.trim(dataarray[0]));
+      getRebateFile(dataarray[0])
+      //itemsarray.push($.trim(dataarray[0]));
+      //console.log(itemsarray);
+      //LoadProduct();
+
+
+    })
+
+
+
+    function getRebateFile(rebatename)
+    {
+      var Rebates = Parse.Object.extend("Rebate");
+var query = new Parse.Query(Rebates);
+query.equalTo("RebateName", rebatename);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " rebates.");
+    if (results.length == 0)
+    {
+      return
+    }
+    else
+    {
+
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i];
+        var savedform = object.get("rebateform").url();
+        console.log(savedform)
+        window.location.href = savedform
+
+      }
+    }
+
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+    }
+
+
+
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
 
 
 

@@ -73,7 +73,13 @@
 						<button type="button" class="btn btn-danger">
 							Add to wishlist
 						</button>
+
+            <div class="btn-group wishlist">
+              <button type="button" class="btn btn-link" id="rebatebutton">
+                Rebate Form Avaiable.
+              </button>
 					</div>
+
           <br />
           <br />
           <div>
@@ -136,12 +142,11 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
   var finalorder = [];
   var currentuser = Parse.User.current();
-  if (currentuser == null)
-  {
-    currentuser = document.cookie
-  }
 
-window.onload = checkCookie();
+
+
+
+
 
   var orderarray = JSON.parse(window.localStorage.getItem("item"))
   console.log(orderarray)
@@ -169,6 +174,7 @@ window.onload = checkCookie();
   } // end of outter loop
 
   getcurrentcart()
+  checkforRebate()
 
 
   function addtoCart()
@@ -211,21 +217,6 @@ window.onload = checkCookie();
 }
 
 
-function checkCookie() {
-console.log("the current cookie is " + document.cookie)
-
-if (currentuser == null)
-{
-currentuser = document.cookie
-console.log(currentuser)
-}
-else
-{
-console.log("user passed")
-console.log(currentuser)
-}
-
-}
 
 function BacktoSearch()
 {
@@ -256,6 +247,46 @@ var currentitems = []
 
   //finalorder.filter(function(val) { return val !== null; }).join(", ")
 }
+}
+
+
+function checkforRebate()
+{
+  var itemname = document.getElementById('itemname').innerHTML
+  var rebatefile = Parse.Object.extend("Rebate")
+  var query = new Parse.Query(rebatefile);
+  query.equalTo("Item", itemname)
+query.find({
+  success: function(results) {
+    // results is an array of Parse.Object.
+    console.log("found")
+  if (results.length != 0)
+  {
+
+    for(var i = 0; i < results.length; i++)
+  {
+    if (results.length != 0)
+    {
+      var object = results[i]
+      $('#rebatebutton').click(function() {
+window.location = object.get("rebateform").url();
+});
+    }
+
+  }
+  }
+  else
+  {
+    $("#rebatebutton").toggle();
+  }
+
+
+  },
+
+  error: function(error) {
+    // error is an instance of Parse.Error.
+  }
+});
 }
 
 </script>

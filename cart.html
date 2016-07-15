@@ -413,6 +413,12 @@ console.log(finalorder)
 
 }
 
+function CancelOrder()
+{
+  orderarray = [];
+  localStorage.removeItem("currentcart");
+  BacktoSearch();
+}
 
 function SendEmail(array, pobject)
 {

@@ -181,7 +181,7 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   {
       var currentitem = document.getElementById("itemname").innerHTML
       var currentbrand = document.getElementById("brandlabel").innerHTML
-      alert(currentitem);
+      alert("Added to Cart");
       var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
       query.equalTo("ITEM", currentitem )

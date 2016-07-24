@@ -164,6 +164,8 @@
       var comepletedorder = []
       var returnemail;
       var isfurfilled = false
+      var avgprice = []
+
 
 
 function Lookup()
@@ -359,6 +361,40 @@ LPXOrder.orderdetails = foundorders
 
 
 console.log(LPXOrder)
+console.log(LPXOrder.orderdetails)
+
+for(var i = 0; i < LPXOrder.orderdetails.length; i++)
+{
+  var sizeamountstr = LPXOrder.orderdetails[i].sizeamount
+      var  substring = "AVE";
+
+  console.log(sizeamountstr.indexOf(substring) > -1);
+
+  var avgkey = sizeamountstr.indexOf(substring) > -1
+
+  if (avgkey == true)
+  {
+    console.log("average found")
+
+    var avergeamount = parseFloat(sizeamountstr)
+    console.log(avergeamount)
+    console.log("the current index is " + i)
+
+    var valuetobereplaced = LPXOrder.prices[i]
+    console.log(valuetobereplaced)
+
+    var newvalue = avergeamount * valuetobereplaced
+    LPXOrder.prices[i] = newvalue
+
+
+  }
+  
+
+
+
+}
+
+
 
 
 
@@ -375,7 +411,7 @@ furfilledordersobj.save(null, {
     // Execute any logic that should take place after the object is saved.
     alert("Your order has been furfilled")
     SendEmail()
-    window.href = "search.html"
+
 
   },
   error: function(order, error) {

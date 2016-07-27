@@ -63,7 +63,8 @@
 </div>
 
 <div class="container">
-  <h4>Current order</h4>
+  <h4>Current order <span><h1 id="cartnote">to ensure the highest procurement possable, If you make a mistake, Please cancel your order and start again.</h1></span></h4>
+  <br />
   <div id="table">
 
     <table id="order-table" class="table">
@@ -198,22 +199,6 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
          $('#order-table').append('<tr><td id="item">' +   object.get('ITEM')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("SIZE") + "</td><td>" + object.get("PACK") +  '</td></tr>');
 
-         // click event
-         $("tr").click(function(){
-           //alert("click")
-           var index = $(this).index();
-           console.log(index)
-           var dataarray = $(this).children("td").map(function(){
-             return $(this).text();
-           }).get();
-
-           var itemtoberemoved = dataarray[0]
-           console.log(itemtoberemoved)
-           //removeitem(itemtoberemoved, orderarray)
-
-
-
-         })
 
 
 
@@ -222,6 +207,7 @@ for (var j = 0; j <= itemidsarray.length; ++j)
       }
     })
 }
+
 
 
 
@@ -438,6 +424,7 @@ function CancelOrder()
   orderarray = [];
   localStorage.removeItem("currentcart");
   BacktoSearch();
+  itemidsarray = []
 }
 
 function SendEmail(array, pobject)

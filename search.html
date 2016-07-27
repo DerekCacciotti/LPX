@@ -168,6 +168,7 @@ var currentuser = Parse.User.current();
                var dataarray = $(this).children("td").map(function(){
                  return $(this).text();
                }).get();
+               console.log(dataarray)
 
                //alert($.trim(dataarray[0]));
                itemsarray.push($.trim(dataarray[0]));

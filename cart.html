@@ -148,6 +148,7 @@ $("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+
    poplatedropdown();
 
   var sessiontoken = Parse.Session.sessionToken;
@@ -164,6 +165,8 @@ var itemidsarray = [];
 var amountarray = [];
 var finalorder = [];
 var isfurfilled = false;
+var userdata = []
+
 
 
 
@@ -205,8 +208,12 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
       }
+
+
     })
 }
+
+
 
 
 
@@ -236,7 +243,69 @@ function cleartable()
 
 function BacktoSearch()
   {
+    var table = $('#order-table')
+    table.find('tr').each(function (i) {
+            var $input = $(this).find("#quanity");
+            var enteredamount = $input.eq(0).val();
+            console.log(enteredamount)
+            userdata.push(enteredamount);
+
+
+
+    });
+
+    localStorage.setItem('userdata', userdata);
+    useramountssaved = true;
+
+
     window.location.href = "search.html"
+
+
+
+
+  }
+
+  function checkforuserdata()
+  {
+    if  (localStorage.getItem("userdata") === null)
+    {
+      return;
+    }
+    else
+    {
+      var data = localStorage.getItem("userdata")
+      console.log(data)
+
+      for(var i = 0; i < data.length; i++)
+      {
+        userdata.push(data[i])
+      }
+
+      var search_term = ",";
+
+      for (var i=userdata.length-1; i>=0; i--) {
+          if (userdata[i] === search_term) {
+              userdata.splice(i, 1);
+
+          }
+      }
+      console.log(userdata)
+      var table = $('#order-table')
+
+      for(var i = 0; i < userdata.length; i++)
+      {
+        table.find('tr').each(function (i) {
+              document.getElementById("quanity").value = userdata[i]
+
+
+
+
+
+        });
+
+      }
+
+    }
   }
 
   function ShowSalesRepInfo()
@@ -397,6 +466,7 @@ console.log(finalorder)
     alert('Your order has been submitted ' + submiitedorder.id);
     SendEmail(sellersarray, submiitedorder);
     localStorage.removeItem("currentcart")
+    localStorage.removeItem("userdata")
 
 
 
@@ -425,6 +495,10 @@ function CancelOrder()
   localStorage.removeItem("currentcart");
   BacktoSearch();
   itemidsarray = []
+  localStorage.removeItem("userdata")
+  userdata = []
+
+
 }
 
 function SendEmail(array, pobject)

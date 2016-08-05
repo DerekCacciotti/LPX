@@ -62,7 +62,6 @@
 				<div class="col-md-7">
 					<div class="product-title" id="itemname">title</div>
 					<div class="product-desc" id="brandlabel">desciption</div>
-          <div class="product-info" id="packsize">packsize</div>
           <br />
           <div class="btn-group back">
 						<input type="button" class="btn btn-warning" value="Back to Search"  name="backtosearch" id="backtosearch"  onclick="BacktoSearch()">
@@ -167,10 +166,9 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
           console.log(results.length);
           var object = results[i]
           var brand = object.get("BRAND")
-          var packsize = object.get("SIZE")
           console.log(brand)
           var brandlabel = document.getElementById("brandlabel").innerHTML = brand
-          var packsizelabel = document.getElementById("packsize").innerHTML = packsize
+
         } // END OF LOOP FOR BRAND
       }, // end of success function
     })
@@ -184,13 +182,12 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   {
       var currentitem = document.getElementById("itemname").innerHTML
       var currentbrand = document.getElementById("brandlabel").innerHTML
-      var currentpacksize = document.getElementById("packsize").innerHTML
+    
       alert("Added to Cart");
       var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
       query.equalTo("ITEM", currentitem )
       query.equalTo("BRAND", currentbrand)
-      query.equalTo("SIZE", currentpacksize)
       query.find({
         success: function(results){
           console.log("found");

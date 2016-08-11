@@ -317,8 +317,14 @@ query.find({
 
 
 
-          $('#order-table').append('<tr><td id="item">' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
+          $('#order-table').append('<tr><td>' + orderdeailts.get("seller") + '</td><td id=item>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
           //itemarray.push(savedorder.orderdetails[j].item)
+          $("#order-table tr:odd").css("background-color", "red");
+          $("#order-table tr:even").css("background-color", "#7AC5CD");
+
+
+
+
 
       }
 

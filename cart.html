@@ -71,6 +71,7 @@
 
   <tr>
     <th>Item</th>
+    <th>Brand</th>
     <th>Amount</th>
     <th>Size</th>
     <th>Pack</th>
@@ -200,7 +201,7 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
 
-         $('#order-table').append('<tr><td id="item">' +   object.get('ITEM')  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("SIZE") + "</td><td>" + object.get("PACK") +  '</td></tr>');
+         $('#order-table').append('<tr><td id="item">' +   object.get('ITEM')  + '</td><td>' + object.get("BRAND") +  '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("SIZE") + "</td><td>" + object.get("PACK") +  '</td></tr>');
 
 
 

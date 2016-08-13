@@ -133,6 +133,7 @@
 
 // this array will hold the id og the items ordered
 var itemsarray =[];
+var brandarray = [];
 
 var currentuser = Parse.User.current();
 
@@ -172,6 +173,7 @@ var currentuser = Parse.User.current();
 
                //alert($.trim(dataarray[0]));
                itemsarray.push($.trim(dataarray[0]));
+               brandarray.push($.trim(dataarray[1]))
                console.log(itemsarray);
                LoadProduct();
              })
@@ -287,8 +289,10 @@ query.find({
 
       //alert($.trim(dataarray[0]));
       itemsarray.push($.trim(dataarray[0]));
-      console.log(itemsarray);
+      console.log(dataarray[1]);
+      brandarray.push($.trim(dataarray[1]))
       LoadProduct();
+      console.log(brandarray)
     });
   },
   error: function(error) {
@@ -374,6 +378,7 @@ function LoadProduct()
 {
   // saving current array
   window.localStorage.setItem("item", JSON.stringify(itemsarray));
+  window.localStorage.setItem("brand", JSON.stringify(brandarray))
 
   window.location.href = "productpage.html"
 }

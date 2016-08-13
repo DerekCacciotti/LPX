@@ -142,6 +142,7 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
   var finalorder = [];
   var currentuser = Parse.User.current();
+  var brand;
 
 
 
@@ -152,12 +153,20 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   console.log(orderarray)
   for (var i = 0; i < orderarray.length; i++)
   {
+
+    var brandarray = JSON.parse(window.localStorage.getItem("brand"))
+    for(var b = 0; b < brandarray.length; b++)
+    {
+      brand = brandarray[b]
+      break;
+    }
     var item = orderarray[i];
     console.log(item)
     var itemname = document.getElementById("itemname").innerHTML = item
     var database = Parse.Object.extend("FoodSourceParse")
     var query = new Parse.Query(database)
     query.equalTo("ITEM", item)
+    query.equalTo("BRAND", brand)
     query.find({
       success: function(results){
         console.log("found");
@@ -182,7 +191,7 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   {
       var currentitem = document.getElementById("itemname").innerHTML
       var currentbrand = document.getElementById("brandlabel").innerHTML
-    
+
       alert("Added to Cart");
       var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
@@ -224,6 +233,7 @@ function BacktoSearch()
 {
   localStorage.setItem("currentcart", JSON.stringify(finalorder))
   window.location.href = "search.html"
+  localStorage.removeItem("brand");
 }
 
 

@@ -94,6 +94,7 @@
       <tr>
         <th>Seller</th>
         <th>Item</th>
+        <th>Brand</th>
         <th>Amount</th>
         <th>Size</th>
         <th>Pack</th>
@@ -279,6 +280,26 @@ query.find({
       //var sortedarray = savedorder.orderdetails.sort()
       //console.log(sortedarray.reverse())
 
+    savedorder.orderdetails.sort(function(a, b) {
+      var item1 = a.item.toLowerCase()
+      var item2 = b.item.toLowerCase()
+
+      if(item1 < item2 )
+      {
+        return -1
+
+      }
+
+      if(item1 > item2)
+      {
+        return 1
+      }
+      else {
+        return 0;
+      }
+
+    })
+
       for (var j = 0; j < savedorder.orderdetails.length; j++)
       {
 
@@ -320,7 +341,7 @@ query.find({
 
 
 
-          $('#order-table').append('<tr><td>' + orderdeailts.get("seller") + '</td><td id=item>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
+          $('#order-table').append('<tr><td>' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].brand + '</td><td id=item>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
           //itemarray.push(savedorder.orderdetails[j].item)
           //$("#order-table tr:odd").css("background-color", "red");
           //$("#order-table tr:even").css("background-color", "#7AC5CD");

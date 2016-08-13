@@ -30,7 +30,7 @@
       <!-- MENU ITEMS-->
       <div class="collaspe navbar-collaspe" id="mainnavbar">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Home</a></li>
+          <li class="active"><a href="dashboard.html">Home</a></li>
           <li><a href="about.html">About</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -63,7 +63,7 @@
 </div>
 
 <div class="container">
-  <h4>Current order <span><h1 id="cartnote">to ensure the highest procurement possable, If you make a mistake, Please cancel your order and start again.</h1></span></h4>
+  <h4>Current order <span><h1 id="cartnote">To ensure the highest procurement possible, If you make a mistake, Please cancel your order and start again. Another option is to contact your Suppliers and let them know that you made user error. </h1></span></h4>
   <br />
   <div id="table">
 
@@ -377,9 +377,12 @@ query.get(currentuser.id, {
     table.find('tr').each(function (i) {
         var $tds = $(this).find('td'),
             product = $tds.eq(0).text(),
-            Quantity = $tds.eq(1).text(),
-            size = $tds.eq(2).text(),
-            pack = $tds.eq(3).text();
+            size = $tds.eq(3).text(),
+            pack = $tds.eq(4).text(),
+            brand = $tds.eq(1).text();
+
+
+
             var $input = $(this).find("#quanity"),
             amount2 = $input.eq(0).val()
 
@@ -389,9 +392,12 @@ query.get(currentuser.id, {
           //  console.log(Quantity)
             console.log(amount2)
             console.log(pack)
+            console.log(brand)
+            console.log(size)
 
             var Order = {};
             Order.item = product
+            Order.brand = brand
             Order.amount = amount2
             Order.sizeamount = size
             Order.pack = pack

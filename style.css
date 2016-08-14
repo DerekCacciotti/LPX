@@ -718,6 +718,25 @@ label
     }
 
 
+    #lpxtag
+    {
+      position: relative;
+      top: 125px;
+    }
+    #video
+    {
+      top:175px;
+    }
+
+    #logo
+    {
+      display: table;
+      margin: 0 auto;
+    }
+
+
+
+
 
 
 }

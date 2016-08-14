@@ -242,6 +242,7 @@
 
 
 
+
 // function to hide the div with the table
 function hideTable()
 {
@@ -662,13 +663,14 @@ query.find({
 
 
 $("#comparsionbutton").click(function() {
+  ++compbuttoncounter
   console.log("click")
     var body = document.getElementById("modalbody")
     var newline = document.createElement("br")
     body.appendChild(newline)
 $("#compare-table").toggle();
-console.log(compbuttoncounter)
-compbuttoncounter++
+
+console.log("button counter is " + compbuttoncounter)
 
 
 // query for toatals for all sellers
@@ -687,7 +689,22 @@ query.find({
       console.log(details.prices)
       for(var j = 0; j < details.prices.length; j++)
       {
-        comptotal += details.prices[j]
+
+
+        for(var a = 0; a < details.orderdetails.length; a++)
+        {
+          console.log(details.orderdetails[a].amount)
+          comptotal += (details.prices[j] * details.orderdetails[a].amount)
+        }
+
+
+
+
+
+
+      //console.log(details.orderdetails.amount)
+        //comptotal += details.prices[j]
+
 
 
       }
@@ -713,15 +730,41 @@ query.find({
 });
 
 
-/*if(compbuttoncounter == 1)
-{
-  $("#compare-table").toggle();
-}
 
-*/
+
 
 });
 compbuttoncounter = 0
+
+
+if(compbuttoncounter > 1)
+{
+  console.log(compbuttoncounter)
+  $("#compare-table").toggle();
+    cleartable();
+  comptotal = 0;
+
+}
+
+
+compbuttoncounter = 0
+
+
+function cleartable()
+{
+  var table = document.getElementById("compare-table");
+  while (table.rows.length > 0) {
+    table.deleteRow(1);
+
+
+
+  }
+
+
+}
+
+
+
 
 
 

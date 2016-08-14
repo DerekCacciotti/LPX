@@ -238,6 +238,7 @@
     var highestprice = 0
     var lowestprice = 0
     var comptotal = 0
+    var amountnum;
 
 
 
@@ -694,8 +695,11 @@ query.find({
         for(var a = 0; a < details.orderdetails.length; a++)
         {
           console.log(details.orderdetails[a].amount)
-          comptotal += (details.prices[j] * details.orderdetails[a].amount)
+         amountnum = details.orderdetails[a].amount
+         break;
+
         }
+        comptotal += (details.prices[j] * amountnum)
 
 
 

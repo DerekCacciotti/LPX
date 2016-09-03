@@ -61,7 +61,16 @@
 
 				<div class="col-md-7">
 					<div class="product-title" id="itemname">title</div>
-					<div class="product-desc" id="brandlabel">desciption</div>
+					<div class="product-desc" id="brandlabel">Brand</div>
+          <br />
+          <div class="dropdown">
+  <button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="brandchooser">Choose an apparate brand.
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu"id="branddropdown">
+
+  </ul>
+</div>
+          <br />
           <br />
           <div class="btn-group back">
 						<input type="button" class="btn btn-warning" value="Back to Search"  name="backtosearch" id="backtosearch"  onclick="BacktoSearch()">
@@ -145,6 +154,41 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   var brand;
 
 
+  var brandlist = Parse.Object.extend("MasterBrandListParse");
+  var query = new Parse.Query(brandlist);
+  query.find({
+    success: function(results1) {
+
+      var results = results1.reverse();
+      console.log(results.length)
+      // Do something with the returned Parse.Object values
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i]
+        var dropdownarea = document.getElementById("branddropdown")
+        var li = document.createElement("li")
+        li.id = "dropdownlist"
+        var atag = document.createElement("a")
+        atag.href = "#"
+        atag.innerHTML = object.get("BRAND")
+        li.appendChild(atag)
+        dropdownarea.appendChild(li)
+
+      }
+
+      $("#branddropdown a").click(function() {
+        brand = this.innerHTML;
+          var brandlabel = document.getElementById("brandlabel").innerHTML = brand
+
+      })
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+
+
+
+
 
 
 
@@ -153,13 +197,6 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   console.log(orderarray)
   for (var i = 0; i < orderarray.length; i++)
   {
-
-    var brandarray = JSON.parse(window.localStorage.getItem("brand"))
-    for(var b = 0; b < brandarray.length; b++)
-    {
-      brand = brandarray[b]
-      break;
-    }
     var item = orderarray[i];
     console.log(item)
     var itemname = document.getElementById("itemname").innerHTML = item
@@ -174,9 +211,9 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
         {
           console.log(results.length);
           var object = results[i]
-          var brand = object.get("BRAND")
-          console.log(brand)
-          var brandlabel = document.getElementById("brandlabel").innerHTML = brand
+          //var brand = object.get("BRAND")
+          //console.log(brand)
+          //var brandlabel = document.getElementById("brandlabel").innerHTML = brand
 
         } // END OF LOOP FOR BRAND
       }, // end of success function
@@ -233,7 +270,7 @@ function BacktoSearch()
 {
   localStorage.setItem("currentcart", JSON.stringify(finalorder))
   window.location.href = "search.html"
-  localStorage.removeItem("brand");
+
 }
 
 

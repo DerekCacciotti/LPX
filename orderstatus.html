@@ -674,7 +674,7 @@ query.find({
 
 
 $("#comparsionbutton").click(function() {
-  ++compbuttoncounter
+  compbuttoncounter++
   console.log("click")
     var body = document.getElementById("modalbody")
     var newline = document.createElement("br")
@@ -682,6 +682,14 @@ $("#comparsionbutton").click(function() {
 $("#compare-table").toggle();
 
 console.log("button counter is " + compbuttoncounter)
+
+if (compbuttoncounter >= 1)
+{
+document.getElementById("comparsionbutton").disabled = true;
+
+}
+
+
 
 
 // query for toatals for all sellers
@@ -751,17 +759,9 @@ query.find({
 compbuttoncounter = 0
 
 
-if(compbuttoncounter > 1)
-{
-  console.log(compbuttoncounter)
-  $("#compare-table").toggle();
-    cleartable();
-  comptotal = 0;
-
-}
 
 
-compbuttoncounter = 0
+
 
 
 function cleartable()

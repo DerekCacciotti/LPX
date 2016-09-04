@@ -64,7 +64,7 @@
 					<div class="product-desc" id="brandlabel">Brand</div>
           <br />
           <div class="dropdown">
-  <button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="brandchooser">Choose an apparate brand.
+  <button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="brandchooser">Choose a brand.
   <span class="caret"></span></button>
   <ul class="dropdown-menu"id="branddropdown">
 
@@ -229,13 +229,21 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
       var currentitem = document.getElementById("itemname").innerHTML
       var currentbrand = document.getElementById("brandlabel").innerHTML
 
-      alert("Added to Cart");
+
       var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
       query.equalTo("ITEM", currentitem )
       query.equalTo("BRAND", currentbrand)
       query.find({
         success: function(results){
+          if(results == 0)
+          {
+            alert("LPX does not carry this item. Try selecting a different brand.")
+          }
+          else
+          {
+            alert("Added to Cart");
+          }
           console.log("found");
           for(var i = 0; i < results.length; i++)
           {

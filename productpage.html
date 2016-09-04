@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="bower_components/toastr/toastr.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
+    <script src="bower_components/toastr/toastr.js"></script>
 </head>
 <body>
 
@@ -70,6 +72,21 @@
 
   </ul>
 </div>
+
+<br />
+
+<div class="dropdown">
+<button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="packchooser">Choose a pack.
+<span class="caret"></span></button>
+<ul class="dropdown-menu"id="packdropdown">
+</div>
+<br />
+  <div class="dropdown">
+<button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="sizechooser">Choose a size.
+<span class="caret"></span></button>
+<ul class="dropdown-menu"id="sizedropdown">
+</div>
+
           <br />
           <br />
           <div class="btn-group back">
@@ -152,10 +169,13 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   var finalorder = [];
   var currentuser = Parse.User.current();
   var brand;
+  var pack;
+  var size;
 
 
   var brandlist = Parse.Object.extend("MasterBrandListParse");
   var query = new Parse.Query(brandlist);
+  query.descending("BRAND");
   query.find({
     success: function(results1) {
 
@@ -186,6 +206,85 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
     }
   });
 
+  var packlist = Parse.Object.extend("MasterPackListParse");
+  var query = new Parse.Query(packlist);
+  query.descending("PACK");
+  query.find({
+    success: function(results1) {
+
+      var results = results1.reverse();
+      console.log(results.length)
+      // Do something with the returned Parse.Object values
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i]
+        var dropdownarea = document.getElementById("packdropdown")
+        var li = document.createElement("li")
+        li.id = "dropdownlist"
+        var atag = document.createElement("a")
+        atag.href = "#"
+        atag.innerHTML = object.get("PACK")
+        li.appendChild(atag)
+        dropdownarea.appendChild(li)
+
+      }
+
+      $("#packdropdown a").click(function() {
+        pack = this.innerHTML;
+        toastr.success('You have chosen a pack: ' + pack)
+
+
+      })
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+
+
+  var sizelist = Parse.Object.extend("MasterSizeListParse");
+  var query = new Parse.Query(sizelist);
+  query.descending("SIZE");
+  query.find({
+    success: function(results1) {
+
+      var results = results1.reverse();
+      console.log(results.length)
+      // Do something with the returned Parse.Object values
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i]
+        var dropdownarea = document.getElementById("sizedropdown")
+        var li = document.createElement("li")
+        li.id = "dropdownlist"
+        var atag = document.createElement("a")
+        atag.href = "#"
+        atag.innerHTML = object.get("SIZE")
+        li.appendChild(atag)
+        dropdownarea.appendChild(li)
+
+      }
+
+      $("#sizedropdown a").click(function() {
+        size = this.innerHTML;
+        toastr.success('You have chosen a pack: ' + size)
+
+
+      })
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -204,6 +303,8 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
     var query = new Parse.Query(database)
     query.equalTo("ITEM", item)
     query.equalTo("BRAND", brand)
+    query.equalTo("PACK",pack)
+    query.equalTo("SIZE",size)
     query.find({
       success: function(results){
         console.log("found");
@@ -238,7 +339,7 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
         success: function(results){
           if(results == 0)
           {
-            alert("LPX does not carry this item. Try selecting a different brand.")
+            alert("LPX does not carry this item. Try selecting a different configuration.")
           }
           else
           {

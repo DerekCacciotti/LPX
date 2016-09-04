@@ -764,7 +764,7 @@ label
 
 }
 
-#brandchooser
+#brandchooser,#sizechooser,#packchooser
 {
 position: absolute;
 padding-right:-225px;
@@ -774,7 +774,8 @@ right: 72%;
 }
 
 
-#branddropdown
+
+#branddropdown, #packdropdown, #sizedropdown
 {
     max-height: 225px;
     overflow-x: hidden;

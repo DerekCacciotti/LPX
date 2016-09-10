@@ -368,6 +368,9 @@ query.find({
 
 
 
+
+
+
       }
 
 
@@ -397,8 +400,8 @@ query.find({
     console.log(pricearray)
   console.log(highestprice)
 
-  var highestpricelabel = document.getElementById("highestlabel").innerHTML = " the highest price is " + highestprice
-  var lowestpricelabel = document.getElementById("lowestlabel").innerHTML = " the lowest price is " + lowestprice
+  var highestpricelabel = document.getElementById("highestlabel").innerHTML = " the highest price is " +  "$ " + highestprice
+  var lowestpricelabel = document.getElementById("lowestlabel").innerHTML = " the lowest price is " + "$ " + lowestprice
 
 
 
@@ -423,7 +426,19 @@ function getMinOfArray(numArray) {
 
 function getpriceperpound(price, pounds)
 {
-  return price / pounds
+  if(pounds % 1 != 0)
+  {
+    var wholenumber = Math.round(pounds.toFixed(2))
+    console.log("decimal found")
+    return price / pounds
+
+  }
+  else
+  {
+      return price / pounds
+  }
+
+
 }
 
 function HideLookupBox()
@@ -731,7 +746,7 @@ query.find({
 
       }
       //comptotal = 0
-        $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + comptotal)
+        $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + "$ " + comptotal.toFixed(2))
         comptotal = 0
 
 

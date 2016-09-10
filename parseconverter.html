@@ -12,7 +12,7 @@
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
       // load the entire food source
-var database = Parse.Object.extend("masteritemlist")
+var database = Parse.Object.extend("mastersizelist")
 var query = new Parse.Query(database)
 query.find({
   success: function(results) {
@@ -20,17 +20,17 @@ query.find({
     // Do something with the returned Parse.Object values
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
-      console.log(object.get("ITEM"))
+      console.log(object.get("SIZE"))
       //alert(object.id + ' - ' + object.get('playerName'));
 
 
 
       // construct new database
 
-      var newdatabase = Parse.Object.extend("MasterItemListParse");
+      var newdatabase = Parse.Object.extend("MasterSizeListParse");
 var db = new newdatabase();
 
-db.set("ITEM", object.get("ITEM"))
+db.set("SIZE", object.get("SIZE"))
 db.save(null, {
   success: function(database) {
     // Execute any logic that should take place after the object is saved.

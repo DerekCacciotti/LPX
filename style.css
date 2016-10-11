@@ -777,7 +777,7 @@ right: 72%;
 
 #branddropdown, #packdropdown, #sizedropdown
 {
-    max-height: 225px;
+    max-height: 450px;
     overflow-x: hidden;
     overflow-y: auto;
     position: absolute;

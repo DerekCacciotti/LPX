@@ -68,7 +68,13 @@
           <div class="dropdown">
   <button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="brandchooser">Choose a brand.
   <span class="caret"></span></button>
+
   <ul class="dropdown-menu"id="branddropdown">
+
+<div id="brandtextarea">
+      <input type="text" id=brandtextbox class="form-control" placeholder="Brand" />
+
+</div>
 
   </ul>
 </div>
@@ -195,11 +201,70 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
       }
 
-      $("#branddropdown a").click(function() {
+      $("#branddropdown a").click(function(e) {
         brand = this.innerHTML;
           var brandlabel = document.getElementById("brandlabel").innerHTML = brand
 
+
+
       })
+      // stop list from closing
+      $('#brandtextarea').click(function (e) {
+       e.stopPropagation();
+
+
+     })
+
+     document.getElementById('brandtextbox').onkeydown = function(event) {
+    if (event.keyCode == 13) {
+        var enteredtext = document.getElementById("brandtextbox").value
+        console.log(enteredtext)
+
+        var GameScore = Parse.Object.extend("MasterBrandListParse");
+var query = new Parse.Query(GameScore);
+query.equalTo("BRAND", enteredtext.toUpperCase());
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " scores.");
+    if (results.length == 0)
+    {
+      alert("LPX does not carry that brand. Please choose a different brand")
+    }
+    else
+    {
+      // Do something with the returned Parse.Object values
+      $('#branddropdown').empty();
+
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i];
+         console.log(object.id + ' - ' + object.get('BRAND'))
+         var dropdownarea = document.getElementById("branddropdown")
+         var li = document.createElement("li")
+         li.id = "dropdownlist"
+         var atag = document.createElement("a")
+         atag.href = "#"
+         atag.innerHTML = object.get("BRAND")
+         li.appendChild(atag)
+         dropdownarea.appendChild(li)
+         brand = object.get("BRAND")
+         var brandlabel = document.getElementById("brandlabel").innerHTML = brand
+
+
+      }
+    }
+
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+
+    }
+}
+
+
+
     },
     error: function(error) {
       alert("Error: " + error.code + " " + error.message);
@@ -331,10 +396,14 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
       var currentbrand = document.getElementById("brandlabel").innerHTML
 
 
+
+
       var database = Parse.Object.extend("FoodSourceParse")
       var query = new Parse.Query(database)
-      query.equalTo("ITEM", currentitem )
+      query.equalTo("ITEM", currentitem)
       query.equalTo("BRAND", currentbrand)
+      query.equalTo("SIZE", size)
+
       query.find({
         success: function(results){
           if(results == 0)
@@ -344,8 +413,9 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
           else
           {
             alert("Added to Cart");
+              console.log("found");
           }
-          console.log("found");
+
           for(var i = 0; i < results.length; i++)
           {
             var object = results[i]

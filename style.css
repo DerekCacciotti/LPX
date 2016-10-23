@@ -402,6 +402,10 @@ label
 {
   margin-top: -100px;
   font-weight: bold;
+  position: relative;
+  top: -550px;
+  right: -285px;
+  font-size: 11.5pt;
 }
 
 #totallabel
@@ -785,6 +789,36 @@ right: 72%;
 
 
 }
+
+
+#sidebanner
+{
+  position: relative;
+  right: -30px;
+  top: -519px;
+  left: 2px;
+}
+
+#sidebanner1
+{
+  position: relative;
+  right: -900px;
+  top: -575px;
+
+}
+
+#videodiv
+{
+  position: relative;
+  top: -730px;
+}
+
+#missionstatement
+{
+  font-weight: bold;
+}
+
+
 
 
 

@@ -89,15 +89,16 @@
 <div id="table">
   <table id="results-table" class="table">
 
-<tr>
-  <th>Item</th>
+    <tr>
+      <th>Item</th>
+      <th>Brand</th>
+      <th>Pack</th>
+      <th>Size</th>
 
 
 
 
-
-</tr>
-
+    </tr>
 
 
 </table>
@@ -143,7 +144,7 @@ var currentuser = Parse.User.current();
         checkCookie()
         var GameScore = Parse.Object.extend("FoodSourceParse");
       var query = new Parse.Query(GameScore);
-      query.descending("BRAND")
+      query.descending("ITEM")
       query.limit(resultlimit)
       query.skip(page * resultlimit)
       query.find({
@@ -153,7 +154,7 @@ var currentuser = Parse.User.current();
                  var object = results[i];
                      (function($) {
 
-                         $('#results-table').append('<tr><td>' +  object.get('ITEM'));
+                       $('#results-table').append('<tr><td>' +  object.get('ITEM')  + '</td><td>' + object.get('BRAND') + '</td><td>' + object.get("PACK") + '</td><td>'  + object.get("SIZE") + '</td><td>');
 
                      })(jQuery);
 
@@ -273,7 +274,8 @@ query.find({
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
 
-         $('#results-table').append('<tr><td>' +  object.get('ITEM'));
+      $('#results-table').append('<tr><td>' +  object.get('ITEM')  + '</td><td>' + object.get('BRAND') + '</td><td>' + object.get("PACK") + '</td><td>'  + object.get("SIZE") + '</td><td>');
+
 
     }
 
@@ -362,7 +364,7 @@ function cleartable()
 
   }
 
-  table.innerHTML = "<tr>" + " <th>Item</th>" + "</tr>"
+  table.innerHTML = "<tr>" + " <th>Item</th>" + "<th>Brand</th>" + "<th>Pack</th>" + "<th>Size</th>" + "</tr>"
 
 
 

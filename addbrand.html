@@ -10,10 +10,10 @@
 
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
-      var GameScore = Parse.Object.extend("MasterBrandListParse");
+      var GameScore = Parse.Object.extend("MasterSizeListParse");
       var gameScore = new GameScore();
 
-      gameScore.set("BRAND", "TYSON");
+      gameScore.set("SIZE", "95 CT");
 
 
       gameScore.save(null, {

@@ -98,7 +98,9 @@ z-index: -1
 }
 .selected {
     background-color: brown;
-    color: #FFF;
+    font-weight: bold;
+    color: green;
+
 }
 
 #copytext
@@ -824,6 +826,9 @@ right: 72%;
 {
   background-color: green;
 }
+
+
+
 
 
 

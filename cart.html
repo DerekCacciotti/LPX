@@ -11,7 +11,7 @@
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
     <script type="text/javascript" src="mandrill.js"></script>
   <script src="node_modules/node-uuid/uuid.js"></script>
-  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+  <link rel="stylesheet" href="bootstrap-table.css">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 
 
@@ -75,7 +75,7 @@
 
   <div id="table">
 
-    <table id="order-table" class="table">
+    <table id="order-table" class="table" data-row-style="rowStyle">
 
       <thead>
        <tr>
@@ -178,6 +178,8 @@ var finalorder = [];
 var isfurfilled = false;
 var userdata = []
 
+var index = 0
+
 var returnedjson = {items:[
 
 
@@ -195,6 +197,9 @@ console.log(currentuser)
 if (localStorage.getItem("jsonitems") != null) {
   var jsondata = localStorage.getItem("jsonitems")
   console.log(jsondata)
+  var savedindex = localStorage.getItem("currentindex")
+
+  index = savedindex
 
 
   returnedjson.items = JSON.parse(jsondata)
@@ -237,12 +242,13 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
 
-        returnedjson.items.push(  {name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
+        returnedjson.items.push(  {index: index, name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
 
 
         $('#order-table').bootstrapTable({
         data: returnedjson.items
     });
+    index++
 
 
 
@@ -253,6 +259,24 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
     })
+}
+
+
+function rowStyle(row, index)
+{
+  var table = $('#order-table')
+  var classes = ['active'];
+
+  if (table.bootstrapTable('check', index))
+  {
+    return {
+               classes: classes
+           };
+  }
+  return {};
+
+
+
 }
 
 
@@ -294,6 +318,7 @@ function BacktoSearch()
     useramountssaved = true;
 
     localStorage.setItem('jsonitems', JSON.stringify(returnedjson.items))
+    localStorage.setItem("currentindex", index)
 
 
     window.location.href = "search.html"
@@ -614,6 +639,10 @@ function CancelOrder()
   BacktoSearch();
   itemidsarray = []
   localStorage.removeItem("userdata")
+  localStorage.removeItem("jsonitems")
+  returnedjson.items = []
+  localStorage.removeItem("currentindex")
+  index = 0
   userdata = []
 
 

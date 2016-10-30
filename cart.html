@@ -104,6 +104,7 @@
     <input type="button" class="btn btn-primary pull-right" onclick="ShowSalesRepInfo()" value="Prepare Order">
     <input type="button" class="btn btn-warning " value="Back to Search"  name="backtosearch"   onclick="BacktoSearch()">
       <input type="button" class="btn btn-danger " value="Cancel Order"  name="cancelorder"   onclick="CancelOrder()">
+      <input type="button" class="btn btn-warning " value="Save Order Guide"  name="saveorderguide"   onclick="SaveOrderGuude()">
 
 
 
@@ -431,6 +432,34 @@ query.get(currentuser.id, {
     $("#formarea").toggle();
   }
 
+
+  function SaveOrderGuude()
+  {
+    var SavedOrederGuide = Parse.Object.extend("OrderGuides");
+var orderguide = new SavedOrederGuide();
+
+ var retVal = prompt("Give your order guide a name ", "your name here");
+
+
+orderguide.set("orderguidedata", JSON.stringify(returnedjson.items));
+orderguide.set("name", retVal)
+orderguide.set("user", currentuser.get("username"))
+
+
+
+orderguide.save(null, {
+  success: function(gameScore) {
+    // Execute any logic that should take place after the object is saved.
+    alert('Your Order Guide was saved.' + orderguide.id);
+  },
+  error: function(gameScore, error) {
+    // Execute any logic that should take place if the save fails.
+    // error is a Parse.Error with an error code and message.
+    alert('Error Saving Order Guide.' + error.message);
+  }
+});
+  }
+
   function CreateOrder()
   {
     var table = $('#order-table')
@@ -694,71 +723,57 @@ function SendEmail(array, pobject)
 // poplates drop down
 function poplatedropdown()
 {
-
   var loggedinuser = Parse.User.current();
-    console.log(loggedinuser)
-  var order = Parse.Object.extend("Order");
-var query = new Parse.Query(order);
-query.equalTo("submitedbyusername", loggedinuser.get("username"));
+  console.log(loggedinuser)
+
+
+var Orderguide = Parse.Object.extend("OrderGuides");
+var query = new Parse.Query(Orderguide);
+query.equalTo("user", loggedinuser.get("username"));
 query.find({
   success: function(results) {
-    console.log("Successfully retrieved " + results.length);
     // Do something with the returned Parse.Object values
-    for(var i = 0; i < results.length; i++ )
-    {
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
       var dropdownmenu = document.getElementById("dropdownmenu")
     var li =  document.createElement("li")
     //li.innerHTML = results[i].id
     var atag = document.createElement("a")
-    //dropdownmenu.appendChild(li)
-    atag.href = "#"
-    atag.innerHTML = results[i].id
-    li.appendChild(atag)
-    dropdownmenu.appendChild(li)
-
-
+     atag.href = "#"
+  atag.innerHTML = object.get("name")
+  li.appendChild(atag)
+   dropdownmenu.appendChild(li)
     }
-
+      // click event
     $("#dropdownmenu a").click(function() {
-      var ordernumber = this.innerHTML;
-    //lert(this.innerHTML)
-    //cleartable();
+          var orderguidename = this.innerHTML;
 
-    var Order = Parse.Object.extend("Order");
-var query = new Parse.Query(Order);
-query.get(ordernumber, {
-  success: function(savedorder) {
-    var order = savedorder.get("order");
 
-    var search_term = '';
-
-    for (var i=order.length-1; i>=0; i--) {
-        if (order[i].item === search_term) {
-            order.splice(i, 1);
-             break;
-        }
-    }
-
-    for (var i  = 0; i < order.length; i++)
-    {
-      console.log(order[i].sizeamount)
-      $('#order-table').append('<tr><td id="item">' +   order[i].item  + '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + order[i].sizeamount + "</td><td>" + order[i].pack +  '</td></tr>');
-
+var ordergudes = Parse.Object.extend("OrderGuides");
+var query = new Parse.Query(ordergudes);
+query.equalTo("name", orderguidename);
+query.equalTo("user", loggedinuser.get("username"))
+query.find({
+  success: function(results) {
+    alert("Successfully retrieved " + results.length);
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      console.log(object.get("orderguidedata"))
 
     }
-
   },
-  error: function(object, error) {
-    // The object was not retrieved successfully.
-    // error is a Parse.Error with an error code and message.
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
   }
 });
 
+        })
 
 
 
 
-});
+
 
 
   },

@@ -11,6 +11,10 @@
     <script src="http://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
     <script type="text/javascript" src="mandrill.js"></script>
   <script src="node_modules/node-uuid/uuid.js"></script>
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+
+
 </head>
 <body>
 
@@ -65,33 +69,33 @@
 <div class="container">
   <h4>Current order <span><h1 id="cartnote">To ensure the highest procurement possible, If you make a mistake, Please cancel your order and start again. Another option is to contact your Suppliers and let them know that you made user error. </h1></span></h4>
   <br />
+
+
+
+
   <div id="table">
 
     <table id="order-table" class="table">
 
-  <tr>
-    <th>Item</th>
-    <th>Brand</th>
-    <th>Amount</th>
-    <th>Size</th>
-    <th>Pack</th>
+      <thead>
+       <tr>
+           <th data-field="state" data-checkbox="true"></th>
+           <th data-field="name">Item</th>
+           <th data-field="brand">Brand</th>
+           <th data-field="amount">Amount</th>
+           <th data-field="size">Size</th>
+           <th data-field="pack">Pack</th>
 
-
-
-
-
-
-
-
-
-  </tr>
-
+       </tr>
+       </thead>
 
 
 
 
   </table>
   </div>
+
+
 
 
 
@@ -152,6 +156,12 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
    poplatedropdown();
 
+
+
+
+
+
+
   var sessiontoken = Parse.Session.sessionToken;
   console.log(sessiontoken)
 
@@ -168,12 +178,31 @@ var finalorder = [];
 var isfurfilled = false;
 var userdata = []
 
+var returnedjson = {items:[
+
+
+
+]};
+
 
 
 
   var currentuser = Parse.User.current();
 console.log(orderarray);
 console.log(currentuser)
+
+
+if (localStorage.getItem("jsonitems") != null) {
+  var jsondata = localStorage.getItem("jsonitems")
+  console.log(jsondata)
+
+
+  returnedjson.items = JSON.parse(jsondata)
+
+  console.log(returnedjson.items)
+
+}
+
 
 for(var i = 0; i < orderarray.length; i++)
 {
@@ -201,7 +230,19 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
 
-         $('#order-table').append('<tr><td id="item">' +   object.get('ITEM')  + '</td><td>' + object.get("BRAND") +  '</td><td>' + 	'<input type="number" id="quanity" class="form-control text-center" value=1> ' + "</td><td>" + object.get("SIZE") + "</td><td>" + object.get("PACK") +  '</td></tr>');
+
+
+
+
+
+
+
+        returnedjson.items.push(  {name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
+
+
+        $('#order-table').bootstrapTable({
+        data: returnedjson.items
+    });
 
 
 
@@ -213,6 +254,7 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
     })
 }
+
 
 
 
@@ -250,6 +292,8 @@ function BacktoSearch()
 
     localStorage.setItem('userdata', userdata);
     useramountssaved = true;
+
+    localStorage.setItem('jsonitems', JSON.stringify(returnedjson.items))
 
 
     window.location.href = "search.html"
@@ -364,7 +408,79 @@ query.get(currentuser.id, {
 
   function CreateOrder()
   {
+    var table = $('#order-table')
     var sellersarray = []
+
+
+    var data = table.bootstrapTable('getAllSelections')
+
+    console.log(table.bootstrapTable('getAllSelections'))
+
+    for(var i = 0; i < data.length; i++)
+    {
+      console.log(data[i])
+
+      var Order = {};
+      Order.item = data[i].name
+      Order.brand = data[i].brand
+      Order.amount = data[i].amount.value
+      Order.sizeamount = data[i].size
+      Order.pack = data[i].pack
+      finalorder.push(Order)
+
+      var order = Parse.Object.extend("Order");
+      var orderobj = new order();
+      console.log(currentuser);
+      var select = document.getElementById("select")
+        for (var i = 0; i < select.options.length; i++) {
+           if(select.options[i].selected ==true){
+                console.log(select.options[i].innerHTML);
+                sellersarray.push(select.options[i].innerHTML)
+            }
+        }
+
+        var addemailvalue = document.getElementById("addemail").value
+
+        if (addemailvalue.length != 0)
+        {
+          console.log("text has changed")
+          console.log(addemailvalue)
+          sellersarray.push(addemailvalue)
+          console.log(sellersarray)
+        }
+
+
+
+
+
+     orderobj.set("order", finalorder)
+      orderobj.set("submitedbyusername", currentuser.get("username"))
+      orderobj.set("selectedsellers", sellersarray)
+      orderobj.set("isfurfilled", isfurfilled)
+      orderobj.set("returnemail", currentuser.get("email"))
+      orderobj.save(null, {
+      success: function(submiitedorder) {
+        // create unique link
+
+
+        alert('Your order has been submitted ' + submiitedorder.id);
+        SendEmail(sellersarray, submiitedorder);
+        localStorage.removeItem("currentcart")
+        localStorage.removeItem("userdata")
+        localStorage.removeItem("jsonitems")
+
+      },
+      error: function(submiitedorder, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        alert('Failed to create new object, with error code: ' + error.message);
+      }
+    });
+
+
+
+    }
+    /*var sellersarray = []
     var table = $('#order-table')
 
     table.find('tr').each(function (i) {
@@ -477,6 +593,8 @@ console.log(finalorder)
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+
+*/
 
 
 
@@ -620,6 +738,7 @@ query.get(ordernumber, {
   }
 });
 }
+
 
 
 

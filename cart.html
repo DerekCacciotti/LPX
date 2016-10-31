@@ -59,7 +59,7 @@
   </nav>
 
   <div class="dropdown" id="dropdownbutton">
-  <button class="btn btn-link dropdown-toggle pull-right" type="button" data-toggle="dropdown">Recent Orders
+  <button class="btn btn-link dropdown-toggle pull-right" type="button" data-toggle="dropdown">Saved Order Gudes
   <span class="caret"></span></button>
   <ul class="dropdown-menu pull-right" id="dropdownmenu">
 
@@ -210,11 +210,12 @@ if (localStorage.getItem("jsonitems") != null) {
 }
 
 
-for(var i = 0; i < orderarray.length; i++)
+/*for(var i = 0; i < orderarray.length; i++)
 {
   itemidsarray.push(orderarray[i].itemid)
   amountarray.push(orderarray[i].amount)
 }
+*/
 console.log(itemidsarray)
 console.log(amountarray)
 
@@ -760,6 +761,22 @@ query.find({
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
       console.log(object.get("orderguidedata"))
+
+    var jsondata = object.get("orderguidedata")
+
+    var formattedjson = JSON.parse(jsondata)
+
+    for(var j = 0; j < formattedjson.length; j++)
+    {
+      returnedjson.items.push({index: formattedjson[j].index, name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
+    }
+
+
+            $('#order-table').bootstrapTable({
+            data: returnedjson.items
+        });
+
+
 
     }
   },

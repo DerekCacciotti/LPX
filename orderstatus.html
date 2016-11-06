@@ -103,7 +103,8 @@
                     <th>Size</th>
                     <th>Pack</th>
                     <th>Returned Case Pricing</th>
-                    <th>Cost per Unit</th>
+                    <th>Item Total</th>
+
 
 
 
@@ -242,6 +243,7 @@
     var lowestprice = 0
     var comptotal = 0
     var amountnum;
+    var itemtotal = 0;
 
 
 
@@ -332,11 +334,14 @@ query.find({
           {
             var price = pricearray[p]
             console.log(units)
-            var units = savedorder.orderdetails[j].sizeamount
-            var convertedunits = parseFloat(units)
-            console.log(convertedunits)
-            var costperunitnotrounded = getpriceperpound(price, convertedunits)
-            priceperpound = "$ " +  costperunitnotrounded.toFixed(2)
+            //var units = savedorder.orderdetails[j].sizeamount
+            //var convertedunits = parseFloat(units)
+            var amount = savedorder.orderdetails[j].amount
+            console.log(amount)
+          //  var costperunitnotrounded = getpriceperpound(price, convertedunits)
+          var itemtotalrounded = price * amount
+          itemtotal = itemtotalrounded.toFixed(2)
+            //priceperpound = "$ " +  costperunitnotrounded.toFixed(2)
 
           }
 
@@ -346,7 +351,7 @@ query.find({
 
 
 
-          $('#order-table').append('<tr><td>' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].brand + '</td><td id=item>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + priceperpound)
+          $('#order-table').append('<tr><td>' + orderdeailts.get("seller") + '</td><td>' + savedorder.orderdetails[j].brand + '</td><td id=item>' + savedorder.orderdetails[j].item + '</td><td>' + savedorder.orderdetails[j].amount + '</td><td>' + savedorder.orderdetails[j].sizeamount  + "</td><td>" +  savedorder.orderdetails[j].pack + '</td><td>' +  savedorder.prices[j] + "</td><td>"  + itemtotal)
           //itemarray.push(savedorder.orderdetails[j].item)
           //$("#order-table tr:odd").css("background-color", "red");
           //$("#order-table tr:even").css("background-color", "#7AC5CD");

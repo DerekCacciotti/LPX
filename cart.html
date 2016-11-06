@@ -209,13 +209,21 @@ if (localStorage.getItem("jsonitems") != null) {
 
 }
 
-
-/*for(var i = 0; i < orderarray.length; i++)
+if(orderarray.length == 0)
 {
-  itemidsarray.push(orderarray[i].itemid)
-  amountarray.push(orderarray[i].amount)
+  poplatedropdown();
 }
-*/
+else
+{
+  for(var i = 0; i < orderarray.length; i++)
+  {
+    itemidsarray.push(orderarray[i].itemid)
+    amountarray.push(orderarray[i].amount)
+  }
+}
+
+
+
 console.log(itemidsarray)
 console.log(amountarray)
 
@@ -672,6 +680,7 @@ function CancelOrder()
   localStorage.removeItem("jsonitems")
   returnedjson.items = []
   localStorage.removeItem("currentindex")
+  localStorage.removeItem("item")
   index = 0
   userdata = []
 

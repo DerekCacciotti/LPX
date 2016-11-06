@@ -65,14 +65,7 @@
 					<div class="product-title" id="itemname">title</div>
 					<div class="product-desc" id="brandlabel">Brand</div>
           <br />
-          <div class="dropdown">
-  <button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="brandchooser">Choose a brand.
-  <span class="caret"></span></button>
 
-  <ul class="dropdown-menu"id="branddropdown">
-
-<div id="brandtextarea">
-      <input type="text" id=brandtextbox class="form-control" placeholder="Brand" />
 
 </div>
 
@@ -81,17 +74,8 @@
 
 <br />
 
-<div class="dropdown">
-<button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="packchooser">Choose a pack.
-<span class="caret"></span></button>
-<ul class="dropdown-menu"id="packdropdown">
-</div>
-<br />
-  <div class="dropdown">
-<button class="btn btn-link dropdown-toggle pull-left" type="button" data-toggle="dropdown" id="sizechooser">Choose a size.
-<span class="caret"></span></button>
-<ul class="dropdown-menu"id="sizedropdown">
-</div>
+
+
 
           <br />
           <br />
@@ -179,179 +163,6 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   var size;
 
 
-  var brandlist = Parse.Object.extend("MasterBrandListParse");
-  var query = new Parse.Query(brandlist);
-  query.descending("BRAND");
-  query.find({
-    success: function(results1) {
-
-      var results = results1.reverse();
-      console.log(results.length)
-      // Do something with the returned Parse.Object values
-      for (var i = 0; i < results.length; i++) {
-        var object = results[i]
-        var dropdownarea = document.getElementById("branddropdown")
-        var li = document.createElement("li")
-        li.id = "dropdownlist"
-        var atag = document.createElement("a")
-        atag.href = "#"
-        atag.innerHTML = object.get("BRAND")
-        li.appendChild(atag)
-        dropdownarea.appendChild(li)
-
-      }
-
-      $("#branddropdown a").click(function(e) {
-        brand = this.innerHTML;
-          var brandlabel = document.getElementById("brandlabel").innerHTML = brand
-
-
-
-      })
-      // stop list from closing
-      $('#brandtextarea').click(function (e) {
-       e.stopPropagation();
-
-
-     })
-
-     document.getElementById('brandtextbox').onkeydown = function(event) {
-    if (event.keyCode == 13) {
-        var enteredtext = document.getElementById("brandtextbox").value
-        console.log(enteredtext)
-
-        var GameScore = Parse.Object.extend("MasterBrandListParse");
-var query = new Parse.Query(GameScore);
-query.equalTo("BRAND", enteredtext.toUpperCase());
-query.find({
-  success: function(results) {
-    console.log("Successfully retrieved " + results.length + " scores.");
-    if (results.length == 0)
-    {
-      alert("LPX does not carry that brand. Please choose a different brand")
-    }
-    else
-    {
-      // Do something with the returned Parse.Object values
-      $('#branddropdown').empty();
-
-      for (var i = 0; i < results.length; i++) {
-        var object = results[i];
-         console.log(object.id + ' - ' + object.get('BRAND'))
-         var dropdownarea = document.getElementById("branddropdown")
-         var li = document.createElement("li")
-         li.id = "dropdownlist"
-         var atag = document.createElement("a")
-         atag.href = "#"
-         atag.innerHTML = object.get("BRAND")
-         li.appendChild(atag)
-         dropdownarea.appendChild(li)
-         brand = object.get("BRAND")
-         var brandlabel = document.getElementById("brandlabel").innerHTML = brand
-
-
-      }
-    }
-
-  },
-  error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
-  }
-});
-
-
-    }
-}
-
-
-
-    },
-    error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
-    }
-  });
-
-  var packlist = Parse.Object.extend("MasterPackListParse");
-  var query = new Parse.Query(packlist);
-  query.descending("PACK");
-  query.find({
-    success: function(results1) {
-
-      var results = results1.reverse();
-      console.log(results.length)
-      // Do something with the returned Parse.Object values
-      for (var i = 0; i < results.length; i++) {
-        var object = results[i]
-        var dropdownarea = document.getElementById("packdropdown")
-        var li = document.createElement("li")
-        li.id = "dropdownlist"
-        var atag = document.createElement("a")
-        atag.href = "#"
-        atag.innerHTML = object.get("PACK")
-        li.appendChild(atag)
-        dropdownarea.appendChild(li)
-
-      }
-
-      $("#packdropdown a").click(function() {
-        pack = this.innerHTML;
-        toastr.success('You have chosen a pack: ' + pack)
-
-
-      })
-    },
-    error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
-    }
-  });
-
-
-  var sizelist = Parse.Object.extend("MasterSizeListParse");
-  var query = new Parse.Query(sizelist);
-  query.descending("SIZE");
-  query.find({
-    success: function(results1) {
-
-      var results = results1.reverse();
-      console.log(results.length)
-      // Do something with the returned Parse.Object values
-      for (var i = 0; i < results.length; i++) {
-        var object = results[i]
-        var dropdownarea = document.getElementById("sizedropdown")
-        var li = document.createElement("li")
-        li.id = "dropdownlist"
-        var atag = document.createElement("a")
-        atag.href = "#"
-        atag.innerHTML = object.get("SIZE")
-        li.appendChild(atag)
-        dropdownarea.appendChild(li)
-
-      }
-
-      $("#sizedropdown a").click(function() {
-        size = this.innerHTML;
-        toastr.success('You have chosen a pack: ' + size)
-
-
-      })
-    },
-    error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
-    }
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -361,29 +172,17 @@ query.find({
   console.log(orderarray)
   for (var i = 0; i < orderarray.length; i++)
   {
-    var item = orderarray[i];
-    console.log(item)
-    var itemname = document.getElementById("itemname").innerHTML = item
-    var database = Parse.Object.extend("FoodSourceParse")
-    var query = new Parse.Query(database)
-    query.equalTo("ITEM", item)
-    query.equalTo("BRAND", brand)
-    query.equalTo("PACK",pack)
-    query.equalTo("SIZE",size)
-    query.find({
-      success: function(results){
-        console.log("found");
-        for(var i = 0; i < results.length; i++)
-        {
-          console.log(results.length);
-          var object = results[i]
-          //var brand = object.get("BRAND")
-          //console.log(brand)
-          //var brandlabel = document.getElementById("brandlabel").innerHTML = brand
+    var saveddata = orderarray[i];
+    console.log(saveddata.item)
 
-        } // END OF LOOP FOR BRAND
-      }, // end of success function
-    })
+
+    // set the labels
+    document.getElementById("itemname").innerHTML = saveddata.item
+    document.getElementById("brandlabel").innerHTML = saveddata.brand
+
+    size = saveddata.size
+
+
   } // end of outter loop
 
   getcurrentcart()
@@ -403,6 +202,7 @@ query.find({
       query.equalTo("ITEM", currentitem)
       query.equalTo("BRAND", currentbrand)
       query.equalTo("SIZE", size)
+      console.log(size)
 
       query.find({
         success: function(results){
@@ -449,6 +249,7 @@ function BacktoSearch()
 {
   localStorage.setItem("currentcart", JSON.stringify(finalorder))
   window.location.href = "search.html"
+  localStorage.removeItem("item");
 
 }
 

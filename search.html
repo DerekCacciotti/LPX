@@ -168,12 +168,24 @@ var currentuser = Parse.User.current();
                var dataarray = $(this).children("td").map(function(){
                  return $(this).text();
                }).get();
+               console.log(dataarray[0])
+               console.log(dataarray[1])
                console.log(dataarray)
 
                //alert($.trim(dataarray[0]));
-               itemsarray.push($.trim(dataarray[0]));
+               //itemsarray.push($.trim(dataarray[0]));
+
+               var Result = new Object()
+               Result.item = dataarray[0],
+               Result.brand = dataarray[1],
+               Result.pack = dataarray[2],
+               Result.size = dataarray[3]
+
+               itemsarray.push(Result)
+
+
                console.log(itemsarray);
-               LoadProduct();
+              LoadProduct();
              })
           },
           error: function(error) {
@@ -287,11 +299,16 @@ query.find({
         return $(this).text();
       }).get();
 
-      //alert($.trim(dataarray[0]));
-      itemsarray.push($.trim(dataarray[0]));
-      console.log(dataarray[1]);
+      var Result = new Object()
+      Result.item = dataarray[0],
+      Result.brand = dataarray[1],
+      Result.pack = dataarray[2],
+      Result.size = dataarray[3]
+
+
+      itemsarray.push(Result)
+      console.log(itemsarray);
       LoadProduct();
-      console.log(brandarray)
     });
   },
   error: function(error) {

@@ -162,18 +162,34 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
   var pack;
   var size;
 
+  var Cart = new Object();
+
+  Cart.items = [];
 
 
 
+var returnedobjecct = JSON.parse(localStorage.getItem("item"))
+console.log(returnedobjecct)
+
+
+document.getElementById("itemname").innerHTML = returnedobjecct.item
+document.getElementById('brandlabel').innerHTML = returnedobjecct.brand
+
+pack = returnedobjecct.pack
+size = returnedobjecct.size
+checkforRebate();
 
 
 
-  var orderarray = JSON.parse(window.localStorage.getItem("item"))
+/*  var orderarray = JSON.parse(window.localStorage.getItem("item"))
   console.log(orderarray)
   for (var i = 0; i < orderarray.length; i++)
   {
     var saveddata = orderarray[i];
     console.log(saveddata.item)
+    console.log(saveddata)
+
+
 
 
     // set the labels
@@ -187,6 +203,8 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
   getcurrentcart()
   checkforRebate()
+
+  */
 
 
   function addtoCart()
@@ -216,24 +234,62 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
               console.log("found");
           }
 
+
+          if (localStorage.getItem("currentcart") != null)
+          {
+            var savedcartdata = JSON.parse(localStorage.getItem("currentcart"))
+            console.log("SAVED CART DATA ")
+            console.log(savedcartdata)
+
+          // push the new items into the current cart
+          for(var i = 0; i < results.length; i++)
+          {
+            savedcartdata.items.push({ id: objectid, item: currentitem, brand: currentbrand, pack: pack, size:size })
+            console.log(savedcartdata)
+
+            // put the save items back in the global object
+
+            for(var j= 0; j < savedcartdata.items.length; j++)
+            Cart.items.push({ id: savedcartdata.items[j].id, item: savedcartdata.items[j].item, brand: savedcartdata.items[j].brand, pack: savedcartdata.items[j].pack, size:savedcartdata.items[j].size})
+            //alert("new item Added to current cart")
+            console.log(Cart)
+            localStorage.setItem("currentcart", JSON.stringify(Cart))
+              window.location.href = "cart.html"
+
+
+
+
+
+          }
+
+
+
+        } // end of if statement
+
+        else
+        {
           for(var i = 0; i < results.length; i++)
           {
             var object = results[i]
             var objectid = object.id
-            finalorder.push({
-    itemid:   objectid,
+            console.log("the pack is " + pack)
 
-});
+
+          Cart.items.push({ id: objectid, item: currentitem, brand: currentbrand, pack: pack, size:size})
             //finalorder.push(objectid)
-            console.log(finalorder);
+            //console.log(finalorder);
+            //console.log(Cart)
 
             // send the order to the cart page
-            localStorage.setItem("currentcart", JSON.stringify(finalorder))
+            localStorage.setItem("currentcart", JSON.stringify(Cart))
               window.location.href = "cart.html"
 
 
 
           }
+        }
+
+
 
 
             //console.log(finalorder);

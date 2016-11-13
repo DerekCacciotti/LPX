@@ -164,10 +164,13 @@ Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7
 
 
   var sessiontoken = Parse.Session.sessionToken;
+    var currentuser = Parse.User.current();
   console.log(sessiontoken)
 
 
 var orderarray = JSON.parse(window.localStorage.getItem("currentcart"))
+
+
 
 var itemid;
 var amount
@@ -179,58 +182,44 @@ var finalorder = [];
 var isfurfilled = false;
 var userdata = []
 
-var index = 0
-
-var returnedjson = {items:[
-
+var tablejson = new Object();
+tablejson.items = []
 
 
-]};
+console.log(orderarray)
 
 
 
-
-  var currentuser = Parse.User.current();
-console.log(orderarray);
-console.log(currentuser)
-
-
-if (localStorage.getItem("jsonitems") != null) {
-  var jsondata = localStorage.getItem("jsonitems")
-  console.log(jsondata)
-  var savedindex = localStorage.getItem("currentindex")
-
-  index = savedindex
-
-
-  returnedjson.items = JSON.parse(jsondata)
-
-  console.log(returnedjson.items)
-
-}
-
-if(orderarray.length == 0)
+for(var i = 0; i < orderarray.items.length; i++)
 {
-  poplatedropdown();
+  var item = orderarray.items[i].item
+  var brand = orderarray.items[i].brand
+  var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+  var pack = orderarray.items[i].pack
+  var size = orderarray.items[i].size
+  console.log(item)
+
+    tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
+
+
 }
-else
-{
-  for(var i = 0; i < orderarray.length; i++)
-  {
-    itemidsarray.push(orderarray[i].itemid)
-    amountarray.push(orderarray[i].amount)
-  }
-}
+
+$('#order-table').bootstrapTable({
+data: tablejson.items
+});
 
 
 
-console.log(itemidsarray)
-console.log(amountarray)
 
-//console.log(itemid)
+
+
+
+
+
+
+
 
 // loop through itemids to populate the table
-
 for (var j = 0; j <= itemidsarray.length; ++j)
 {
 
@@ -252,11 +241,11 @@ for (var j = 0; j <= itemidsarray.length; ++j)
 
 
 
-        returnedjson.items.push(  {index: index, name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
+        tablejson.items.push(  {index: index, name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
 
 
         $('#order-table').bootstrapTable({
-        data: returnedjson.items
+        data: tablejson.items
     });
     index++
 
@@ -327,8 +316,8 @@ function BacktoSearch()
     localStorage.setItem('userdata', userdata);
     useramountssaved = true;
 
-    localStorage.setItem('jsonitems', JSON.stringify(returnedjson.items))
-    localStorage.setItem("currentindex", index)
+    //localStorage.setItem('jsonitems', JSON.stringify(returnedjson.items))
+    //localStorage.setItem("currentindex", index)
 
 
     window.location.href = "search.html"
@@ -777,12 +766,12 @@ query.find({
 
     for(var j = 0; j < formattedjson.length; j++)
     {
-      returnedjson.items.push({index: formattedjson[j].index, name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
+      tablejson.items.push({index: formattedjson[j].index, name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
     }
 
 
             $('#order-table').bootstrapTable({
-            data: returnedjson.items
+            data: tablejson.items
         });
 
 

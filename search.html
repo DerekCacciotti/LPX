@@ -130,6 +130,9 @@
 
       var resultlimit = 50
 
+
+      var Result = new Object();
+
 // this array will hold the id og the items ordered
 var itemsarray =[];
 
@@ -174,8 +177,7 @@ var currentuser = Parse.User.current();
 
                //alert($.trim(dataarray[0]));
                //itemsarray.push($.trim(dataarray[0]));
-
-               var Result = new Object()
+               
                Result.item = dataarray[0],
                Result.brand = dataarray[1],
                Result.pack = dataarray[2],
@@ -299,14 +301,14 @@ query.find({
         return $(this).text();
       }).get();
 
-      var Result = new Object()
+
       Result.item = dataarray[0],
       Result.brand = dataarray[1],
       Result.pack = dataarray[2],
       Result.size = dataarray[3]
 
 
-      itemsarray.push(Result)
+      //itemsarray.push(Result)
       console.log(itemsarray);
       LoadProduct();
     });
@@ -393,8 +395,8 @@ function cleartable()
 function LoadProduct()
 {
   // saving current array
-  window.localStorage.setItem("item", JSON.stringify(itemsarray));
-
+  window.localStorage.setItem("item", JSON.stringify(Result));
+  console.log(Result);
 
   window.location.href = "productpage.html"
 }

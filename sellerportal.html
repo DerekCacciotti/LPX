@@ -117,7 +117,7 @@
 
     </ul>
   </div>
-  <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer(retrievedorder[items])"/>
+  <input type="button" class="btn btn-md btn-success pull-right" name="submittocustomer" value="Submit to customer" id="submittocustomer" onclick="Submitbacktocustomer()"/>
 
 
 
@@ -166,6 +166,9 @@
       var returnemail;
       var isfurfilled = false
       var avgprice = []
+        var foundorders = []
+
+      var LPXOrder = new Object();
 
 
 
@@ -183,6 +186,7 @@ query.get(ordernumber, {
     orderfor = order.get("submitedbyusername")
     returnemail = order.get("returnemail")
     enteredsuppiler = document.getElementById("company").value
+    console.log(enteredsuppiler)
 
     //console.log(orderforid)
     console.log(returnemail)
@@ -191,24 +195,74 @@ query.get(ordernumber, {
     // create table here so user can the seller can enter values
 
     retrievedorder = order.get("order")
+    console.log(retrievedorder)
     var search_term = 'undefined';
 
-    for (var i=retrievedorder.length-1; i>=0; i--) {
+    /*for (var i=retrievedorder.length-1; i>=0; i--) {
         if (retrievedorder[i] === search_term) {
             retrievedorder.splice(i, 1);
              break;
         }
     }
+    */
 
-    retrievedorder.shift();
+    console.log(retrievedorder)
+
+    //retrievedorder.shift();
 
     //console.log(retrievedorder)
 
-    for(items in retrievedorder)
+  for(var i = 0; i < retrievedorder.length; i++)
+  {
+    console.log(retrievedorder[i].json)
+
+
+
+    for(var j = 0; j < retrievedorder[i].json.length; j++)
+    {
+      console.log(retrievedorder[i].json[j].name)
+
+      var item = retrievedorder[i].json[j].name
+      var brand = retrievedorder[i].json[j].brand
+      var amount = retrievedorder[i].json[j].amount
+      var rsize = retrievedorder[i].json[j].size
+      var rpack = retrievedorder[i].json[j].pack
+      LPXOrder.item = item
+      LPXOrder.brand = brand
+      LPXOrder.amount = amount
+      LPXOrder.size = rsize
+      LPXOrder.paack = rpack
+      LPXOrder.prices = []
+      LPXOrder.seller = enteredsuppiler
+
+      foundorders.push({
+        item: item,
+        brand: brand,
+        amount: amount,
+        size: rsize,
+        pack: rpack,
+        seller: enteredsuppiler
+
+      });
+
+      console.log(rsize)
+
+      $('#order-table').append('<tr><td id="item">' + item + '</td><td>' + brand  + '</td><td>' + amount  + '</td><td>' + rsize + '</td><td>' + rpack + '</td><td>' + '<input type="text" name="pricebox" class="form-control text-center">' )
+
+
+
+
+      console.log(foundorders)
+
+    }
+  }
+
+    /*for(items in retrievedorder)
     {
       $('#order-table').append('<tr><td id="item">' + retrievedorder[items].item + '</td><td>' + retrievedorder[items].brand  + '</td><td>' +  retrievedorder[items].amount + "</td><td>" + retrievedorder[items].sizeamount + "</td><td>" + retrievedorder[items].pack  + "</td><td>" +'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
 
     }
+    */
 
     populatesuppilerslist();
 
@@ -331,12 +385,12 @@ function returntoLookup()
 
 function Submitbacktocustomer()
 {
-  var foundorders = []
 
 
 
 
-var LPXOrder = {};
+
+
 
 // get prices first
 
@@ -347,12 +401,30 @@ console.log(prices)
 
 
 
-LPXOrder.prices = prices
+
+
+
+
+LPXOrder.prices.push(prices)
+console.log(LPXOrder)
+
+//foundorders.push(LPXOrder)
+
+
+/*for(var r = 0; r < retrievedorder.length; r++)
+{
+  for(var m = 0; m < retrievedorder[r].length; m++)
+  {
+    console.log(retrievedorder[r].json[m])
+  }
+}
+
+*/
 
 
 // get order deatils
 
-for(orders in retrievedorder)
+/*for(orders in retrievedorder)
 {
   foundorders.push(retrievedorder[orders])
 }
@@ -396,6 +468,8 @@ for(var i = 0; i < LPXOrder.orderdetails.length; i++)
 
 }
 
+*/
+
 
 
 
@@ -403,7 +477,8 @@ for(var i = 0; i < LPXOrder.orderdetails.length; i++)
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
 
-furfilledordersobj.set("furfilledorder", LPXOrder);
+furfilledordersobj.set("furfilledorder", foundorders);
+furfilledordersobj.set("prices", prices)
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", selectedsupplier);
 furfilledordersobj.set("orderfor", orderfor);
@@ -422,6 +497,8 @@ furfilledordersobj.save(null, {
     alert('Failed to create new object, with error code: ' + error.message);
   }
 });
+
+
 
 }
 

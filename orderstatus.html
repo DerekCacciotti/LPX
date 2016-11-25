@@ -277,17 +277,61 @@ query.find({
     HideLookupBox();
 
 
-
     for(var i = 0; i < results.length; i++)
     {
-     var orderdeailts = results[i];
+      var orderdeailts = results[i]
+      var sellername = orderdeailts.get("seller")
+      console.log(sellername)
 
-      var savedorder = orderdeailts.get("furfilledorder")
-      console.log(savedorder.orderdetails)
+      var returnedprices = orderdeailts.get("prices")
+
+
+
+       var savedorder = orderdeailts.get("furfilledorder")
+       console.log(savedorder)
+
+
+       console.log(orderdeailts.get("prices"))
+
+       var foundprices = orderdeailts.get("prices")
+
+       for(var p = 0; p < foundprices.length; p++)
+       {
+         pricearray.push(foundprices[p])
+       }
+       console.log(pricearray)
+
+      console.log(savedorder.length)
+
+
+       for(var o = 0; o < savedorder.length; o++)
+       {
+         sellersarray.push(savedorder[o].seller)
+         for(var p = 0; p < pricearray.length; p++)
+         {
+              var amounthtml = $(savedorder[o].amount);
+              var amountvalue = amounthtml.val()
+
+              itemamount = pricearray[p] * amountvalue
+              $('#order-table').append('<tr><td>' + savedorder[o].seller + '</td><td>' + savedorder[o].brand + '</td><td>' + savedorder[o].item + '</td><td>' + savedorder[o].amount + '</td><td>' + savedorder[o].size + '</td><td>' + savedorder[o].pack + '</td><td>' + pricearray[p] + '</td><td>' +  itemamount)
+         }
+
+       }
+
+       console.log(sellersarray)
+
+    }
+
+
+
+
+
+
+      //console.log(savedorder.orderdetails)
       //var sortedarray = savedorder.orderdetails.sort()
       //console.log(sortedarray.reverse())
 
-    savedorder.orderdetails.sort(function(a, b) {
+    /*savedorder.orderdetails.sort(function(a, b) {
       var item1 = a.item.toLowerCase()
       var item2 = b.item.toLowerCase()
 
@@ -306,8 +350,9 @@ query.find({
       }
 
     })
+    */
 
-      for (var j = 0; j < savedorder.orderdetails.length; j++)
+      /*for (var j = 0; j < savedorder.orderdetails.length; j++)
       {
 
 
@@ -377,6 +422,7 @@ query.find({
 
 
       }
+      */
 
 
 
@@ -395,7 +441,15 @@ query.find({
 
 
 
-    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -417,6 +471,8 @@ query.find({
   }
 });
 }
+
+
 
 function getMaxOfArray(numArray) {
   return Math.max.apply(null, numArray);
@@ -725,7 +781,7 @@ query.find({
       var object = results[i];
       var details = object.get("furfilledorder")
       console.log(details)
-      console.log(details.prices)
+      /*console.log(details.prices)
       for(var j = 0; j < details.prices.length; j++)
       {
 
@@ -751,6 +807,7 @@ query.find({
 
       }
       //comptotal = 0
+      */
         $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + "$ " + comptotal.toFixed(2))
         comptotal = 0
 

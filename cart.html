@@ -182,31 +182,38 @@ var finalorder = [];
 var isfurfilled = false;
 var userdata = []
 
+  var Order = {};
+
 var tablejson = new Object();
 tablejson.items = []
 
 
 console.log(orderarray)
 
-
-
-for(var i = 0; i < orderarray.items.length; i++)
+if (orderarray != null)
 {
-  var item = orderarray.items[i].item
-  var brand = orderarray.items[i].brand
-  var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
-  var pack = orderarray.items[i].pack
-  var size = orderarray.items[i].size
-  console.log(item)
+  for(var i = 0; i < orderarray.items.length; i++)
+  {
+    var item = orderarray.items[i].item
+    var brand = orderarray.items[i].brand
+    var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+    var pack = orderarray.items[i].pack
+    var size = orderarray.items[i].size
+    console.log(item)
 
-    tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
+      tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
 
 
+  }
+
+
+  $('#order-table').bootstrapTable({
+  data: tablejson.items
+  });
 }
 
-$('#order-table').bootstrapTable({
-data: tablejson.items
-});
+
+
 
 
 
@@ -439,7 +446,7 @@ var orderguide = new SavedOrederGuide();
  var retVal = prompt("Give your order guide a name ", "your name here");
 
 
-orderguide.set("orderguidedata", JSON.stringify(returnedjson.items));
+orderguide.set("orderguidedata", JSON.stringify(tablejson.items));
 orderguide.set("name", retVal)
 orderguide.set("user", currentuser.get("username"))
 
@@ -466,19 +473,13 @@ orderguide.save(null, {
 
     var data = table.bootstrapTable('getAllSelections')
 
-    console.log(table.bootstrapTable('getAllSelections'))
+    console.log(data)
 
-    for(var i = 0; i < data.length; i++)
-    {
-      console.log(data[i])
 
-      var Order = {};
-      Order.item = data[i].name
-      Order.brand = data[i].brand
-      Order.amount = data[i].amount.value
-      Order.sizeamount = data[i].size
-      Order.pack = data[i].pack
-      finalorder.push(Order)
+  finalorder.push({json: data})
+
+  console.log(finalorder)
+
 
       var order = Parse.Object.extend("Order");
       var orderobj = new order();
@@ -656,8 +657,6 @@ console.log(finalorder)
 
 
 
-
-}
 
 function CancelOrder()
 {

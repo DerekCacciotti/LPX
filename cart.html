@@ -154,63 +154,61 @@ $("#formarea").toggle();
 
 Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
   Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
+  poplatedropdown();
 
-   poplatedropdown();
-
-
-
-
-
-
-
-  var sessiontoken = Parse.Session.sessionToken;
-    var currentuser = Parse.User.current();
-  console.log(sessiontoken)
-
-
-var orderarray = JSON.parse(window.localStorage.getItem("currentcart"))
-
-
-
-var itemid;
-var amount
-var finalamounts;
-
-var itemidsarray = [];
-var amountarray = [];
-var finalorder = [];
+var saveditemsarray = []
+var sellersarray = [];
+var currentuser = Parse.User.current();
 var isfurfilled = false;
-var userdata = []
 
-  var Order = {};
+var itemfromproductpage = JSON.parse(localStorage.getItem("Item"))
+console.log(itemfromproductpage)
 
+// this is the table we are going to fill
 var tablejson = new Object();
 tablejson.items = []
 
-
-console.log(orderarray)
-
-if (orderarray != null)
+//  this code is ran when there is something in the cart
+if (localStorage.getItem("SavedCart") != null)
 {
-  for(var i = 0; i < orderarray.items.length; i++)
-  {
-    var item = orderarray.items[i].item
-    var brand = orderarray.items[i].brand
-    var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
-    var pack = orderarray.items[i].pack
-    var size = orderarray.items[i].size
-    console.log(item)
+  var savedcart = JSON.parse(localStorage.getItem("SavedCart"))
+  console.log(savedcart)
 
-      tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
+  for(var i = 0; i < savedcart.length; i++)
+  {
+    var item = savedcart[i].name;
+    var brand = savedcart[i].brand;
+    var pack = savedcart[i].pack
+    var size = savedcart[i].size
+    var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+    saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
+    tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
 
 
   }
+}
+// puts new item in the cart
+for(var i = 0; i < itemfromproductpage.length; i++)
+{
+  var item = itemfromproductpage[i].item;
+  var brand = itemfromproductpage[i].brand
+  var pack = itemfromproductpage[i].pack
+  var size = itemfromproductpage[i].size
+   var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+
+   saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
+
+  tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
+
+}
 
 
-  $('#order-table').bootstrapTable({
+$('#order-table').bootstrapTable({
   data: tablejson.items
   });
-}
+
+  console.log(tablejson.items)
+  console.log(saveditemsarray)
 
 
 
@@ -218,269 +216,58 @@ if (orderarray != null)
 
 
 
-
-
-
-
-
-
-
-
-// loop through itemids to populate the table
-for (var j = 0; j <= itemidsarray.length; ++j)
-{
-
-    var database = Parse.Object.extend("FoodSourceParse")
-     var query = new Parse.Query(database)
-     query.get(itemidsarray[j],  {
-      success: function(object)
-
-      {
-        console.log(object.get('ITEM'));
-        console.log(object.get("SIZE"));
-
-
-
-
-
-
-
-
-
-
-        tablejson.items.push(  {index: index, name: object.get('ITEM'), brand: object.get('BRAND'), amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: object.get("SIZE"), pack: object.get("PACK")})
-
-
-        $('#order-table').bootstrapTable({
-        data: tablejson.items
-    });
-    index++
-
-
-
-
-
-
-      }
-
-
-    })
-}
-
-
-function rowStyle(row, index)
-{
-  var table = $('#order-table')
-  var classes = ['active'];
-
-  if (table.bootstrapTable('check', index))
-  {
-    return {
-               classes: classes
-           };
-  }
-  return {};
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function cleartable()
-{
-  var table = document.getElementById("order-table");
-  while (table.rows.length > 0) {
-    table.deleteRow(2);
-
-
-
-  }
-
-
-}
 
 
 function BacktoSearch()
-  {
-    var table = $('#order-table')
-    table.find('tr').each(function (i) {
-            var $input = $(this).find("#quanity");
-            var enteredamount = $input.eq(0).val();
-            console.log(enteredamount)
-            userdata.push(enteredamount);
+{
+  localStorage.setItem("SavedCart", JSON.stringify(saveditemsarray))
+  window.location.href = "search.html"
+  localStorage.removeItem("selectedItem")
+}
 
 
 
-    });
-
-    localStorage.setItem('userdata', userdata);
-    useramountssaved = true;
-
-    //localStorage.setItem('jsonitems', JSON.stringify(returnedjson.items))
-    //localStorage.setItem("currentindex", index)
-
-
-    window.location.href = "search.html"
-
-
-
-
-  }
-
-  function checkforuserdata()
-  {
-    if  (localStorage.getItem("userdata") === null)
-    {
-      return;
-    }
-    else
-    {
-      var data = localStorage.getItem("userdata")
-      console.log(data)
-
-      for(var i = 0; i < data.length; i++)
-      {
-        userdata.push(data[i])
-      }
-
-      var search_term = ",";
-
-      for (var i=userdata.length-1; i>=0; i--) {
-          if (userdata[i] === search_term) {
-              userdata.splice(i, 1);
-
-          }
-      }
-      console.log(userdata)
-      var table = $('#order-table')
-
-      for(var i = 0; i < userdata.length; i++)
-      {
-        table.find('tr').each(function (i) {
-              document.getElementById("quanity").value = userdata[i]
-
-
-
-
-
-        });
-
-      }
-
-    }
-  }
-
-  function ShowSalesRepInfo()
-  {
-    $("#formarea").toggle();
-
-    //console.log(currentuser.id)
-    // get sellers
-
-    var index = 0;
-    var Loggedin = Parse.User.current();
-    var users = Parse.Object.extend("_User")
-    var query = new Parse.Query(users);
-    if (currentuser == null)
-    {
-      currentuser = document.cookie
-    }
+function ShowSalesRepInfo()
+{
+  $("#formarea").toggle();
+  //console.log(currentuser.id)
+  // get sellers
+  var index = 0;
+  var Loggedin = Parse.User.current();
+  var users = Parse.Object.extend("_User")
+  var query = new Parse.Query(users);
 query.get(currentuser.id, {
-  success: function(results) {
-    console.log(results)
-
-    var sellers = results.get("salesreps")
-    console.log(sellers)
-
-
-    var selecttag = document.getElementById("select")
-
-     for(seller in sellers)
-     {
-       var option = document.createElement("option")
-       option.value = index
-       option.innerHTML = sellers[seller]
-
-
-      selecttag.appendChild(option)
-      index++
-
-
-
-
-     }
-
-
-
-
-  },
-  error: function(object, error) {
-    // The object was not retrieved successfully.
-    // error is a Parse.Error with an error code and message.
-  }
+success: function(results) {
+  console.log(results)
+  var sellers = results.get("salesreps")
+  console.log(sellers)
+  var selecttag = document.getElementById("select")
+   for(seller in sellers)
+   {
+     var option = document.createElement("option")
+     option.value = index
+     option.innerHTML = sellers[seller]
+    selecttag.appendChild(option)
+    index++
+   }
+},
+error: function(object, error) {
+  // The object was not retrieved successfully.
+  // error is a Parse.Error with an error code and message.
+}
 });
+}
 
 
 
-  }
-
-
-  function CloseSellerPane()
-  {
-    $("#formarea").toggle();
-  }
-
-
-  function SaveOrderGuude()
-  {
-    var SavedOrederGuide = Parse.Object.extend("OrderGuides");
-var orderguide = new SavedOrederGuide();
-
- var retVal = prompt("Give your order guide a name ", "your name here");
-
-
-orderguide.set("orderguidedata", JSON.stringify(tablejson.items));
-orderguide.set("name", retVal)
-orderguide.set("user", currentuser.get("username"))
-
-
-
-orderguide.save(null, {
-  success: function(gameScore) {
-    // Execute any logic that should take place after the object is saved.
-    alert('Your Order Guide was saved.' + orderguide.id);
-  },
-  error: function(gameScore, error) {
-    // Execute any logic that should take place if the save fails.
-    // error is a Parse.Error with an error code and message.
-    alert('Error Saving Order Guide.' + error.message);
-  }
-});
-  }
-
-  function CreateOrder()
+function CreateOrder()
   {
     var table = $('#order-table')
     var sellersarray = []
-
-
     var data = table.bootstrapTable('getAllSelections')
-
     console.log(data)
-
-
-  finalorder.push({json: data})
-
-  console.log(finalorder)
-
-
+  //finalorder.push({json: data})
+  //console.log(finalorder)
       var order = Parse.Object.extend("Order");
       var orderobj = new order();
       console.log(currentuser);
@@ -491,9 +278,7 @@ orderguide.save(null, {
                 sellersarray.push(select.options[i].innerHTML)
             }
         }
-
         var addemailvalue = document.getElementById("addemail").value
-
         if (addemailvalue.length != 0)
         {
           console.log("text has changed")
@@ -501,12 +286,7 @@ orderguide.save(null, {
           sellersarray.push(addemailvalue)
           console.log(sellersarray)
         }
-
-
-
-
-
-     orderobj.set("order", finalorder)
+     orderobj.set("order", saveditemsarray)
       orderobj.set("submitedbyusername", currentuser.get("username"))
       orderobj.set("selectedsellers", sellersarray)
       orderobj.set("isfurfilled", isfurfilled)
@@ -514,14 +294,11 @@ orderguide.save(null, {
       orderobj.save(null, {
       success: function(submiitedorder) {
         // create unique link
-
-
         alert('Your order has been submitted ' + submiitedorder.id);
         SendEmail(sellersarray, submiitedorder);
         localStorage.removeItem("currentcart")
         localStorage.removeItem("userdata")
         localStorage.removeItem("jsonitems")
-
       },
       error: function(submiitedorder, error) {
         // Execute any logic that should take place if the save fails.
@@ -529,133 +306,7 @@ orderguide.save(null, {
         alert('Failed to create new object, with error code: ' + error.message);
       }
     });
-
-
-
     }
-    /*var sellersarray = []
-    var table = $('#order-table')
-
-    table.find('tr').each(function (i) {
-        var $tds = $(this).find('td'),
-            product = $tds.eq(0).text(),
-            size = $tds.eq(3).text(),
-            pack = $tds.eq(4).text(),
-            brand = $tds.eq(1).text();
-
-
-
-            var $input = $(this).find("#quanity"),
-            amount2 = $input.eq(0).val()
-
-
-
-            //console.log(product)
-          //  console.log(Quantity)
-            console.log(amount2)
-            console.log(pack)
-            console.log(brand)
-            console.log(size)
-
-            var Order = {};
-            Order.item = product
-            Order.brand = brand
-            Order.amount = amount2
-            Order.sizeamount = size
-            Order.pack = pack
-
-          finalorder.push(Order)
-          //finalorder.push(Quantity)
-          //inalorder.push(amount2)
-
-    });
-
-    console.log(finalorder)
-
-
-
-    for(var d = 0; d < finalorder.length; d++)
-    {
-      console.log(finalorder[d])
-
-
-
-      //console.log(ordernum)
-
-
-
-
-
-
-}
-
-console.log(finalorder)
-
-
-
-
-
-
-
-  var order = Parse.Object.extend("Order");
-  var orderobj = new order();
-  console.log(currentuser);
-  var select = document.getElementById("select")
-    for (var i = 0; i < select.options.length; i++) {
-       if(select.options[i].selected ==true){
-            console.log(select.options[i].innerHTML);
-            sellersarray.push(select.options[i].innerHTML)
-        }
-    }
-
-    var addemailvalue = document.getElementById("addemail").value
-
-    if (addemailvalue.length != 0)
-    {
-      console.log("text has changed")
-      console.log(addemailvalue)
-      sellersarray.push(addemailvalue)
-      console.log(sellersarray)
-    }
-
-
-
-
-
- orderobj.set("order", finalorder)
-  orderobj.set("submitedbyusername", currentuser.get("username"))
-  orderobj.set("selectedsellers", sellersarray)
-  orderobj.set("isfurfilled", isfurfilled)
-  orderobj.set("returnemail", currentuser.get("email"))
-  orderobj.save(null, {
-  success: function(submiitedorder) {
-    // create unique link
-
-
-    alert('Your order has been submitted ' + submiitedorder.id);
-    SendEmail(sellersarray, submiitedorder);
-    localStorage.removeItem("currentcart")
-    localStorage.removeItem("userdata")
-
-
-
-  },
-  error: function(submiitedorder, error) {
-    // Execute any logic that should take place if the save fails.
-    // error is a Parse.Error with an error code and message.
-    alert('Failed to create new object, with error code: ' + error.message);
-  }
-});
-
-*/
-
-
-
-
-
-
-
-
 
 
 function CancelOrder()
@@ -671,21 +322,14 @@ function CancelOrder()
   localStorage.removeItem("item")
   index = 0
   userdata = []
-
-
 }
-
 function SendEmail(array, pobject)
 {
   console.log("the sellers are " + array)
-
   // loop through sellers arrays
   for (object in array)
   {
     var email = new mandrill.Mandrill('TMc9w9HepAG7nUI1amdO3g'); // This will be public
-
-
-
     var params = {
   "template_name": "LPXCart",
   "template_content": [
@@ -694,7 +338,6 @@ function SendEmail(array, pobject)
           "content": "testing"
       }
   ],
-
   "message": {
       "from_email":"orders@lpxco.com",
       "to":[{"email":array[object], "name": "Confidental"}],
@@ -702,29 +345,41 @@ function SendEmail(array, pobject)
       "text": "Hello, your LPX order number " + pobject.id +  " has been furfilled " + " please check out the dashboard to see pricing"
   }
   };
-
   email.messages.sendTemplate(params, function(res) {
       log(res);
   }, function(err) {
       log(err);
   });
   }
-
-
 }
 
 
-
-
-
+  function SaveOrderGuude()
+  {
+    var SavedOrederGuide = Parse.Object.extend("OrderGuides");
+var orderguide = new SavedOrederGuide();
+ var retVal = prompt("Give your order guide a name ", "your name here");
+orderguide.set("orderguidedata", JSON.stringify(saveditemsarray));
+orderguide.set("name", retVal)
+orderguide.set("user", currentuser.get("username"))
+orderguide.save(null, {
+  success: function(gameScore) {
+    // Execute any logic that should take place after the object is saved.
+    alert('Your Order Guide was saved.' + orderguide.id);
+  },
+  error: function(gameScore, error) {
+    // Execute any logic that should take place if the save fails.
+    // error is a Parse.Error with an error code and message.
+    alert('Error Saving Order Guide.' + error.message);
+  }
+});
+  }
 
 // poplates drop down
 function poplatedropdown()
 {
   var loggedinuser = Parse.User.current();
   console.log(loggedinuser)
-
-
 var Orderguide = Parse.Object.extend("OrderGuides");
 var query = new Parse.Query(Orderguide);
 query.equalTo("user", loggedinuser.get("username"));
@@ -745,8 +400,6 @@ query.find({
       // click event
     $("#dropdownmenu a").click(function() {
           var orderguidename = this.innerHTML;
-
-
 var ordergudes = Parse.Object.extend("OrderGuides");
 var query = new Parse.Query(ordergudes);
 query.equalTo("name", orderguidename);
@@ -758,44 +411,43 @@ query.find({
     for (var i = 0; i < results.length; i++) {
       var object = results[i];
       console.log(object.get("orderguidedata"))
-
     var jsondata = object.get("orderguidedata")
-
     var formattedjson = JSON.parse(jsondata)
-
     for(var j = 0; j < formattedjson.length; j++)
     {
-      tablejson.items.push({index: formattedjson[j].index, name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
+      tablejson.items.push({name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
+      saveditemsarray.push({name: formattedjson[j].name, brand:formattedjson[j].brand, amount:'<input type="number" id="quanity" class="form-control text-center" value=1> ',size: formattedjson[j].size, pack: formattedjson[j].pack})
     }
-
-
             $('#order-table').bootstrapTable({
             data: tablejson.items
         });
-
-
-
     }
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
   }
 });
-
         })
-
-
-
-
-
-
-
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
   }
 });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

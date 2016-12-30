@@ -132,14 +132,22 @@ success: function(results) {
   for (var i = 0; i < results.length; i++) {
     var object = results[i];
     var orderdetails = object.get("furfilledorder")
+    var returnedprices = object.get("prices")
 
-    for(y = 0; y < orderdetails.prices.length; y++)
+    for(var p = 0; p < returnedprices.length; p++)
+    {
+      yeartodate += returnedprices[p]
+          document.getElementById("yeartodatesales").innerHTML = "year to date sales " + yeartodate
+
+    }
+
+    /*for(y = 0; y < orderdetails.prices.length; y++)
     {
       yeartodate += orderdetails.prices[y]
         document.getElementById("yeartodatesales").innerHTML = "year to date sales " + yeartodate
 
     }
-
+*/
   //document.getElementById("yeartodatesales").innerHTML = "year to date sales " + yeartodate
 
     console.log(yeartodate)
@@ -216,39 +224,25 @@ success: function(results) {
   for (var i = 0; i < results.length; i++) {
     var object = results[i];
     var order = object.get("furfilledorder")
-    console.log(order.orderdetails)
+    var prices = object.get("prices")
 
-  console.log(order.prices)
-
-
-        for (var j = 0; j < order.orderdetails.length; j++)
-        {
-              $('#salesarea-table').append('<tr><td>' +  order.orderdetails[j].item  + '</td><td>' + order.prices[j] + '</td><td>' + order.orderdetails[j].amount +'</td><td>' + object.get("seller") );
-              total += order.prices[j]
-              var converedcasenumber = parseFloat(order.orderdetails[j].amount)
-              casetotal += converedcasenumber
-
-
-
-
-        }
-
-        var totallabel = document.getElementById("totallabel").innerHTML = "The total price for this order is " + total
-        var casetotallabel = document.getElementById("casetotal").innerHTML = "The number of cases purchased is " + casetotal
-
-
-
-
-
-
+    for(var p = 0; p < prices.length; p++)
+    {
+      for(var j = 0; j < order.length; j++)
+      {
+        var amountstr = $(order[j].amount)
+        var amountval = amountstr.val();
+         $('#salesarea-table').append('<tr><td>' + order[j].name + '</td><td>' + prices[p] + '</td><td>' + amountval + '</td><td>' + object.get("seller"))
+      }
     }
+
 
 
 
     //console.log(object.id + ' - ' + object.get('playerName'));
 
 
-
+}
 
 
 },

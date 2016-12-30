@@ -137,6 +137,13 @@
     Parse.initialize("bmobCoB17mgSf7S9J6ZntiQGq5NEm2eIyHroyP9t", "Wut80Nd7rKFVvHEvT7K9jQMCV2HIO67OEH0pWaBe");
       Parse.serverURL = 'https://rayfoodapp.herokuapp.com/parse'
 
+      var prices = [];
+      var globordernum;
+      var foundorders = [];
+      var finalpricesarray = []
+
+
+
       document.onload = onpage();
 
       function onpage()
@@ -149,26 +156,7 @@
 
       }
 
-      var globordernum;
 
-      var counter = 0
-      var pricecounter = 0;
-
-      var submittedpricesarray = []
-      var retrievedorder;
-      var orderforid;
-      var orderfor;
-      var selectedsupplier;
-      var enteredsuppiler;
-
-      var finalprices;
-      var comepletedorder = []
-      var returnemail;
-      var isfurfilled = false
-      var avgprice = []
-        var foundorders = []
-
-      var LPXOrder = new Object();
 
 
 
@@ -214,47 +202,13 @@ query.get(ordernumber, {
 
   for(var i = 0; i < retrievedorder.length; i++)
   {
-    console.log(retrievedorder[i].json)
+    console.log(retrievedorder[i])
+
+    $('#order-table').append('<tr><td id="item">' + retrievedorder[i].name + '</td><td>' + retrievedorder[i].brand  + '</td><td>' +  retrievedorder[i].amount + "</td><td>" + retrievedorder[i].size + "</td><td>" + retrievedorder[i].pack  + "</td><td>" +'<input type="text" name="pricebox" class="form-control text-center"> ' + '</td></tr>')
 
 
 
-    for(var j = 0; j < retrievedorder[i].json.length; j++)
-    {
-      console.log(retrievedorder[i].json[j].name)
-
-      var item = retrievedorder[i].json[j].name
-      var brand = retrievedorder[i].json[j].brand
-      var amount = retrievedorder[i].json[j].amount
-      var rsize = retrievedorder[i].json[j].size
-      var rpack = retrievedorder[i].json[j].pack
-      LPXOrder.item = item
-      LPXOrder.brand = brand
-      LPXOrder.amount = amount
-      LPXOrder.size = rsize
-      LPXOrder.paack = rpack
-      LPXOrder.prices = []
-      LPXOrder.seller = enteredsuppiler
-
-      foundorders.push({
-        item: item,
-        brand: brand,
-        amount: amount,
-        size: rsize,
-        pack: rpack,
-        seller: enteredsuppiler
-
-      });
-
-      console.log(rsize)
-
-      $('#order-table').append('<tr><td id="item">' + item + '</td><td>' + brand  + '</td><td>' + amount  + '</td><td>' + rsize + '</td><td>' + rpack + '</td><td>' + '<input type="text" name="pricebox" class="form-control text-center">' )
-
-
-
-
-      console.log(foundorders)
-
-    }
+  foundorders.push({name: retrievedorder[i].name, brand: retrievedorder[i].brand, amount: retrievedorder[i].amount, size: retrievedorder[i].size, pack: retrievedorder[i].pack})
   }
 
     /*for(items in retrievedorder)
@@ -405,8 +359,7 @@ console.log(prices)
 
 
 
-LPXOrder.prices.push(prices)
-console.log(LPXOrder)
+
 
 //foundorders.push(LPXOrder)
 
@@ -477,12 +430,58 @@ for(var i = 0; i < LPXOrder.orderdetails.length; i++)
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var furfilledordersobj = new furfilledorders();
 
+// get the order again, get the amounts the loop through the finalprices
+
+var desiredorder = Parse.Object.extend("Order");
+var query = new Parse.Query(desiredorder);
+query.equalTo("objectId", globordernum);
+query.find({
+  success: function(results) {
+    console.log("Successfully retrieved " + results.length + " objects");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      console.log(object.get("order"))
+    var orderobj = object.get("order")
+    for(var j = 0; j < orderobj.length; j++)
+    {
+      console.log(orderobj[j].amount)
+
+      var amounthtmlstr = orderobj[j].amount
+      var amounthtml = $(amounthtmlstr)
+      console.log(amounthtml);
+      var amountvaluestr = amounthtml.val();
+      console.log(amountvaluestr)
+      var amountvalue = parseFloat(amountvaluestr)
+      console.log(amountvalue)
+
+      // loop through prices array
+      for(var p = 0; p < prices.length; p++)
+      {
+        var finalprice = amountvalue * prices[i]
+        console.log(finalprice)
+        finalpricesarray.push(finalprice)
+      }
+
+
+    }
+      }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+
+    console.log(finalpricesarray)
+
+
 furfilledordersobj.set("furfilledorder", foundorders);
 furfilledordersobj.set("prices", prices)
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", selectedsupplier);
 furfilledordersobj.set("orderfor", orderfor);
 furfilledordersobj.set("isfurfilled", isfurfilled)
+//furfilledordersobj.set("finalprices", finalpricesarray)
 furfilledordersobj.save(null, {
   success: function(furfilledorder) {
     // Execute any logic that should take place after the object is saved.

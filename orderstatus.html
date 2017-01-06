@@ -244,6 +244,7 @@
     var comptotal = 0
     var amountnum;
     var itemtotal = 0;
+    var currentprice = 0;
 
 
 
@@ -286,19 +287,49 @@ query.find({
       console.log(seller)
       console.log(orderdetails)
 
+      for(var p = 0; p < prices.length; p++)
+      {
+        pricearray.push(prices[p])
+      }
+
+
+
+
     for(var j = 0; j < orderdetails.length; j++)
     {
-      for(var p = 0; p < prices.length; p++)
+
+
+
+      console.log(pricearray[j])
+
+      var convertedhtml = $(orderdetails[j].amount)
+      var htmlvalue = convertedhtml.val();
+      var valuenum = parseFloat(htmlvalue)
+      itemtotal = pricearray[j] * valuenum
+
+
+
+
+
+      $('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + pricearray[j] + '</td><td>' + itemtotal);
+      /*for(var p = 0; p < prices.length; p++)
       {
         pricearray.push(prices[p])
         var convertedhtml = $(orderdetails[j].amount)
         var htmlvalue = convertedhtml.val();
         var valuenum = parseFloat(htmlvalue)
         var currentprice = prices[p]
+        currentp = currentprice
         var itemtotal = valuenum * currentprice
-          $('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + prices[p] + '</td><td>' + itemtotal);
+          //$('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + prices[p] + '</td><td>' + itemtotal);
 
       }
+      */
+
+      //$('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + currentp + '</td><td>' + itemtotal);
+
+
+
 
     }
 

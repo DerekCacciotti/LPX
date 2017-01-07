@@ -301,12 +301,12 @@ query.find({
 
 
       console.log(pricearray[j])
+      console.log(orderdetails[j].amount)
+      var amountstr = orderdetails[j].amount
+      var finalamount = parseFloat(amountstr)
+      itemtotal = pricearray[j] * finalamount
 
-      var convertedhtml = $(orderdetails[j].amount)
-      var htmlvalue = convertedhtml.val();
-      var valuenum = parseFloat(htmlvalue)
-      itemtotal = pricearray[j] * valuenum
-
+    
 
 
 

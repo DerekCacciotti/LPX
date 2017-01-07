@@ -161,6 +161,8 @@ var sellersarray = [];
 var currentuser = Parse.User.current();
 var isfurfilled = false;
 
+
+
 var itemfromproductpage = JSON.parse(localStorage.getItem("Item"))
 console.log(itemfromproductpage)
 
@@ -180,7 +182,7 @@ if (localStorage.getItem("SavedCart") != null)
     var brand = savedcart[i].brand;
     var pack = savedcart[i].pack
     var size = savedcart[i].size
-    var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+    var amount = '<input type="number" id="quanity" class="form-control text-center" value=1 name="amount">'
     saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
     tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
 
@@ -194,7 +196,7 @@ for(var i = 0; i < itemfromproductpage.length; i++)
   var brand = itemfromproductpage[i].brand
   var pack = itemfromproductpage[i].pack
   var size = itemfromproductpage[i].size
-   var amount = '<input type="number" id="quanity" class="form-control text-center" value=1>'
+   var amount = '<input type="number" id="quanity" class="form-control text-center" value=1 name="amount">'
 
    saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
 
@@ -223,6 +225,7 @@ function BacktoSearch()
   localStorage.setItem("SavedCart", JSON.stringify(saveditemsarray))
   window.location.href = "search.html"
   localStorage.removeItem("selectedItem")
+
 }
 
 
@@ -262,6 +265,13 @@ error: function(object, error) {
 
 function CreateOrder()
   {
+
+    var values = [];
+    $("input[name='amount']").each(function() {
+        values.push($(this).val());
+    });
+    console.log(values)
+
     var table = $('#order-table')
     var sellersarray = []
     var data = table.bootstrapTable('getAllSelections')
@@ -286,6 +296,12 @@ function CreateOrder()
           sellersarray.push(addemailvalue)
           console.log(sellersarray)
         }
+
+      for(var j = 0; j < saveditemsarray.length; j++)
+      {
+        saveditemsarray[j].amount = values[j]
+      }
+
      orderobj.set("order", saveditemsarray)
       orderobj.set("submitedbyusername", currentuser.get("username"))
       orderobj.set("selectedsellers", sellersarray)
@@ -315,11 +331,11 @@ function CancelOrder()
   localStorage.removeItem("currentcart");
   BacktoSearch();
   itemidsarray = []
-  localStorage.removeItem("userdata")
   localStorage.removeItem("jsonitems")
   returnedjson.items = []
-  localStorage.removeItem("currentindex")
-  localStorage.removeItem("item")
+  localStorage.removeItem("selectedItem")
+  localStorage.removeItem("selectedsupplier")
+  localStorage.removeItem("SavedCart")
   index = 0
   userdata = []
 }

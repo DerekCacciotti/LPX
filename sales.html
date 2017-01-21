@@ -113,6 +113,7 @@
       var total = 0;
       var casetotal = 0;
       var yeartodate = 0;
+      var amountval = 0
 
 
 function getSalesData()
@@ -133,13 +134,19 @@ success: function(results) {
     var object = results[i];
     var orderdetails = object.get("furfilledorder")
     var returnedprices = object.get("prices")
+    console.log(orderdetails)
+    console.log(returnedprices)
 
-    for(var p = 0; p < returnedprices.length; p++)
+    for(var p = 0; p < returnedprices.sentpricing.length; p++)
     {
-      yeartodate += returnedprices[p]
+      yeartodate += returnedprices.sentpricing[p]
           document.getElementById("yeartodatesales").innerHTML = "year to date sales " + yeartodate
 
     }
+
+
+
+
 
     /*for(y = 0; y < orderdetails.prices.length; y++)
     {
@@ -225,15 +232,20 @@ success: function(results) {
     var object = results[i];
     var order = object.get("furfilledorder")
     var prices = object.get("prices")
+    console.log(prices)
 
-    for(var p = 0; p < prices.length; p++)
+    for(var p = 0; p < prices.sentpricing.length; p++)
     {
       for(var j = 0; j < order.length; j++)
       {
-        var amountstr = $(order[j].amount)
-        var amountval = amountstr.val();
-         $('#salesarea-table').append('<tr><td>' + order[j].name + '</td><td>' + prices[p] + '</td><td>' + amountval + '</td><td>' + object.get("seller"))
+        var amountstr = $(order[p].amount)
+        console.log(order[p].amount)
+        amountval = parseFloat(order[p].amount)
+
       }
+
+
+       $('#salesarea-table').append('<tr><td>' + order[p].name + '</td><td>' + prices.sentpricing[p] + '</td><td>' + amountval + '</td><td>' + object.get("seller"))
     }
 
 

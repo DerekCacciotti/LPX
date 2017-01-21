@@ -160,6 +160,7 @@ var saveditemsarray = []
 var sellersarray = [];
 var currentuser = Parse.User.current();
 var isfurfilled = false;
+var amountnum;
 
 
 
@@ -183,6 +184,16 @@ if (localStorage.getItem("SavedCart") != null)
     var pack = savedcart[i].pack
     var size = savedcart[i].size
     var amount = '<input type="number" id="quanity" class="form-control text-center" value=1 name="amount">'
+
+
+  
+
+  console.log(amountnum)
+
+
+
+
+
     saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
     tablejson.items.push({name: item, brand:brand, amount:amount,pack: pack, size: size});
 
@@ -196,7 +207,17 @@ for(var i = 0; i < itemfromproductpage.length; i++)
   var brand = itemfromproductpage[i].brand
   var pack = itemfromproductpage[i].pack
   var size = itemfromproductpage[i].size
-   var amount = '<input type="number" id="quanity" class="form-control text-center" value=1 name="amount">'
+   var amount = '<input type="number" id="quanity" class="form-control text-center" value="1" name="amount">'
+
+
+   $("#quanity").each(function() {
+         amountnum = this.value;
+
+         console.log(amountnum)
+ });
+
+
+
 
    saveditemsarray.push({name: item, brand:brand, amount:amount,pack: pack, size: size})
 

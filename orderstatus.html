@@ -153,7 +153,7 @@
 
 <tr>
   <th>Seller</th>
-  <th>Total</th>
+  <th>Case Price Total</th>
 
 
 
@@ -233,6 +233,7 @@
       var sellersarray = [];
         var zeroarray = [];
         var itemarray = []
+        var itemtotalarray = []
 
     var currentUser = Parse.User.current();
     var total = 0
@@ -244,7 +245,7 @@
     var comptotal = 0
     var amountnum;
     var itemtotal = 0;
-    var currentprice = 0;
+    var totalpriceforallitems = 0;
 
 
 
@@ -287,31 +288,57 @@ query.find({
       console.log(seller)
       console.log(orderdetails)
 
-      for(var p = 0; p < prices.length; p++)
+      for(var p = 0; p < prices.sentpricing.length; ++p)
       {
-        pricearray.push(prices[p])
+        pricearray.push(prices.sentpricing[p])
+
+
       }
+
+    console.log(pricearray)
 
 
 
 
     for(var j = 0; j < orderdetails.length; j++)
+
     {
 
+      /*for(var p = 0; p < prices.length; ++p)
+      {
+        pricearray.push(prices[p])
 
 
+      }
+      */
+
+
+
+      var returnpricesobj = prices.sentpricing
+      /*console.log(returnpricesobj)
       console.log(pricearray[j])
       console.log(orderdetails[j].amount)
       var amountstr = orderdetails[j].amount
       var finalamount = parseFloat(amountstr)
       itemtotal = pricearray[j] * finalamount
+      console.log(pricearray[])
+      */
 
-    
+      for(var h = 0; h < returnpricesobj.length; h++)
+      {
+        var amountstr = orderdetails[j].amount
+        var finalamount = parseFloat(amountstr)
+        itemtotal = returnpricesobj[j] * finalamount
+        itemtotalarray.push(itemtotal)
+
+      }
 
 
 
 
-      $('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + pricearray[j] + '</td><td>' + itemtotal);
+
+
+      $('#order-table').append('<tr><td>' + object.get("seller") + '</td><td>' + orderdetails[j].brand + '</td><td>' + orderdetails[j].name + '</td><td>' + orderdetails[j].amount + '</td><td>'  + orderdetails[j].pack + '</td><td>' + orderdetails[j].size + '</td><td>' + returnpricesobj[j] + '</td><td>' + itemtotal);
       /*for(var p = 0; p < prices.length; p++)
       {
         pricearray.push(prices[p])
@@ -787,6 +814,12 @@ document.getElementById("comparsionbutton").disabled = true;
 
 // query for toatals for all sellers
 
+var sorteditemtotals = []
+
+$.each(itemtotalarray, function(i, el){
+    if($.inArray(el, sorteditemtotals) === -1) sorteditemtotals.push(el);
+});
+
 var furfilledorders = Parse.Object.extend("furfilledorders");
 var query = new Parse.Query(furfilledorders);
 query.equalTo("ordernumber", globordernum);
@@ -800,10 +833,18 @@ query.find({
       console.log(details)
       var returnedprices = object.get("prices")
       console.log(returnedprices)
-      for(var p = 0; p < returnedprices.length; p++)
+      for(var p = 0; p < returnedprices.sentpricing.length; ++p)
       {
-        comptotal += returnedprices[p]
+        comptotal += returnedprices.sentpricing[p]
+
+
+
       }
+
+
+
+
+
       /*console.log(details.prices)
       for(var j = 0; j < details.prices.length; j++)
       {
@@ -833,6 +874,7 @@ query.find({
       */
         $('#compare-table').append('<tr><td id="item">' + object.get("seller") +  '</td><td>' + "$ " + comptotal.toFixed(2))
         comptotal = 0
+
 
 
 

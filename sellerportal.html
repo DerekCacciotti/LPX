@@ -141,6 +141,7 @@
       var globordernum;
       var foundorders = [];
       var finalpricesarray = []
+      var priceobject = {}
 
 
 
@@ -351,7 +352,10 @@ function Submitbacktocustomer()
 var prices = $('input[name="pricebox"]').map(function() {
     return parseFloat(this.value)
 }).get()
+priceobject.sentpricing = prices
 console.log(prices)
+
+console.log(priceobject)
 
 
 
@@ -476,7 +480,7 @@ query.find({
 
 
 furfilledordersobj.set("furfilledorder", foundorders);
-furfilledordersobj.set("prices", prices)
+furfilledordersobj.set("prices", priceobject)
 furfilledordersobj.set("ordernumber", globordernum);
 furfilledordersobj.set("seller", selectedsupplier);
 furfilledordersobj.set("orderfor", orderfor);

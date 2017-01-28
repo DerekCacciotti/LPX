@@ -186,7 +186,7 @@ if (localStorage.getItem("SavedCart") != null)
     var amount = '<input type="number" id="quanity" class="form-control text-center" value=1 name="amount">'
 
 
-  
+
 
   console.log(amountnum)
 
@@ -253,6 +253,7 @@ function BacktoSearch()
 
 function ShowSalesRepInfo()
 {
+  console.log(saveditemsarray)
   $("#formarea").toggle();
   //console.log(currentuser.id)
   // get sellers
@@ -287,6 +288,7 @@ error: function(object, error) {
 function CreateOrder()
   {
 
+console.log(saveditemsarray)
     var values = [];
     $("input[name='amount']").each(function() {
         values.push($(this).val());
@@ -333,9 +335,11 @@ function CreateOrder()
         // create unique link
         alert('Your order has been submitted ' + submiitedorder.id);
         SendEmail(sellersarray, submiitedorder);
-        localStorage.removeItem("currentcart")
-        localStorage.removeItem("userdata")
-        localStorage.removeItem("jsonitems")
+        localStorage.removeItem("SavedCart")
+          localStorage.removeItem("Item")
+          localStorage.removeItem("selectedItem")
+          //window.location.href = "dashboard.html"
+
       },
       error: function(submiitedorder, error) {
         // Execute any logic that should take place if the save fails.
@@ -357,6 +361,7 @@ function CancelOrder()
   localStorage.removeItem("selectedItem")
   localStorage.removeItem("selectedsupplier")
   localStorage.removeItem("SavedCart")
+  localStorage,removeItem("Item")
   index = 0
   userdata = []
 }
@@ -393,6 +398,7 @@ function SendEmail(array, pobject)
 
   function SaveOrderGuude()
   {
+    console.log(saveditemsarray)
     var SavedOrederGuide = Parse.Object.extend("OrderGuides");
 var orderguide = new SavedOrederGuide();
  var retVal = prompt("Give your order guide a name ", "your name here");
@@ -450,10 +456,14 @@ query.find({
       console.log(object.get("orderguidedata"))
     var jsondata = object.get("orderguidedata")
     var formattedjson = JSON.parse(jsondata)
+    console.log(formattedjson)
     for(var j = 0; j < formattedjson.length; j++)
     {
-      tablejson.items.push({name: formattedjson[j].name, brand: formattedjson[j].brand, amount: '<input type="number" id="quanity" class="form-control text-center" value=1> ', size: formattedjson[j].size, pack: formattedjson[j].pack})
-      saveditemsarray.push({name: formattedjson[j].name, brand:formattedjson[j].brand, amount:'<input type="number" id="quanity" class="form-control text-center" value=1> ',size: formattedjson[j].size, pack: formattedjson[j].pack})
+      var amounthtml = $(formattedjson[j].amount)
+      var amountvalue = amounthtml.val();
+      console.log(amountvalue)
+      tablejson.items.push({name: formattedjson[j].name, brand: formattedjson[j].brand, amount: amountvalue, size: formattedjson[j].size, pack: formattedjson[j].pack})
+      saveditemsarray.push({name: formattedjson[j].name, brand:formattedjson[j].brand, amount:amountvalue, size: formattedjson[j].size, pack: formattedjson[j].pack})
     }
             $('#order-table').bootstrapTable({
             data: tablejson.items

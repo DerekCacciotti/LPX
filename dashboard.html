@@ -167,7 +167,20 @@
 
 
 
-      // log out function
+      // jquery call
+      $( "#logoutbutton" ).click(function() {
+      Logout();
+      });
+      // logout button
+      function Logout()
+      {
+
+        Parse.User.logOut().then(() => {
+  var currentUser = Parse.User.current();  // this will now be null
+  alert("Logging out......")
+    window.location.href = "index.html"
+});
+      }
 
       function populateorderslist()
       {
